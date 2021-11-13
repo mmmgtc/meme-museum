@@ -14,7 +14,7 @@ import {
 import { useRouter } from "next/router";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
-import Card from "components/custom/Card";
+import CardMedia from "./custom/CardMedia";
 
 type Meme = {
   image: string;
@@ -40,7 +40,7 @@ function MemeCard({ meme }: { meme: Meme }) {
   }
 
   return (
-    <Card>
+    <CardMedia>
       <VStack px="6" align="left" w="full">
         <Heading fontSize="2xl">{meme.name}</Heading>
         <Text fontSize="xs">Created on {meme.created}</Text>
@@ -96,7 +96,7 @@ function MemeCard({ meme }: { meme: Meme }) {
           View Meme
         </Button>
       </VStack>
-    </Card>
+    </CardMedia>
   );
 }
 
