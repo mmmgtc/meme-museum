@@ -21,8 +21,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src",
-    "commitlint.config.js",
-    "ceramic.config.js"
+    "commitlint.config.js"
   ],
   "exclude": ["node_modules"]
 }
