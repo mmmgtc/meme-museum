@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import ConnectButton from "../Buttons/ConnectButton";
 import LogoIcon from "../Icons/LogoIcon";
 
-const LinkItem = ({ href, path, _target, children, ...props }) => {
+const LinkItem = ({ href, path, _target, children, ...props }: any) => {
   const active = path === href;
   return (
     <NextLink href={href} passHref>
@@ -21,7 +21,7 @@ const LinkItem = ({ href, path, _target, children, ...props }) => {
   );
 };
 
-const Navbar = (props) => {
+const Navbar = (props: any) => {
   const { path } = props;
 
   return (

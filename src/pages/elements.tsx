@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Divider,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -38,16 +37,11 @@ import {
   TabPanels,
   Tabs,
   Tag,
-  Text,
   Textarea,
   useDisclosure,
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
-
-import AdminHomeCard from "../components/Cards/AdminCards/AdminHomeCard";
-import QDIcon from "../components/Icons/LogoIcon";
 
 const Elements = () => {
   const toast = useToast();
@@ -152,7 +146,7 @@ const Elements = () => {
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
             <Input type="email" />
-            <FormHelperText>We'll never share your email.</FormHelperText>
+            <FormHelperText>We will never share your email.</FormHelperText>
           </FormControl>
 
           <FormControl id="email" isRequired>

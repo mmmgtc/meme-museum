@@ -25,6 +25,8 @@ const CreateMemePage: React.FunctionComponent = () => {
     formState: { errors },
   } = useFormContext();
 
+  const requiredText = "This is required";
+
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles, e) => {
       if (acceptedFiles) {
@@ -69,16 +71,11 @@ const CreateMemePage: React.FunctionComponent = () => {
       <Heading>Create meme</Heading>
       <FormControl isInvalid={errors.logo} {...getRootProps()}>
         <FormLabel htmlFor="logo">Logo</FormLabel>
-        {/* <input
-            type="file"
-            accept={acceptedFileTypes}
-            style={{ display: "none" }}
-          /> */}
+        <input type="file" style={{ display: "none" }} {...getInputProps()} />
         <Input
           {...register("logo", {
-            required: "This is required",
+            required: requiredText,
           })}
-          {...getInputProps()}
           placeholder="Logo"
         />
         {thumbs}
@@ -99,7 +96,7 @@ const CreateMemePage: React.FunctionComponent = () => {
         <Input
           placeholder="Meme title"
           {...register("title", {
-            required: "This is required",
+            required: requiredText,
             maxLength: {
               value: 150,
               message: "Maximum length should be 150",
@@ -116,7 +113,7 @@ const CreateMemePage: React.FunctionComponent = () => {
         <Textarea
           placeholder="Meme description"
           {...register("description", {
-            required: "This is required",
+            required: requiredText,
             maxLength: {
               value: 1200,
               message: "Maximum length should be 1200",
