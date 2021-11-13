@@ -15,8 +15,6 @@ import { BsFillPersonLinesFill } from "react-icons/bs";
 
 import { Web3Context } from "../../contexts/Web3Provider";
 
-import LogoutButton from "./LogoutButton";
-
 function ConnectButton() {
   const { account, connectWeb3, logout } = useContext(Web3Context);
 
@@ -58,9 +56,6 @@ function ConnectButton() {
             </Link>
           </MenuItem>
           <MenuDivider />
-          <MenuItem w="full">
-            <LogoutButton w="full" />
-          </MenuItem>
         </MenuList>
       </Menu>
     </HStack>

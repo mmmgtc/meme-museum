@@ -29,7 +29,6 @@ function IconWithState({ icon, active = false }: IconWithStateProps) {
   const {
     handleSubmit,
     register,
-    control,
     formState: { errors, isSubmitting },
   } = useForm();
 

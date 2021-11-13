@@ -3,6 +3,7 @@
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "noImplicitAny": false,
     "skipLibCheck": true,
     "downlevelIteration": true,
     "strict": true,
@@ -21,8 +22,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src",
-    "commitlint.config.js",
-    "ceramic.config.js"
+    "commitlint.config.js"
   ],
   "exclude": ["node_modules"]
 }
