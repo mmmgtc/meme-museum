@@ -67,13 +67,26 @@ export const Web3Provider = ({ children }: { children: any }) => {
     const signer = ethersProvider.getSigner();
     const account = await signer.getAddress();
     setAccount(account);
+    const signature = await ethersProvider.send("personal_sign", [
+      "meme party",
+      account,
+    ]);
+    const authResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
+      {
+        method: "POST",
+        body: JSON.stringify({ signed: signature, address: account }),
+      }
+    );
+    const authToken = await authResponse.json();
+    localStorage.setItem("Authorization", JSON.stringify(authToken));
 
     provider.on("chainChanged", () => {
-      window.location.reload();
+      // window.location.reload();
     });
 
     provider.on("accountsChanged", () => {
-      window.location.reload();
+      // window.location.reload();
     });
   }, []);
 

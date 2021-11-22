@@ -12,11 +12,13 @@ import {
   Tabs,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useEffect, useState } from "react";
 
 import Container from "../../components/layout/Container";
 import MemeCard from "../../components/MemeCard";
 
 const MemeData = {
+  id: 1,
   image: "https://siasky.net/AAB-yQ5MuGLqpb5fT9w0gd54RbDfRS9sZDb2aMx9NeJ8QA",
   avatar: "https://siasky.net/AAB-yQ5MuGLqpb5fT9w0gd54RbDfRS9sZDb2aMx9NeJ8QA",
   owner: "huxwell.eth",
@@ -36,6 +38,18 @@ const MemeData = {
 const allMemes = [MemeData, MemeData, MemeData];
 
 function Memes() {
+  const [memes, setMemes] = useState([]);
+  useEffect(() => {
+    async function fetchMemes() {
+      const memesResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
+      );
+      const memesResult = await memesResponse.json();
+      console.log({ memesResult });
+      setMemes(memesResult);
+    }
+    fetchMemes();
+  }, []);
   return (
     <Container>
       <Flex w="full">
@@ -61,7 +75,7 @@ function Memes() {
               }}
               spacing={10}
             >
-              {allMemes.map((meme) => (
+              {memes.map((meme) => (
                 <MemeCard meme={meme} />
               ))}
             </SimpleGrid>

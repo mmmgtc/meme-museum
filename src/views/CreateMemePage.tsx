@@ -16,6 +16,8 @@ import { useFormContext } from "react-hook-form";
 
 import IconWithState from "../components/custom/IconWithState";
 
+import ImageDropzone from "./ImageDropzone";
+
 const CreateMemePage: React.FunctionComponent = () => {
   const router = useRouter();
   const [files, setFiles] = useState([]);
@@ -26,34 +28,6 @@ const CreateMemePage: React.FunctionComponent = () => {
   } = useFormContext();
 
   const requiredText = "This is required";
-
-  const onDrop = useCallback(
-    (acceptedFiles, rejectedFiles, e) => {
-      if (acceptedFiles) {
-        const { name } = e.target;
-        setValue(name, e.target.files);
-        setFiles(
-          acceptedFiles.map((file: File) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-        );
-      }
-    },
-    [setValue]
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: "image/*",
-    onDrop,
-  });
-
-  const thumbs = files.map((file: any) => (
-    <div key={file.name}>
-      <Image src={file.preview} />
-    </div>
-  ));
 
   useEffect(
     () => () => {
@@ -69,33 +43,13 @@ const CreateMemePage: React.FunctionComponent = () => {
   return (
     <>
       <Heading>Create meme</Heading>
-      <FormControl isInvalid={errors.logo} {...getRootProps()}>
-        <FormLabel htmlFor="logo">Logo</FormLabel>
-        <input type="file" style={{ display: "none" }} {...getInputProps()} />
-        <Input
-          {...register("logo", {
-            required: requiredText,
-          })}
-          placeholder="Logo"
-        />
-        {thumbs}
-        {isDragActive ? (
-          <p>Drop the files here ...</p>
-        ) : (
-          <Center h="150px" bg="aqua.300" color="space" borderRadius="4">
-            Drag something here or select
-          </Center>
-        )}
-        <FormErrorMessage>
-          {errors.logo && errors.logo.message}
-        </FormErrorMessage>
-      </FormControl>
+      <ImageDropzone />
 
-      <FormControl isInvalid={errors.title}>
-        <FormLabel htmlFor="title">Meme title</FormLabel>
+      <FormControl isInvalid={errors.memelord}>
+        <FormLabel htmlFor="memelord">Meme lord</FormLabel>
         <Input
-          placeholder="Meme title"
-          {...register("title", {
+          placeholder="Meme lord"
+          {...register("memelord", {
             required: requiredText,
             maxLength: {
               value: 150,
@@ -104,10 +58,9 @@ const CreateMemePage: React.FunctionComponent = () => {
           })}
         />
         <FormErrorMessage>
-          {errors.title && errors.title.message}
+          {errors.memelord && errors.memelord.message}
         </FormErrorMessage>
       </FormControl>
-
       <FormControl isInvalid={errors.description}>
         <FormLabel htmlFor="description">Description</FormLabel>
         <Textarea

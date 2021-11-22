@@ -12,11 +12,14 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useContext } from "react";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
 import Container from "../../components/layout/Container";
+import { Web3Context } from "../../contexts/Web3Provider";
 
 const MemeData = {
+  id: 1,
   image: "https://pbs.twimg.com/media/FD4GHmPVcAAwufb?format=jpg&name=large",
   avatar: "https://siasky.net/AAB-yQ5MuGLqpb5fT9w0gd54RbDfRS9sZDb2aMx9NeJ8QA",
   owner: "huxwell.eth",
@@ -35,6 +38,39 @@ const MemeData = {
 
 function MemePage() {
   const meme = MemeData;
+  const { account } = useContext(Web3Context);
+  const authHeaderKey = "Authorization";
+  const headers = {
+    [authHeaderKey]: localStorage.getItem("Authorization") || "",
+  };
+  const handleUpvote = async () => {
+    const upvoteMemeResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          upvotes: [...meme.upvotes, account],
+        }),
+        headers,
+      }
+    );
+    const upvotedMeme = await upvoteMemeResponse.json();
+    console.log({ upvotedMeme });
+  };
+  const handleDownvote = async () => {
+    const downvoteMemeResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          downvotes: [...meme.downvotes, account],
+        }),
+        headers,
+      }
+    );
+    const downvotedMeme = await downvoteMemeResponse.json();
+    console.log({ downvotedMeme });
+  };
 
   return (
     <Container>
@@ -60,13 +96,20 @@ function MemePage() {
             colorScheme="green"
             borderRadius="full"
             cursor="pointer"
+            onClick={handleUpvote}
           >
             <HStack p="2" w="full" justifyContent="space-between">
               <FaArrowCircleUp />
               <TagLabel>{meme.upvotes.length}</TagLabel>
             </HStack>
           </Tag>
-          <Tag w="110px" colorScheme="red" borderRadius="full" cursor="pointer">
+          <Tag
+            w="110px"
+            colorScheme="red"
+            borderRadius="full"
+            cursor="pointer"
+            onClick={handleDownvote}
+          >
             <HStack p="2" w="full" justifyContent="space-between">
               <FaArrowCircleDown />
               <TagLabel>{meme.downvotes.length}</TagLabel>
