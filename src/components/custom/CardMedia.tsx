@@ -1,25 +1,24 @@
-import { VStack, StackProps, Image } from "@chakra-ui/react";
+import { HStack, StackProps, Image } from "@chakra-ui/react";
 
 function CardMedia(props: StackProps) {
   const { children, ...others } = props;
   return (
-    <VStack
-      bg="spacelightalpha"
+    <HStack
+      bg="spacepink"
       h="auto"
-      pb="6"
-      borderRadius="base"
-      spacing="4"
-      align="start"
+      w="full"
+      rounded="3xl"
+      color="purple.200"
       {...others}
     >
       <Image
-        maxH="400px"
-        w="full"
+        rounded="3xl"
+        maxH="600px"
         src="https://pbs.twimg.com/media/FD4GHmPVcAAwufb?format=jpg&name=large"
         objectFit="contain"
       />
       {children}
-    </VStack>
+    </HStack>
   );
 }
 

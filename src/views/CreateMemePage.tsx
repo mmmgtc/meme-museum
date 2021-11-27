@@ -42,12 +42,21 @@ const CreateMemePage: React.FunctionComponent = () => {
   }
   return (
     <>
-      <Heading>Create meme</Heading>
+      <Heading color="purple.200">JUST MEME IT! ᕕ༼ ຈل͜ຈ༽ ᕗ </Heading>
       <ImageDropzone />
-
       <FormControl isInvalid={errors.memelord}>
-        <FormLabel htmlFor="memelord">Meme lord</FormLabel>
+        <FormLabel htmlFor="memelord" fontWeight="bold">
+          MEME LORD
+        </FormLabel>
         <Input
+          borderColor="purple.300"
+          _hover={{
+            borderColor: "purple.300",
+          }}
+          _focus={{
+            borderColor: "purple.700",
+            boxShadow: `0 0 0 1px purple.700`,
+          }}
           placeholder="Meme lord"
           {...register("memelord", {
             required: requiredText,
@@ -62,8 +71,18 @@ const CreateMemePage: React.FunctionComponent = () => {
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={errors.description}>
-        <FormLabel htmlFor="description">Description</FormLabel>
+        <FormLabel htmlFor="description" fontWeight="bold">
+          DESCRIPTION
+        </FormLabel>
         <Textarea
+          borderColor="purple.300"
+          _hover={{
+            borderColor: "purple.300",
+          }}
+          _focus={{
+            borderColor: "purple.700",
+            boxShadow: `0 0 0 1px purple.700`,
+          }}
           placeholder="Meme description"
           {...register("description", {
             required: requiredText,

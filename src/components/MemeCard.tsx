@@ -1,8 +1,9 @@
 import {
-  Avatar,
+  Badge,
   Button,
   Flex,
   Heading,
+  SimpleGrid,
   Spacer,
   Text,
   Tag,
@@ -13,36 +14,23 @@ import {
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useContext } from "react";
+import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
+import { getSlicedAddress } from "../helpers";
 
 import CardMedia from "./custom/CardMedia";
 
-type Meme = {
-  id: number;
-  image: string;
-  name: string;
-  avatar: string;
-  owner: string;
-  description: string;
-  website: string;
-  whitepaper: string;
-  social: {
-    github: string;
-  };
-  upvotes: string[];
-  downvotes: string[];
-  created: string;
-};
-
-function MemeCard({ meme }: { meme: Meme }) {
+function MemeCard({ meme }: { meme: any }) {
   const router = useRouter();
   const { account } = useContext(Web3Context);
   const authHeaderKey = "Authorization";
-  const headers = {
-    [authHeaderKey]: localStorage.getItem("Authorization") || "",
-  };
+  const headers = localStorage
+    ? {
+      [authHeaderKey]: localStorage.getItem("Authorization") || "",
+    }
+    : {};
 
   const handleUpvote = async () => {
     const upvoteMemeResponse = await fetch(
@@ -76,16 +64,51 @@ function MemeCard({ meme }: { meme: Meme }) {
     router.push("/meme/example");
   };
 
+  const createdAt = meme.created ?? new Date().toDateString().toUpperCase();
+
   return (
     <CardMedia>
-      <VStack px="6" align="left" w="full">
-        <Heading fontSize="2xl">{meme.name}</Heading>
-        <Text fontSize="xs">Created on {meme.created}</Text>
+      <VStack p="6" align="left" w="full">
+        <Heading fontSize="2xl">{meme.title}</Heading>
+        <Text fontSize="xs">CREATED ON: {createdAt.toUpperCase()}</Text>
+        <Text fontSize="xs">POASTER:</Text>
         <Flex align="center">
-          <Avatar mr="0.5rem" boxSize="1.5em" src={meme.avatar} />
-          <Text fontSize="sm">{meme.owner}</Text>
+          {meme.poaster && (
+            <Badge
+              rounded="full"
+              variant="outline"
+              border="none"
+              px={2}
+              py={1}
+              fontWeight="400"
+            >
+              <HStack>
+                <Blockies
+                  size={10}
+                  seed={meme.poaster.username.toLowerCase()}
+                  className="blockies"
+                  scale={4}
+                />
+                <Text isTruncated>{meme.poaster.username}</Text>
+              </HStack>
+            </Badge>
+          )}
         </Flex>
-        <Text noOfLines={2}>{meme.description}</Text>
+        <Text noOfLines={2}>
+          {meme.description || "This meme has no story, no soul!"}
+        </Text>
+        <Spacer />
+        {meme.tags && meme.tags.length > 0 && (
+          <SimpleGrid columns={4} spacing={2} w="fit-content">
+            {meme.tags.map(({ name }: { name: string }) => (
+              <Tag rounded="full" size="md" key={name}>
+                <TagLabel fontWeight="bold" alt={name}>
+                  {name.toUpperCase()}
+                </TagLabel>
+              </Tag>
+            ))}
+          </SimpleGrid>
+        )}
         <Spacer />
         <Flex direction="column" fontSize="xs" w="full">
           <Stack direction="row" justifyContent="space-between">
@@ -100,7 +123,7 @@ function MemeCard({ meme }: { meme: Meme }) {
               >
                 <HStack w="full" justifyContent="space-between">
                   <FaArrowCircleUp />
-                  <TagLabel>{meme.upvotes.length}</TagLabel>
+                  <TagLabel>{meme.upvotes}</TagLabel>
                 </HStack>
               </Tag>
             </Stack>
@@ -115,15 +138,25 @@ function MemeCard({ meme }: { meme: Meme }) {
               >
                 <HStack w="full" justifyContent="space-between">
                   <FaArrowCircleDown />
-                  <TagLabel>{meme.downvotes.length}</TagLabel>
+                  <TagLabel>{meme.downvotes}</TagLabel>
                 </HStack>
               </Tag>
             </Stack>
           </Stack>
         </Flex>
         <Spacer />
-        <Button w="100%" fontSize="md" onClick={() => openMeme()}>
-          View Meme
+        <Button
+          w="100%"
+          rounded="full"
+          _hover={{
+            background: "purple.700",
+          }}
+          color="white"
+          bg="purple.200"
+          fontSize="md"
+          onClick={() => openMeme()}
+        >
+          VIEW MEME
         </Button>
       </VStack>
     </CardMedia>

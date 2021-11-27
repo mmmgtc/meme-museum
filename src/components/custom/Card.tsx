@@ -4,10 +4,10 @@ function Card(props: StackProps) {
   const { children, ...others } = props;
   return (
     <VStack
-      bg="spacelightalpha"
+      background="spacelightpurple"
       p="8"
-      h="md"
-      borderRadius="base"
+      h="auto"
+      borderRadius="3xl"
       spacing="4"
       align="start"
       {...others}

@@ -1,3 +1,4 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
   FormControl,
@@ -37,10 +38,10 @@ const TagsField = () => {
     <FormControl isInvalid={errors.tags}>
       <HStack justifyContent="space-between">
         <FormLabel htmlFor="tags" fontWeight="bold">
-          Tags:
+          TAGS:
         </FormLabel>
-        <Button my="5" onClick={() => append("")}>
-          + Add new tag
+        <Button leftIcon={<AddIcon />} my="5" onClick={() => append("")}>
+          ADD TAG
         </Button>
       </HStack>
       <SimpleGrid columns={4} spacing={4} mt="5">

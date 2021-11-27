@@ -76,10 +76,13 @@ export const Web3Provider = ({ children }: { children: any }) => {
       {
         method: "POST",
         body: JSON.stringify({ signed: signature, address: account }),
+        headers: {
+          "Content-Type": "application/json"
+        }
       }
     );
     const authToken = await authResponse.json();
-    localStorage.setItem("Authorization", JSON.stringify(authToken));
+    localStorage.setItem("Authorization", authToken.token);
 
     provider.on("chainChanged", () => {
       // window.location.reload();

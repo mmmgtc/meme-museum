@@ -21,11 +21,11 @@ const Page404 = () => {
 
       <Box>
         <Heading textAlign="center" pt="10">
-          Page not Found.
+          ლ(ಠ益ಠლ) PAGE NOT FOUND ლ(ಠ益ಠლ)
         </Heading>
         <Box textAlign="center" pt="10">
           <Link href="/" passHref>
-            <Button>Let&apos;s Head Back</Button>
+            <Button>GO BACK!!</Button>
           </Link>
         </Box>
       </Box>

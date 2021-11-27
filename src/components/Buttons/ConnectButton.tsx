@@ -2,6 +2,7 @@ import {
   Button,
   HStack,
   Menu,
+  Badge,
   MenuButton,
   MenuDivider,
   MenuItem,
@@ -10,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useContext } from "react";
+import Blockies from "react-blockies";
 import { AiFillSetting } from "react-icons/ai";
 import { BsFillPersonLinesFill } from "react-icons/bs";
 
@@ -19,45 +21,47 @@ function ConnectButton() {
   const { account, connectWeb3, logout } = useContext(Web3Context);
 
   return (
-    <HStack w="full">
-      <Text>{account}</Text>
-      {account ? (
-        <Button onClick={logout}>Logout</Button>
-      ) : (
-        <Button onClick={connectWeb3}>Connect</Button>
+    <HStack w="full" justifyContent="center">
+      {account && (
+        <Badge rounded="full" bg="purple.200" fontWeight="600" w="full">
+          <HStack>
+            <Blockies
+              size={10}
+              seed={account.toLowerCase()}
+              className="blockies"
+              scale={4}
+            />
+            <Text color="white" fontWeight="bold" isTruncated>
+              {account}
+            </Text>
+          </HStack>
+        </Badge>
       )}
-      <Menu>
-        <MenuButton
-          as={Button}
+      {account ? (
+        <Button
           rounded="full"
-          variant="link"
-          cursor="pointer"
-          minW={0}
+          _hover={{
+            background: "purple.700",
+          }}
+          color="white"
+          bg="purple.200"
+          onClick={logout}
         >
-          {/* <Avatar
-            w="40px"
-            h="40px"
-            src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-          /> */}
-        </MenuButton>
-        <MenuList rounded="3xl">
-          <MenuItem>
-            <Link href="/profile" passHref>
-              <Button leftIcon={<BsFillPersonLinesFill />} w="full">
-                Profile
-              </Button>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link href="/settings" passHref>
-              <Button leftIcon={<AiFillSetting />} w="full">
-                Settings
-              </Button>
-            </Link>
-          </MenuItem>
-          <MenuDivider />
-        </MenuList>
-      </Menu>
+          LOGOUT
+        </Button>
+      ) : (
+        <Button
+          rounded="full"
+          _hover={{
+            background: "purple.700",
+          }}
+          color="white"
+          bg="purple.200"
+          onClick={connectWeb3}
+        >
+          CONNECT
+        </Button>
+      )}
     </HStack>
   );
 }

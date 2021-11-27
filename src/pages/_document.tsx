@@ -3,7 +3,9 @@
  * @todo: remove this comment below when ready
  * ref: https://github.com/vercel/next.js/issues/13712#issuecomment-910409023
  * */
+import { ColorModeScript } from '@chakra-ui/color-mode';
 import createEmotionServer from "@emotion/server/create-instance";
+import theme from "../styles/customTheme"
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, {
   Html,
@@ -81,6 +83,7 @@ class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <Main />
           <NextScript />
         </body>

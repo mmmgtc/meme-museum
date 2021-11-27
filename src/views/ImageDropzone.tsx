@@ -74,17 +74,20 @@ const ImageDropzone = () => {
 
   return (
     <FormControl isInvalid={errors.image} {...getRootProps()}>
-      <FormLabel htmlFor="image">Image</FormLabel>
+      <FormLabel htmlFor="image" fontWeight="bold">
+        MEME IMAGE
+      </FormLabel>
       {files && thumbs}
       {files.length === 0 && isDragActive && (
         <Center
           _hover={{ cursor: "pointer" }}
           h="150px"
-          bg="aqua.200"
-          color="space"
+          bg="white"
+          border="solid 1px #8C65F7"
+          color="purple.200"
           borderRadius="4"
         >
-          Drop the files here ...
+          DROP THE FILES HERE ...
           <Input
             type="file"
             placeholder="Meme image"
@@ -101,11 +104,12 @@ const ImageDropzone = () => {
           w="full"
           _hover={{ cursor: "pointer" }}
           h="150px"
-          bg="aqua.300"
-          color="space"
+          bg="white"
+          border="solid 1px #8C65F7"
+          color="purple.200"
           borderRadius="4"
         >
-          Drag something here or select
+          DRAG &amp; DROP YOUR MEME HERE OR CLICK TO SELECT
           <Input
             type="file"
             placeholder="Meme image"

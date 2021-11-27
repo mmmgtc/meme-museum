@@ -1,4 +1,5 @@
 import { EditIcon } from "@chakra-ui/icons";
+import React from "react";
 import {
   Button,
   Flex,
@@ -40,9 +41,9 @@ function MemePage() {
   const meme = MemeData;
   const { account } = useContext(Web3Context);
   const authHeaderKey = "Authorization";
-  const headers = {
+  const headers = localStorage ? {
     [authHeaderKey]: localStorage.getItem("Authorization") || "",
-  };
+  } : {};
   const handleUpvote = async () => {
     const upvoteMemeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,

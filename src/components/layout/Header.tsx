@@ -1,8 +1,18 @@
-import { Box, Container, Flex, Heading, Link, Stack } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Flex,
+  Heading,
+  Link,
+  Stack,
+  HStack,
+} from "@chakra-ui/react";
 import NextLink from "next/link";
 
 import ConnectButton from "../Buttons/ConnectButton";
 import LogoIcon from "../Icons/LogoIcon";
+
+import ThemeToggle from "./ThemeToggle";
 
 const LinkItem = ({ href, path, _target, children, ...props }: any) => {
   const active = path === href;
@@ -23,15 +33,13 @@ const LinkItem = ({ href, path, _target, children, ...props }: any) => {
 
 const Navbar = (props: any) => {
   const { path } = props;
-
   return (
     <Box
-      position="fixed"
+      // position="fixed"
       as="nav"
       w="100%"
       top="0"
-      bg="spacelightalpha"
-      style={{ backdropFilter: "blur(10px)" }}
+      bg="none"
       zIndex={1}
       {...props}
     >
@@ -45,9 +53,9 @@ const Navbar = (props: any) => {
       >
         <NextLink href="/">
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-            <LogoIcon size="25px" />
-            <Heading fontSize="lg" pl="2">
-              Meme museum
+            {/* <LogoIcon size="25px" /> */}
+            <Heading fontSize="lg" pl="2" color="purple.200">
+              乁༼ ☯‿☯✿༽ㄏ MEMES.PARTY ༼ノ◕ヮ◕ ༽ノ︵┻━┻
             </Heading>
           </Flex>
         </NextLink>
@@ -59,18 +67,12 @@ const Navbar = (props: any) => {
           alignItems="center"
           flexGrow={1}
           mt={{ base: 4, md: 0 }}
-        >
-          <LinkItem href="/memes" path={path}>
-            Memes
-          </LinkItem>
-          <LinkItem href="/leaderboard" path={path}>
-            Leaderboard
-          </LinkItem>
-        </Stack>
+        />
 
-        <Flex>
+        <HStack>
           <ConnectButton />
-        </Flex>
+          <ThemeToggle />
+        </HStack>
       </Container>
     </Box>
   );

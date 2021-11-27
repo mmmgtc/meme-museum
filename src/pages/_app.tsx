@@ -7,6 +7,7 @@ import "@fontsource/space-mono";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import Particles from "react-tsparticles";
 
 import "styles/globals.css";
 import defaultSEOConfig from "../../next-seo.config";
@@ -14,7 +15,6 @@ import { Web3Provider } from "../contexts/Web3Provider";
 import Layout from "components/layout";
 import createEmotionCache from "styles/createEmotionCache";
 import theme from "styles/customTheme";
-
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
@@ -26,6 +26,8 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
+
+
   return (
     <Web3Provider>
       <CacheProvider value={emotionCache}>
