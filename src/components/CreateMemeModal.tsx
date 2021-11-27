@@ -70,12 +70,12 @@ function CreateMemeModal({
       size="2xl"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent rounded="3xl" bg="none">
         <ModalCloseButton color="pink.300" mt="6" mr="4" />
         <ModalBody pb={6}>
           <FormProvider {...methods}>
             <CenteredFrame>
-              <Card h="full" w="2xl">
+              <Card h="full" w="2xl" bg="white">
                 <Stack
                   w="full"
                   as="form"
@@ -84,41 +84,38 @@ function CreateMemeModal({
                   <CreateMemePage />
                   <TagsField />
                 </Stack>
+                <HStack justifyContent="center" alignItems="center">
+                  <Button
+                    mr="0.5rem"
+                    _hover={{
+                      background: "purple.700",
+                    }}
+                    color="white"
+                    bg="purple.200"
+                    isLoading={methods.formState.isSubmitting}
+                    type="submit"
+                    onClick={() => onSubmit()}
+                    px="1.25rem"
+                    fontSize="md"
+                  >
+                    SUBMIT
+                  </Button>
+                  <Button
+                    _hover={{
+                      background: "pink.700",
+                    }}
+                    color="white"
+                    bg="pink.300"
+                    rounded="full"
+                    onClick={onClose}
+                  >
+                    CANCEL
+                  </Button>
+                </HStack>
               </Card>
             </CenteredFrame>
           </FormProvider>
         </ModalBody>
-
-        <ModalFooter>
-          <HStack justifyContent="center" alignItems="center">
-            <Button
-              mr="0.5rem"
-              _hover={{
-                background: "purple.700",
-              }}
-              color="white"
-              bg="purple.200"
-              isLoading={methods.formState.isSubmitting}
-              type="submit"
-              onClick={() => onSubmit()}
-              px="1.25rem"
-              fontSize="md"
-            >
-              SUBMIT
-            </Button>
-            <Button
-              _hover={{
-                background: "pink.700",
-              }}
-              color="white"
-              bg="pink.300"
-              rounded="full"
-              onClick={onClose}
-            >
-              CANCEL
-            </Button>
-          </HStack>
-        </ModalFooter>
       </ModalContent>
     </Modal>
   );

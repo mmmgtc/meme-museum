@@ -4,7 +4,7 @@ function Card(props: StackProps) {
   const { children, ...others } = props;
   return (
     <VStack
-      background="spacelightpurple"
+      background={others.bg || "spacelightpurple"}
       p="8"
       h="auto"
       borderRadius="3xl"
