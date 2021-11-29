@@ -54,7 +54,6 @@ const TagsField = () => {
       <SimpleGrid columns={4} spacing={4} mt="5">
         {fields.map((item, index) => (
           <Tag
-            size="sm"
             key={item.id}
             borderRadius="full"
             bg="purple.200"
@@ -64,6 +63,7 @@ const TagsField = () => {
               <Input
                 placeholder="web3"
                 border="none"
+                size="sm"
                 fontWeight="bold"
                 style={{
                   textTransform: "uppercase",

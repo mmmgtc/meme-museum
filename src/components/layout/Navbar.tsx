@@ -11,6 +11,7 @@ import NextLink from "next/link";
 import React from "react";
 
 import ConnectButton from "../Buttons/ConnectButton";
+import LogoIcon from "../Icons/LogoIcon";
 
 // import DiscordButton from "../Buttons/DiscordButton";
 // import TwitterButton from "../Buttons/TwitterButton";
@@ -38,9 +39,7 @@ function Navbar() {
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
             <NextLink href="/">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <Heading fontSize="lg" color={headingColor}>
-                  MEMES.PARTY
-                </Heading>
+                <LogoIcon size="160px" />
               </Flex>
             </NextLink>
           </Flex>

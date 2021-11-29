@@ -1,6 +1,6 @@
 import {
   HStack,
-  Box,
+  Heading,
   Button,
   Stack,
   Modal,
@@ -8,6 +8,7 @@ import {
   ModalBody,
   ModalContent,
   ModalCloseButton,
+  ModalHeader,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -90,7 +91,16 @@ function CreateMemeModal({
     >
       <ModalOverlay />
       <ModalContent rounded="3xl" bg="white">
-        <ModalCloseButton color="pink.300" mt="6" mr="4" />
+        <ModalHeader display="flex">
+          <Heading color="purple.200">JUST MEME IT!</Heading>
+          <ModalCloseButton
+            border="solid 1px #8C65F7"
+            color="purple.200"
+            mt="4"
+            mr="4"
+            cursor="pointer"
+          />
+        </ModalHeader>
         <ModalBody>
           <FormProvider {...methods}>
             <Stack as="form" onSubmit={methods.handleSubmit(onSubmit)}>
@@ -100,7 +110,8 @@ function CreateMemeModal({
             <HStack
               w="full"
               justifyContent="flex-end"
-              alignItems="space-between"
+              alignItems="center"
+              py="4"
             >
               <Button
                 mr="0.5rem"
@@ -111,21 +122,25 @@ function CreateMemeModal({
                 color="white"
                 bg="purple.200"
                 isLoading={methods.formState.isSubmitting}
-                type="submit"
                 onClick={() => onSubmit()}
-                px="1.25rem"
                 fontSize="md"
+                size="md"
               >
                 SUBMIT
               </Button>
               <Button
+                variant="outline"
                 _hover={{
-                  background: "pink.700",
+                  background: "white",
+                  color: "purple.200",
                 }}
-                color="white"
-                bg="pink.300"
+                outlineColor="purple.200"
+                color="purple.200"
                 rounded="full"
+                px="1.25rem"
                 onClick={onClose}
+                fontSize="md"
+                size="sm"
               >
                 CANCEL
               </Button>

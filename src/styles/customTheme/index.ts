@@ -4,6 +4,10 @@ import colors from "./colors";
 
 const baseTheme = {
   colors,
+  fonts: {
+    heading: "Comic Sans MS",
+    body: "Comic Sans MS",
+  },
   components: {
     Button: {
       // 1. We can update the base styles

@@ -21,6 +21,7 @@ import { useContext, useEffect, useState } from "react";
 
 import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
+import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors } from "../helpers";
@@ -67,9 +68,7 @@ function Memes() {
     <Card>
       <Container>
         <VStack w="full" alignItems="center">
-          <Heading rounded="full" p="5" color="white">
-            MEME LORDS IN DA PARTY!
-          </Heading>
+          <LogoIcon size="600px" />
           <Button
             rounded="full"
             size="lg"

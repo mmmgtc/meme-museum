@@ -43,7 +43,6 @@ const CreateMemePage: React.FunctionComponent = () => {
   }
   return (
     <Box color="purple.200">
-      <Heading color="purple.200">ᕕ༼ ຈل͜ຈ༽ ᕗ</Heading>
       <ImageDropzone />
       <FormControl isInvalid={errors.title}>
         <FormLabel htmlFor="title" fontWeight="bold">
