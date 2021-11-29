@@ -244,9 +244,8 @@ function MemePage(prefetchedMeme: MemeType) {
               ))}
             </Flex>
           )}
-          <Flex pt="6" w="full" justify="space-around">
+          <Flex pt="6" w="full" justify="space-between">
             <Tag
-              w="full"
               colorScheme="green"
               borderRadius="full"
               cursor="pointer"
@@ -259,7 +258,6 @@ function MemePage(prefetchedMeme: MemeType) {
               </HStack>
             </Tag>
             <Tag
-              w="full"
               colorScheme="red"
               borderRadius="full"
               cursor="pointer"

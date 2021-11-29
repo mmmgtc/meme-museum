@@ -223,9 +223,8 @@ function MemeCard({ meme }: { meme: any }) {
           </Flex>
         )}
         <Spacer />
-        <Flex py="6" w="full" justify="space-around">
+        <Flex py="6" w="full" justify="space-between">
           <Tag
-            w="full"
             colorScheme="green"
             borderRadius="full"
             cursor="pointer"
@@ -238,7 +237,6 @@ function MemeCard({ meme }: { meme: any }) {
             </HStack>
           </Tag>
           <Tag
-            w="full"
             colorScheme="red"
             borderRadius="full"
             cursor="pointer"
