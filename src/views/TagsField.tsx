@@ -28,7 +28,7 @@ const TagsField = () => {
   });
 
   useEffect(() => {
-    append("");
+    append({ name: "" });
     return () => {
       remove();
     };
@@ -40,7 +40,14 @@ const TagsField = () => {
         <FormLabel htmlFor="tags" fontWeight="bold">
           TAGS:
         </FormLabel>
-        <Button leftIcon={<AddIcon />} my="5" onClick={() => append("")}>
+        <Button
+          leftIcon={<AddIcon />}
+          my="5"
+          size="sm"
+          color="white"
+          bg="purple.200"
+          onClick={() => append({ name: "" })}
+        >
           ADD TAG
         </Button>
       </HStack>
@@ -50,17 +57,21 @@ const TagsField = () => {
             size="sm"
             key={item.id}
             borderRadius="full"
-            bg="purple.700"
+            bg="purple.200"
             variant="solid"
           >
             <TagLabel>
               <Input
                 placeholder="web3"
                 border="none"
+                fontWeight="bold"
+                style={{
+                  textTransform: "uppercase",
+                }}
                 _focus={{
                   border: "none",
                 }}
-                {...register(`tags.${index}.value`, {
+                {...register(`tags.${index}.name`, {
                   maxLength: {
                     value: 150,
                     message: "Maximum length should be 150",

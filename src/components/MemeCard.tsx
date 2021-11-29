@@ -3,7 +3,7 @@ import {
   Button,
   Flex,
   Heading,
-  SimpleGrid,
+  Image,
   Spacer,
   Text,
   Tag,
@@ -11,140 +11,168 @@ import {
   VStack,
   Stack,
   HStack,
+  Container,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
 import { getSlicedAddress } from "../helpers";
 
+import Card from "./custom/Card";
 import CardMedia from "./custom/CardMedia";
 
 function MemeCard({ meme }: { meme: any }) {
   const router = useRouter();
+  const [updatedMeme, setUpdatedMeme] = useState(meme);
+
   const { account } = useContext(Web3Context);
-  const authHeaderKey = "Authorization";
-  const headers = localStorage
-    ? {
-      [authHeaderKey]: localStorage.getItem("Authorization") || "",
+  const [headers, setHeaders] = useState<{
+    Authorization: string;
+    [key: string]: string;
+  }>();
+
+  useEffect(() => {
+    // Perform localStorage action
+    const token = localStorage.getItem("Authorization");
+    if (token) {
+      setHeaders({
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      });
     }
-    : {};
+  }, []);
 
   const handleUpvote = async () => {
+    console.log({ headers });
     const upvoteMemeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/upvote/`,
       {
-        method: "PATCH",
+        method: "POST",
         body: JSON.stringify({
-          upvotes: [...meme.upvotes, account],
+          id: updatedMeme.id,
         }),
         headers,
       }
     );
     const upvotedMeme = await upvoteMemeResponse.json();
     console.log({ upvotedMeme });
+    setUpdatedMeme(upvotedMeme);
   };
   const handleDownvote = async () => {
     const downvoteMemeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/downvote/`,
       {
-        method: "PATCH",
+        method: "POST",
         body: JSON.stringify({
-          downvotes: [...meme.downvotes, account],
+          id: updatedMeme.id,
         }),
         headers,
       }
     );
     const downvotedMeme = await downvoteMemeResponse.json();
     console.log({ downvotedMeme });
-  };
-  const openMeme = () => {
-    router.push("/meme/example");
+    setUpdatedMeme(downvotedMeme);
   };
 
-  const createdAt = meme.created ?? new Date().toDateString().toUpperCase();
+  const openMeme = () => {
+    router.push(`/meme/${updatedMeme.id}`);
+  };
+
+  const createdAt =
+    updatedMeme.created_at ?? new Date().toDateString().toUpperCase();
 
   return (
-    <CardMedia>
-      <VStack p="6" align="left" w="full">
-        <Heading fontSize="2xl">{meme.title}</Heading>
+    <Card bg="spacepink" color="purple.200">
+      <Image
+        rounded="3xl"
+        minH="100px"
+        w="full"
+        maxH="600px"
+        // objectFit="contain"
+        src={meme.image}
+        objectFit="cover"
+      />
+      <Flex w="full" direction="column" py="6" color="white" fontWeight="bold">
+        <Text fontSize="2xl">{updatedMeme.title}</Text>
+        <Text noOfLines={2} fontSize="xl">
+          {updatedMeme.description || "This meme has no story, no soul!"}
+        </Text>
         <Text fontSize="xs">CREATED ON: {createdAt.toUpperCase()}</Text>
         <Text fontSize="xs">POASTER:</Text>
-        <Flex align="center">
-          {meme.poaster && (
+        <Flex
+          align="center"
+          w={{
+            sm: "full",
+            md: "fit-content",
+          }}
+          py="2"
+        >
+          {updatedMeme.poaster && (
             <Badge
               rounded="full"
               variant="outline"
+              w="full"
               border="none"
               px={2}
               py={1}
               fontWeight="400"
             >
-              <HStack>
+              <HStack w="full">
                 <Blockies
                   size={10}
-                  seed={meme.poaster.username.toLowerCase()}
+                  seed={updatedMeme.poaster.username.toLowerCase()}
                   className="blockies"
                   scale={4}
                 />
-                <Text isTruncated>{meme.poaster.username}</Text>
+                <Text isTruncated>{updatedMeme.poaster.username}</Text>
               </HStack>
             </Badge>
           )}
         </Flex>
-        <Text noOfLines={2}>
-          {meme.description || "This meme has no story, no soul!"}
-        </Text>
+
         <Spacer />
-        {meme.tags && meme.tags.length > 0 && (
-          <SimpleGrid columns={4} spacing={2} w="fit-content">
-            {meme.tags.map(({ name }: { name: string }) => (
-              <Tag rounded="full" size="md" key={name}>
+        {updatedMeme.tags && updatedMeme.tags.length > 0 && (
+          <Flex wrap="wrap" w="fit-content" py="2" gridGap="2">
+            {updatedMeme.tags.map(({ name }) => (
+              <Tag flexGrow={1} rounded="full" size="md" key={name}>
                 <TagLabel fontWeight="bold" alt={name}>
                   {name.toUpperCase()}
                 </TagLabel>
               </Tag>
             ))}
-          </SimpleGrid>
+          </Flex>
         )}
         <Spacer />
-        <Flex direction="column" fontSize="xs" w="full">
-          <Stack direction="row" justifyContent="space-between">
-            <Stack spacing={0} align="center">
-              <Tag
-                size="lg"
-                w="110px"
-                colorScheme="green"
-                borderRadius="full"
-                cursor="pointer"
-                onClick={handleUpvote}
-              >
-                <HStack w="full" justifyContent="space-between">
-                  <FaArrowCircleUp />
-                  <TagLabel>{meme.upvotes}</TagLabel>
-                </HStack>
-              </Tag>
-            </Stack>
-            <Stack spacing={0} align="center">
-              <Tag
-                size="lg"
-                w="110px"
-                colorScheme="red"
-                borderRadius="full"
-                cursor="pointer"
-                onClick={handleDownvote}
-              >
-                <HStack w="full" justifyContent="space-between">
-                  <FaArrowCircleDown />
-                  <TagLabel>{meme.downvotes}</TagLabel>
-                </HStack>
-              </Tag>
-            </Stack>
-          </Stack>
+        <Flex py="6" w="full" justify="space-around">
+          <Tag
+            w="full"
+            colorScheme="green"
+            borderRadius="full"
+            cursor="pointer"
+            mr="6"
+            onClick={handleUpvote}
+          >
+            <HStack p="2" w="full" justifyContent="space-between">
+              <FaArrowCircleUp />
+              <TagLabel fontWeight="bold">{meme.upvotes}</TagLabel>
+            </HStack>
+          </Tag>
+          <Tag
+            w="full"
+            colorScheme="red"
+            borderRadius="full"
+            cursor="pointer"
+            onClick={handleDownvote}
+          >
+            <HStack p="2" w="full" justifyContent="space-between">
+              <FaArrowCircleDown />
+              <TagLabel fontWeight="bold">{meme.downvotes}</TagLabel>
+            </HStack>
+          </Tag>
         </Flex>
-        <Spacer />
         <Button
           w="100%"
           rounded="full"
@@ -158,8 +186,8 @@ function MemeCard({ meme }: { meme: any }) {
         >
           VIEW MEME
         </Button>
-      </VStack>
-    </CardMedia>
+      </Flex>
+    </Card>
   );
 }
 

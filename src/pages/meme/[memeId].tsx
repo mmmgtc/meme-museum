@@ -1,5 +1,4 @@
 import { EditIcon } from "@chakra-ui/icons";
-import React from "react";
 import {
   Button,
   Flex,
@@ -10,115 +9,210 @@ import {
   Tag,
   Image,
   TagLabel,
-  Avatar,
+  Badge,
+  SimpleGrid,
 } from "@chakra-ui/react";
+import { GetStaticProps } from "next";
 import NextLink from "next/link";
-import { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
+import { MemeType } from "..";
+import Card from "../../components/custom/Card";
+import Layout from "../../components/layout";
 import Container from "../../components/layout/Container";
 import { Web3Context } from "../../contexts/Web3Provider";
 
-const MemeData = {
-  id: 1,
-  image: "https://pbs.twimg.com/media/FD4GHmPVcAAwufb?format=jpg&name=large",
-  avatar: "https://siasky.net/AAB-yQ5MuGLqpb5fT9w0gd54RbDfRS9sZDb2aMx9NeJ8QA",
-  owner: "huxwell.eth",
-  name: "Meme Alpha",
-  description:
-    "This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.This is an awesome meme.",
-  website: "https://www.google.com",
-  whitepaper: "https://www.google.com",
-  social: {
-    github: "https://github.com",
-  },
-  upvotes: ["0x"],
-  downvotes: ["0x"],
-  created: "2021-09-13",
+type Props = {
+  memeId: string | null;
 };
 
-function MemePage() {
-  const meme = MemeData;
+export const getServerSideProps: GetStaticProps<Props, { memeId: string }> =
+  async (ctx) => {
+    const memeId = ctx.params?.memeId ?? null;
+    if (memeId === null) {
+      return {
+        redirect: { destination: "/", permanent: true },
+      };
+    }
+    const memeResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${memeId}/`,
+      { method: "GET" }
+    );
+    const fetchedMeme = await memeResponse.json();
+    console.log({ fetchedMeme });
+    return {
+      props: { id: memeId, ...fetchedMeme },
+    };
+  };
+
+function MemePage(prefetchedMeme: MemeType) {
+  const [meme, setMeme] = useState(prefetchedMeme);
   const { account } = useContext(Web3Context);
-  const authHeaderKey = "Authorization";
-  const headers = localStorage ? {
-    [authHeaderKey]: localStorage.getItem("Authorization") || "",
-  } : {};
+  const [headers, setHeaders] = useState<{
+    Authorization: string;
+    [key: string]: string;
+  }>();
+
+  useEffect(() => {
+    // Perform localStorage action
+    const token = localStorage.getItem("Authorization");
+    if (token) {
+      setHeaders({
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      });
+    }
+  }, []);
+
   const handleUpvote = async () => {
+    console.log({ headers });
     const upvoteMemeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/upvote/`,
       {
-        method: "PATCH",
+        method: "POST",
         body: JSON.stringify({
-          upvotes: [...meme.upvotes, account],
+          id: meme.id,
         }),
         headers,
       }
     );
     const upvotedMeme = await upvoteMemeResponse.json();
     console.log({ upvotedMeme });
+    setMeme(upvotedMeme);
   };
   const handleDownvote = async () => {
     const downvoteMemeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${meme.id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/downvote/`,
       {
-        method: "PATCH",
+        method: "POST",
         body: JSON.stringify({
-          downvotes: [...meme.downvotes, account],
+          id: meme.id,
         }),
         headers,
       }
     );
     const downvotedMeme = await downvoteMemeResponse.json();
     console.log({ downvotedMeme });
+    setMeme(downvotedMeme);
   };
 
   return (
-    <Container>
-      <Image w="full" src={meme.image} objectFit="cover" />
-      <Flex w="full">
-        <Heading>{meme.name}</Heading>
-        <Spacer />
-        <NextLink href="/create-meme" passHref>
-          <Button rightIcon={<EditIcon />}>Edit Meme</Button>
-        </NextLink>
-      </Flex>
+    <Card bg="spacepink">
+      <Container>
+        <Image w="full" src={meme.image} objectFit="cover" />
+        <Flex w="full">
+          <Spacer />
+          {meme.poaster.username === account && (
+            <NextLink href="/edit-meme" passHref>
+              <Button
+                rounded="full"
+                color="white"
+                bg="purple.200"
+                // onClick={onOpen}
+                _hover={{
+                  background: "purple.700",
+                }}
+                leftIcon={<EditIcon />}
+              >
+                EDIT MEME
+              </Button>
+            </NextLink>
+          )}
+        </Flex>
 
-      <Flex direction="column" pt="4">
-        <Flex align="center">
-          <Avatar mr="0.5rem" boxSize="1.5em" src={meme.avatar} />
-          <Text fontSize="sm">by {meme.owner}</Text>
-        </Flex>
-        <Text fontSize="xs">Created on {meme.created}</Text>
-        <Text pt="8">{meme.description}</Text>
-        <Flex pt="12" w="full" justify="space-around">
-          <Tag
-            w="110px"
-            colorScheme="green"
-            borderRadius="full"
-            cursor="pointer"
-            onClick={handleUpvote}
+        <Flex
+          w="full"
+          direction="column"
+          pt="4"
+          color="white"
+          fontWeight="bold"
+        >
+          <Text fontSize="4xl" py="2">
+            {meme.title}
+          </Text>
+          <Text noOfLines={2} fontSize="2xl" py="2">
+            {meme.description || "This meme has no story, no soul!"}
+          </Text>
+          <Text fontSize="xs" py="2">
+            CREATED ON: {meme.created_at.toUpperCase()}
+          </Text>
+          <Text fontSize="xs" py="2">
+            POASTER:
+          </Text>
+          <Flex
+            align="center"
+            w={{
+              sm: "full",
+              md: "fit-content",
+            }}
+            py="2"
           >
-            <HStack p="2" w="full" justifyContent="space-between">
-              <FaArrowCircleUp />
-              <TagLabel>{meme.upvotes.length}</TagLabel>
-            </HStack>
-          </Tag>
-          <Tag
-            w="110px"
-            colorScheme="red"
-            borderRadius="full"
-            cursor="pointer"
-            onClick={handleDownvote}
-          >
-            <HStack p="2" w="full" justifyContent="space-between">
-              <FaArrowCircleDown />
-              <TagLabel>{meme.downvotes.length}</TagLabel>
-            </HStack>
-          </Tag>
+            {meme.poaster && meme.poaster.username && (
+              <Badge
+                rounded="full"
+                variant="outline"
+                w="full"
+                border="none"
+                px={2}
+                py={1}
+                fontWeight="400"
+              >
+                <HStack w="full">
+                  <Blockies
+                    size={10}
+                    seed={meme.poaster.username.toLowerCase()}
+                    className="blockies"
+                    scale={4}
+                  />
+                  <Text isTruncated>{meme.poaster.username}</Text>
+                </HStack>
+              </Badge>
+            )}
+          </Flex>
+
+          {meme.tags && meme.tags.length > 0 && (
+            <Flex wrap="wrap" w="fit-content" py="2" gridGap="2">
+              {meme.tags.map(({ name }) => (
+                <Tag flexGrow={1} rounded="full" size="md" key={name}>
+                  <TagLabel fontWeight="bold" alt={name}>
+                    {name.toUpperCase()}
+                  </TagLabel>
+                </Tag>
+              ))}
+            </Flex>
+          )}
+          <Flex pt="6" w="full" justify="space-around">
+            <Tag
+              w="full"
+              colorScheme="green"
+              borderRadius="full"
+              cursor="pointer"
+              mr="6"
+              onClick={handleUpvote}
+            >
+              <HStack p="2" w="full" justifyContent="space-between">
+                <FaArrowCircleUp />
+                <TagLabel fontWeight="bold">{meme.upvotes}</TagLabel>
+              </HStack>
+            </Tag>
+            <Tag
+              w="full"
+              colorScheme="red"
+              borderRadius="full"
+              cursor="pointer"
+              onClick={handleDownvote}
+            >
+              <HStack p="2" w="full" justifyContent="space-between">
+                <FaArrowCircleDown />
+                <TagLabel fontWeight="bold">{meme.downvotes}</TagLabel>
+              </HStack>
+            </Tag>
+          </Flex>
         </Flex>
-      </Flex>
-    </Container>
+      </Container>
+    </Card>
   );
 }
 

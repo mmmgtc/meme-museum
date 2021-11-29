@@ -1,6 +1,6 @@
 import {
   Center,
-  Flex,
+  Box,
   FormControl,
   FormErrorMessage,
   FormLabel,
@@ -28,7 +28,8 @@ const CreateMemePage: React.FunctionComponent = () => {
   } = useFormContext();
 
   const requiredText = "This is required";
-
+  const purple = "purple.300";
+  const purpleDark = "purple.700";
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
@@ -41,24 +42,24 @@ const CreateMemePage: React.FunctionComponent = () => {
     router.back();
   }
   return (
-    <>
-      <Heading color="purple.200">JUST MEME IT! ᕕ༼ ຈل͜ຈ༽ ᕗ </Heading>
+    <Box color="purple.200">
+      <Heading color="purple.200">ᕕ༼ ຈل͜ຈ༽ ᕗ</Heading>
       <ImageDropzone />
-      <FormControl isInvalid={errors.memelord}>
-        <FormLabel htmlFor="memelord" fontWeight="bold">
-          MEME LORD
+      <FormControl isInvalid={errors.title}>
+        <FormLabel htmlFor="title" fontWeight="bold">
+          TITLE
         </FormLabel>
         <Input
-          borderColor="purple.300"
+          borderColor={purple}
           _hover={{
-            borderColor: "purple.300",
+            borderColor: purple,
           }}
           _focus={{
-            borderColor: "purple.700",
-            boxShadow: `0 0 0 1px purple.700`,
+            borderColor: purpleDark,
+            boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
-          placeholder="Meme lord"
-          {...register("memelord", {
+          placeholder="Meme title"
+          {...register("title", {
             required: requiredText,
             maxLength: {
               value: 150,
@@ -67,7 +68,33 @@ const CreateMemePage: React.FunctionComponent = () => {
           })}
         />
         <FormErrorMessage>
-          {errors.memelord && errors.memelord.message}
+          {errors.title && errors.title.message}
+        </FormErrorMessage>
+      </FormControl>
+      <FormControl isInvalid={errors.meme_lord}>
+        <FormLabel htmlFor="meme_lord" fontWeight="bold">
+          MEME LORD
+        </FormLabel>
+        <Input
+          borderColor={purple}
+          _hover={{
+            borderColor: purple,
+          }}
+          _focus={{
+            borderColor: purpleDark,
+            boxShadow: `0 0 0 1px ${purpleDark}`,
+          }}
+          placeholder="Meme lord"
+          {...register("meme_lord", {
+            required: requiredText,
+            maxLength: {
+              value: 150,
+              message: "Maximum length should be 150",
+            },
+          })}
+        />
+        <FormErrorMessage>
+          {errors.meme_lord && errors.meme_lord.message}
         </FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={errors.description}>
@@ -75,13 +102,13 @@ const CreateMemePage: React.FunctionComponent = () => {
           DESCRIPTION
         </FormLabel>
         <Textarea
-          borderColor="purple.300"
+          borderColor={purple}
           _hover={{
-            borderColor: "purple.300",
+            borderColor: purple,
           }}
           _focus={{
-            borderColor: "purple.700",
-            boxShadow: `0 0 0 1px purple.700`,
+            borderColor: purpleDark,
+            boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
           placeholder="Meme description"
           {...register("description", {
@@ -96,7 +123,7 @@ const CreateMemePage: React.FunctionComponent = () => {
           {errors.description && errors.description.message}
         </FormErrorMessage>
       </FormControl>
-    </>
+    </Box>
   );
 };
 

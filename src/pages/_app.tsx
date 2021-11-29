@@ -15,6 +15,7 @@ import { Web3Provider } from "../contexts/Web3Provider";
 import Layout from "components/layout";
 import createEmotionCache from "styles/createEmotionCache";
 import theme from "styles/customTheme";
+
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {
@@ -26,8 +27,6 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
-
-
   return (
     <Web3Provider>
       <CacheProvider value={emotionCache}>

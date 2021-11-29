@@ -95,6 +95,7 @@ const ImageDropzone = () => {
               required: "This is required",
             })}
             {...getInputProps()}
+            size="md"
           />
         </Center>
       )}
@@ -117,6 +118,7 @@ const ImageDropzone = () => {
               required: "This is required",
             })}
             {...getInputProps()}
+            size="md"
           />
         </Center>
       )}

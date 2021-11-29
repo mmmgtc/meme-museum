@@ -9,7 +9,8 @@ const extendedColors: DeepPartial<
   spacepink: "#301041",
   spacelight: "#1A103D",
   spacelightalpha: "rgba(255, 255, 255, 0.05)",
-  spacelightpurple: "rgba(111, 63, 245, 0.2)",
+  spacelightpurple: "rgba(111, 63, 245, 0.5)",
+  spacelightpurpledark: "rgba(111, 63, 245, 1)",
   stone: "#9B95B0",
   smoke: "#3B3058",
   purple: {

@@ -1,9 +1,15 @@
-import { HStack, StackProps, Image } from "@chakra-ui/react";
+import { SimpleGrid, Image } from "@chakra-ui/react";
 
-function CardMedia(props: StackProps) {
-  const { children, ...others } = props;
+function CardMedia(props: any) {
+  const { children, src, ...others } = props;
   return (
-    <HStack
+    <SimpleGrid
+      columns={{
+        sm: 1,
+        md: 2,
+      }}
+      justifyContent="center"
+      alignItems="center"
       bg="spacepink"
       h="auto"
       w="full"
@@ -13,12 +19,13 @@ function CardMedia(props: StackProps) {
     >
       <Image
         rounded="3xl"
+        w="full"
         maxH="600px"
-        src="https://pbs.twimg.com/media/FD4GHmPVcAAwufb?format=jpg&name=large"
+        src={src}
         objectFit="contain"
       />
       {children}
-    </HStack>
+    </SimpleGrid>
   );
 }
 

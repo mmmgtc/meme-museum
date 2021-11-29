@@ -1,59 +1,77 @@
 import {
   Button,
   HStack,
-  Menu,
+  Flex,
   Badge,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React, { useContext } from "react";
 import Blockies from "react-blockies";
-import { AiFillSetting } from "react-icons/ai";
-import { BsFillPersonLinesFill } from "react-icons/bs";
+import { FiLogOut } from "react-icons/fi";
 
 import { Web3Context } from "../../contexts/Web3Provider";
 
 function ConnectButton() {
   const { account, connectWeb3, logout } = useContext(Web3Context);
-
+  const hoverBg = "purple.700";
   return (
-    <HStack w="full" justifyContent="center">
+    <Flex gridGap="4" w="full" justifyContent="flex-end">
       {account && (
-        <Badge rounded="full" bg="purple.200" fontWeight="600" w="full">
-          <HStack>
+        <Badge rounded="full" bg="purple.200" fontWeight="600" w="fit-content">
+          <HStack w="full">
             <Blockies
               size={10}
               seed={account.toLowerCase()}
               className="blockies"
               scale={4}
             />
-            <Text color="white" fontWeight="bold" isTruncated>
+            <Text
+              display={["none", "none", "flex", "flex"]}
+              color="white"
+              fontWeight="bold"
+              isTruncated
+            >
               {account}
             </Text>
           </HStack>
         </Badge>
       )}
       {account ? (
-        <Button
-          rounded="full"
-          _hover={{
-            background: "purple.700",
-          }}
-          color="white"
-          bg="purple.200"
-          onClick={logout}
-        >
-          LOGOUT
-        </Button>
+        <>
+          {/** DESKTOP* */}
+          <Button
+            aria-label="logout"
+            rounded="full"
+            _hover={{
+              background: hoverBg,
+            }}
+            color="white"
+            bg="purple.200"
+            onClick={logout}
+            display={["none", "none", "flex", "flex"]}
+          >
+            LOGOUT
+          </Button>
+          {/** MOBILE* */}
+          <IconButton
+            aria-label="logout"
+            rounded="full"
+            icon={<FiLogOut />}
+            _hover={{
+              background: hoverBg,
+            }}
+            color="white"
+            bg="purple.200"
+            onClick={logout}
+            display={["flex", "flex", "none", "none"]}
+          />
+        </>
       ) : (
         <Button
           rounded="full"
           _hover={{
-            background: "purple.700",
+            background: hoverBg,
           }}
           color="white"
           bg="purple.200"
@@ -62,7 +80,7 @@ function ConnectButton() {
           CONNECT
         </Button>
       )}
-    </HStack>
+    </Flex>
   );
 }
 

@@ -3,9 +3,8 @@
  * @todo: remove this comment below when ready
  * ref: https://github.com/vercel/next.js/issues/13712#issuecomment-910409023
  * */
-import { ColorModeScript } from '@chakra-ui/color-mode';
+import { ColorModeScript } from "@chakra-ui/react";
 import createEmotionServer from "@emotion/server/create-instance";
-import theme from "../styles/customTheme"
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, {
   Html,
@@ -16,6 +15,7 @@ import Document, {
 } from "next/document";
 import * as React from "react";
 
+import theme from "../styles/customTheme";
 import createEmotionCache from "styles/createEmotionCache";
 
 const APP_NAME = "quadratic-diplomacy";

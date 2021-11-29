@@ -77,8 +77,8 @@ export const Web3Provider = ({ children }: { children: any }) => {
         method: "POST",
         body: JSON.stringify({ signed: signature, address: account }),
         headers: {
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
     const authToken = await authResponse.json();

@@ -7,11 +7,9 @@ import {
   ModalOverlay,
   ModalBody,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalCloseButton,
-  useDisclosure,
 } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import CreateMemePage from "../views/CreateMemePage";
@@ -27,9 +25,26 @@ function CreateMemeModal({
   isOpen: boolean;
   onClose: any;
 }) {
+  const [isSubmitting, setIsSumbitting] = useState(false);
   const methods = useForm();
+  const [headers, setHeaders] = useState<{
+    Authorization: string;
+    [key: string]: string;
+  }>();
+
+  useEffect(() => {
+    // Perform localStorage action
+    const token = localStorage.getItem("Authorization");
+    if (token) {
+      setHeaders({
+        Authorization: `Token ${token}`,
+        "Content-Type": "application/json",
+      });
+    }
+  }, []);
 
   async function onSubmit() {
+    setIsSumbitting(true);
     const values = methods.getValues();
     console.log({ values });
     const formData = new FormData();
@@ -41,25 +56,26 @@ function CreateMemeModal({
       body: formData,
     });
     const { cids } = await cidsRes.json();
-    const authHeaderKey = "Authorization";
-    const headers = localStorage
-      ? {
-        [authHeaderKey]: localStorage.getItem("Authorization") || "",
-      }
-      : {};
-    const createMemeResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          ...values,
-          image: cids.image,
-        }),
-        headers,
-      }
-    );
-    const createdMeme = await createMemeResponse.json();
-    console.log({ createdMeme });
+
+    try {
+      const createMemeResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            ...values,
+            image: `https://ipfs.io/ipfs/${cids.image}`,
+          }),
+          headers,
+        }
+      );
+      const createdMeme = await createMemeResponse.json();
+      console.log({ createdMeme });
+      setIsSumbitting(false);
+    } catch (error) {
+      console.log(error);
+      setIsSumbitting(false);
+    }
   }
 
   return (
@@ -70,50 +86,46 @@ function CreateMemeModal({
       size="2xl"
     >
       <ModalOverlay />
-      <ModalContent rounded="3xl" bg="none">
+      <ModalContent rounded="3xl" bg="white">
         <ModalCloseButton color="pink.300" mt="6" mr="4" />
-        <ModalBody pb={6}>
+        <ModalBody>
           <FormProvider {...methods}>
-            <CenteredFrame>
-              <Card h="full" w="2xl" bg="white">
-                <Stack
-                  w="full"
-                  as="form"
-                  onSubmit={methods.handleSubmit(onSubmit)}
-                >
-                  <CreateMemePage />
-                  <TagsField />
-                </Stack>
-                <HStack justifyContent="center" alignItems="center">
-                  <Button
-                    mr="0.5rem"
-                    _hover={{
-                      background: "purple.700",
-                    }}
-                    color="white"
-                    bg="purple.200"
-                    isLoading={methods.formState.isSubmitting}
-                    type="submit"
-                    onClick={() => onSubmit()}
-                    px="1.25rem"
-                    fontSize="md"
-                  >
-                    SUBMIT
-                  </Button>
-                  <Button
-                    _hover={{
-                      background: "pink.700",
-                    }}
-                    color="white"
-                    bg="pink.300"
-                    rounded="full"
-                    onClick={onClose}
-                  >
-                    CANCEL
-                  </Button>
-                </HStack>
-              </Card>
-            </CenteredFrame>
+            <Stack as="form" onSubmit={methods.handleSubmit(onSubmit)}>
+              <CreateMemePage />
+              <TagsField />
+            </Stack>
+            <HStack
+              w="full"
+              justifyContent="flex-end"
+              alignItems="space-between"
+            >
+              <Button
+                mr="0.5rem"
+                _hover={{
+                  background: "purple.700",
+                }}
+                color="white"
+                bg="purple.200"
+                isLoading={methods.formState.isSubmitting}
+                type="submit"
+                onClick={() => onSubmit()}
+                px="1.25rem"
+                fontSize="md"
+              >
+                SUBMIT
+              </Button>
+              <Button
+                _hover={{
+                  background: "pink.700",
+                }}
+                color="white"
+                bg="pink.300"
+                rounded="full"
+                onClick={onClose}
+              >
+                CANCEL
+              </Button>
+            </HStack>
           </FormProvider>
         </ModalBody>
       </ModalContent>
