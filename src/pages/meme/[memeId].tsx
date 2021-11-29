@@ -10,7 +10,7 @@ import {
   Image,
   TagLabel,
   Badge,
-  SimpleGrid,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { GetStaticProps } from "next";
 import NextLink from "next/link";
@@ -23,6 +23,7 @@ import Card from "../../components/custom/Card";
 import Layout from "../../components/layout";
 import Container from "../../components/layout/Container";
 import { Web3Context } from "../../contexts/Web3Provider";
+import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../../helpers";
 
 type Props = {
   memeId: string | null;
@@ -48,13 +49,32 @@ export const getServerSideProps: GetStaticProps<Props, { memeId: string }> =
   };
 
 function MemePage(prefetchedMeme: MemeType) {
+  const { account, staticProvider } = useContext(Web3Context);
   const [meme, setMeme] = useState(prefetchedMeme);
-  const { account } = useContext(Web3Context);
+  const [ens, setENS] = useState<string | null>(null);
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
   }>();
 
+  useEffect(() => {
+    // Address to ENS
+    async function getENS() {
+      if (staticProvider && meme?.poaster && meme.poaster.username) {
+        try {
+          const resolvedENS = await staticProvider.lookupAddress(
+            meme.poaster.username
+          );
+          console.log({ resolvedENS });
+          setENS(resolvedENS);
+        } catch (error) {
+          console.log({ error });
+          setENS(null);
+        }
+      }
+    }
+    getENS();
+  }, [meme?.poaster, staticProvider]);
   useEffect(() => {
     // Perform localStorage action
     const token = localStorage.getItem("Authorization");
@@ -97,22 +117,26 @@ function MemePage(prefetchedMeme: MemeType) {
     console.log({ downvotedMeme });
     setMeme(downvotedMeme);
   };
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const badgeColor = useColorModeValue(brandColors.mainPurple, "white");
+  const color = "white";
 
   return (
-    <Card bg="spacepink">
+    <Card bg="spacelightpurple" color={color}>
       <Container>
-        <Image w="full" src={meme.image} objectFit="cover" />
+        <Image w="full" src={meme.image} objectFit="cover" rounded="3xl" />
         <Flex w="full">
           <Spacer />
           {meme.poaster.username === account && (
             <NextLink href="/edit-meme" passHref>
               <Button
                 rounded="full"
-                color="white"
-                bg="purple.200"
+                color={color}
+                bg={bg}
                 // onClick={onOpen}
                 _hover={{
-                  background: "purple.700",
+                  background: "white",
+                  color: brandColors.mainPurple,
                 }}
                 leftIcon={<EditIcon />}
               >
@@ -122,61 +146,98 @@ function MemePage(prefetchedMeme: MemeType) {
           )}
         </Flex>
 
-        <Flex
-          w="full"
-          direction="column"
-          pt="4"
-          color="white"
-          fontWeight="bold"
-        >
+        <Flex w="full" direction="column" pt="4" fontWeight="bold">
           <Text fontSize="4xl" py="2">
             {meme.title}
           </Text>
           <Text noOfLines={2} fontSize="2xl" py="2">
             {meme.description || "This meme has no story, no soul!"}
           </Text>
-          <Text fontSize="xs" py="2">
-            CREATED ON: {meme.created_at.toUpperCase()}
-          </Text>
-          <Text fontSize="xs" py="2">
-            POASTER:
-          </Text>
           <Flex
             align="center"
             w={{
               sm: "full",
-              md: "fit-content",
+              md: W_FIT_CONTENT,
             }}
             py="2"
           >
-            {meme.poaster && meme.poaster.username && (
+            {meme.poaster && (
               <Badge
                 rounded="full"
-                variant="outline"
-                w="full"
-                border="none"
-                px={2}
-                py={1}
+                color="white"
+                bg="none"
+                border="solid 1px white"
+                w={{
+                  base: "full",
+                  md: W_FIT_CONTENT,
+                }}
+                pr={4}
+                py={2}
                 fontWeight="400"
               >
-                <HStack w="full">
+                <HStack
+                  w={{
+                    sm: "full",
+                    md: W_FIT_CONTENT,
+                  }}
+                >
                   <Blockies
                     size={10}
                     seed={meme.poaster.username.toLowerCase()}
                     className="blockies"
                     scale={4}
                   />
-                  <Text isTruncated>{meme.poaster.username}</Text>
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                    w="full"
+                  >
+                    <HStack w="full">
+                      <Text
+                        fontSize="xs"
+                        isTruncated
+                        display={["none", "none", "flex", "flex"]}
+                      >
+                        CREATED ON
+                      </Text>
+                      <Text fontWeight="bold" isTruncated pr="2">
+                        {new Date(meme.created_at).toDateString().toUpperCase()}
+                      </Text>
+                    </HStack>
+                    <HStack w="full">
+                      <Text
+                        fontSize="xs"
+                        display={["none", "none", "flex", "flex"]}
+                      >
+                        BY
+                      </Text>
+                      <Text
+                        fontWeight="bold"
+                        isTruncated
+                        display={["none", "none", "flex", "flex"]}
+                      >
+                        {ens || meme.poaster.username}
+                      </Text>
+                      <Text
+                        fontWeight="bold"
+                        isTruncated
+                        display={["flex", "flex", "none", "none"]}
+                      >
+                        {ens || getSlicedAddress(meme.poaster.username)}
+                      </Text>
+                    </HStack>
+                  </Flex>
                 </HStack>
               </Badge>
             )}
           </Flex>
 
           {meme.tags && meme.tags.length > 0 && (
-            <Flex wrap="wrap" w="fit-content" py="2" gridGap="2">
+            <Flex wrap="wrap" w={W_FIT_CONTENT} py="2" gridGap="2">
               {meme.tags.map(({ name }) => (
                 <Tag flexGrow={1} rounded="full" size="md" key={name}>
-                  <TagLabel fontWeight="bold" alt={name}>
+                  <TagLabel fontWeight="bold" color={badgeColor} alt={name}>
                     {name.toUpperCase()}
                   </TagLabel>
                 </Tag>

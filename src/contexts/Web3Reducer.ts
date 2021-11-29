@@ -1,8 +1,11 @@
+import { ethers } from "ethers";
 /* eslint-disable import/prefer-default-export */
 export type State = {
   loading: boolean;
   account: null | string;
+  ens: null | string;
   provider: null | any;
+  staticProvider: ethers.providers.Web3Provider;
   self: null | any;
   connectWeb3?: any;
   logout?: any;
@@ -13,6 +16,11 @@ export const Web3Reducer = (state: State, action: Record<string, any>) => {
       return {
         ...state,
         account: action.payload,
+      };
+    case "SET_ENS":
+      return {
+        ...state,
+        ens: action.payload,
       };
     case "SET_PROVIDER":
       return {

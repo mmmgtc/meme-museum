@@ -11,14 +11,20 @@ import Blockies from "react-blockies";
 import { FiLogOut } from "react-icons/fi";
 
 import { Web3Context } from "../../contexts/Web3Provider";
+import { brandColors } from "../../helpers";
 
 function ConnectButton() {
-  const { account, connectWeb3, logout } = useContext(Web3Context);
+  const { account, ens, connectWeb3, logout } = useContext(Web3Context);
   const hoverBg = "purple.700";
   return (
     <Flex gridGap="4" w="full" justifyContent="flex-end">
       {account && (
-        <Badge rounded="full" bg="purple.200" fontWeight="600" w="fit-content">
+        <Badge
+          rounded="full"
+          bg={brandColors.mainPurple}
+          fontWeight="600"
+          w="fit-content"
+        >
           <HStack w="full">
             <Blockies
               size={10}
@@ -31,8 +37,9 @@ function ConnectButton() {
               color="white"
               fontWeight="bold"
               isTruncated
+              p="2"
             >
-              {account}
+              {ens || account}
             </Text>
           </HStack>
         </Badge>
@@ -44,10 +51,11 @@ function ConnectButton() {
             aria-label="logout"
             rounded="full"
             _hover={{
-              background: hoverBg,
+              background: "white",
+              color: brandColors.mainPurple,
             }}
             color="white"
-            bg="purple.200"
+            bg={brandColors.mainPurple}
             onClick={logout}
             display={["none", "none", "flex", "flex"]}
           >
@@ -59,10 +67,11 @@ function ConnectButton() {
             rounded="full"
             icon={<FiLogOut />}
             _hover={{
-              background: hoverBg,
+              background: "white",
+              color: brandColors.mainPurple,
             }}
             color="white"
-            bg="purple.200"
+            bg={brandColors.mainPurple}
             onClick={logout}
             display={["flex", "flex", "none", "none"]}
           />
@@ -71,7 +80,8 @@ function ConnectButton() {
         <Button
           rounded="full"
           _hover={{
-            background: hoverBg,
+            background: "white",
+            color: "purple.200",
           }}
           color="white"
           bg="purple.200"

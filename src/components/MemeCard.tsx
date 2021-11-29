@@ -9,9 +9,10 @@ import {
   Tag,
   TagLabel,
   VStack,
-  Stack,
+  Box,
   HStack,
   Container,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
@@ -19,20 +20,44 @@ import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
-import { getSlicedAddress } from "../helpers";
+import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../helpers";
 
 import Card from "./custom/Card";
 import CardMedia from "./custom/CardMedia";
 
 function MemeCard({ meme }: { meme: any }) {
   const router = useRouter();
+  const { staticProvider } = useContext(Web3Context);
   const [updatedMeme, setUpdatedMeme] = useState(meme);
+  const [ens, setENS] = useState<string | null>(null);
 
-  const { account } = useContext(Web3Context);
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
   }>();
+
+  useEffect(() => {
+    // Address to ENS
+    async function getENS() {
+      if (
+        staticProvider &&
+        updatedMeme?.poaster &&
+        updatedMeme.poaster.username
+      ) {
+        try {
+          const resolvedENS = await staticProvider.lookupAddress(
+            updatedMeme.poaster.username
+          );
+          console.log({ resolvedENS });
+          setENS(resolvedENS);
+        } catch (error) {
+          console.log({ error });
+          setENS(null);
+        }
+      }
+    }
+    getENS();
+  }, [updatedMeme?.poaster, staticProvider]);
 
   useEffect(() => {
     // Perform localStorage action
@@ -84,50 +109,102 @@ function MemeCard({ meme }: { meme: any }) {
   const createdAt =
     updatedMeme.created_at ?? new Date().toDateString().toUpperCase();
 
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
-    <Card bg="spacepink" color="purple.200">
+    <Card bg={bg} color={color}>
       <Image
         rounded="3xl"
         minH="100px"
         w="full"
-        maxH="600px"
-        // objectFit="contain"
+        h="300px"
+        objectFit="contain"
         src={meme.image}
-        objectFit="cover"
       />
-      <Flex w="full" direction="column" py="6" color="white" fontWeight="bold">
+      <Flex w="full" direction="column" py="6" fontWeight="bold">
         <Text fontSize="2xl">{updatedMeme.title}</Text>
         <Text noOfLines={2} fontSize="xl">
           {updatedMeme.description || "This meme has no story, no soul!"}
         </Text>
-        <Text fontSize="xs">CREATED ON: {createdAt.toUpperCase()}</Text>
-        <Text fontSize="xs">POASTER:</Text>
+
         <Flex
           align="center"
           w={{
             sm: "full",
-            md: "fit-content",
+            md: W_FIT_CONTENT,
           }}
           py="2"
         >
           {updatedMeme.poaster && (
             <Badge
               rounded="full"
-              variant="outline"
-              w="full"
-              border="none"
-              px={2}
-              py={1}
+              color={color}
+              bg="none"
+              border={`solid 1px ${badgeBorderColor}`}
+              w={{
+                base: "full",
+                md: W_FIT_CONTENT,
+              }}
+              pr={4}
+              py={2}
               fontWeight="400"
             >
-              <HStack w="full">
+              <HStack
+                w={{
+                  sm: "full",
+                  md: W_FIT_CONTENT,
+                }}
+              >
                 <Blockies
                   size={10}
                   seed={updatedMeme.poaster.username.toLowerCase()}
                   className="blockies"
                   scale={4}
                 />
-                <Text isTruncated>{updatedMeme.poaster.username}</Text>
+                <Flex
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  w="full"
+                >
+                  <HStack w="full">
+                    <Text
+                      fontSize="xs"
+                      isTruncated
+                      display={["none", "none", "flex", "flex"]}
+                    >
+                      CREATED ON
+                    </Text>
+                    <Text fontWeight="bold" isTruncated pr="2">
+                      {new Date(updatedMeme.created_at)
+                        .toDateString()
+                        .toUpperCase()}
+                    </Text>
+                  </HStack>
+                  <HStack w="full">
+                    <Text
+                      fontSize="xs"
+                      display={["none", "none", "flex", "flex"]}
+                    >
+                      BY
+                    </Text>
+                    <Text
+                      fontWeight="bold"
+                      isTruncated
+                      display={["none", "none", "flex", "flex"]}
+                    >
+                      {ens || updatedMeme.poaster.username}
+                    </Text>
+                    <Text
+                      fontWeight="bold"
+                      isTruncated
+                      display={["flex", "flex", "none", "none"]}
+                    >
+                      {ens || getSlicedAddress(updatedMeme.poaster.username)}
+                    </Text>
+                  </HStack>
+                </Flex>
               </HStack>
             </Badge>
           )}
@@ -135,10 +212,10 @@ function MemeCard({ meme }: { meme: any }) {
 
         <Spacer />
         {updatedMeme.tags && updatedMeme.tags.length > 0 && (
-          <Flex wrap="wrap" w="fit-content" py="2" gridGap="2">
+          <Flex wrap="wrap" w={W_FIT_CONTENT} py="2" gridGap="2">
             {updatedMeme.tags.map(({ name }) => (
               <Tag flexGrow={1} rounded="full" size="md" key={name}>
-                <TagLabel fontWeight="bold" alt={name}>
+                <TagLabel fontWeight="bold" color={color} alt={name}>
                   {name.toUpperCase()}
                 </TagLabel>
               </Tag>
@@ -177,10 +254,11 @@ function MemeCard({ meme }: { meme: any }) {
           w="100%"
           rounded="full"
           _hover={{
-            background: "purple.700",
+            background: "white",
+            color: brandColors.mainPurple,
           }}
-          color="white"
-          bg="purple.200"
+          color={bg}
+          bg={color}
           fontSize="md"
           onClick={() => openMeme()}
         >

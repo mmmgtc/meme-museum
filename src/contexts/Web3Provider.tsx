@@ -6,12 +6,16 @@ import Web3Modal from "web3modal";
 
 import { State, Web3Reducer } from "./Web3Reducer";
 
+const { NEXT_PUBLIC_INFURA_ID } = process.env;
+const staticProvider = new ethers.providers.StaticJsonRpcProvider(
+  `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`
+);
 const initialState = {
   loading: false,
   account: null,
   provider: null,
+  staticProvider,
 } as State;
-const { NEXT_PUBLIC_INFURA_ID } = process.env;
 
 const providerOptions = {
   walletconnect: {
@@ -43,6 +47,12 @@ export const Web3Provider = ({ children }: { children: any }) => {
     });
   };
 
+  const setENS = (ens: null | string) => {
+    dispatch({
+      type: "SET_ENS",
+      payload: ens,
+    });
+  };
   const setProvider = (provider: null | any) => {
     dispatch({
       type: "SET_PROVIDER",
@@ -66,6 +76,14 @@ export const Web3Provider = ({ children }: { children: any }) => {
     setProvider(ethersProvider);
     const signer = ethersProvider.getSigner();
     const account = await signer.getAddress();
+    try {
+      const ens = await ethersProvider.lookupAddress(account);
+      console.log({ ens });
+      setENS(ens);
+    } catch (error) {
+      console.log({ error });
+      setENS(null);
+    }
     setAccount(account);
     const signature = await ethersProvider.send("personal_sign", [
       "meme party",

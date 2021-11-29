@@ -38,16 +38,8 @@ function Navbar() {
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
             <NextLink href="/">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                {/* <LogoIcon size="25px" /> */}
-                {/* <Heading
-                  fontSize="lg"
-                  color={headingColor}
-                  display={["flex", "flex", "none", "none"]}
-                >
-                  MEMES.PARTY
-                </Heading> */}
                 <Heading fontSize="lg" color={headingColor}>
-                  乁༼ ☯‿☯✿༽ㄏ MEMES.PARTY ༼ノ◕ヮ◕ ༽ノ︵┻━┻
+                  MEMES.PARTY
                 </Heading>
               </Flex>
             </NextLink>

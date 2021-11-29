@@ -23,6 +23,7 @@ import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
+import { brandColors } from "../helpers";
 
 const MemeCard = dynamic(() => import("../components/MemeCard"), {
   ssr: false,
@@ -67,17 +68,18 @@ function Memes() {
       <Container>
         <VStack w="full" alignItems="center">
           <Heading rounded="full" p="5" color="white">
-            MEME LORDS IN DA PARTY ༼⌐ ■ل͟■ ༽
+            MEME LORDS IN DA PARTY!
           </Heading>
           <Button
             rounded="full"
-            color="white"
             size="lg"
-            bg="purple.200"
+            bg={brandColors.mainPurple}
+            color="white"
             fontSize="xl"
             onClick={onOpen}
             _hover={{
-              background: "purple.700",
+              background: "white",
+              color: brandColors.mainPurple,
             }}
             leftIcon={<AddIcon />}
           >
@@ -114,14 +116,14 @@ function Memes() {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={1} spacing={10}>
+              <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={10}>
                 {memes.map((meme: MemeType) => (
                   <MemeCard key={meme.id} meme={meme} />
                 ))}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={1} spacing={10}>
+              <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={10}>
                 {memes
                   .filter((meme: MemeType) => meme.poaster.username === account)
                   .map((meme: MemeType) => (

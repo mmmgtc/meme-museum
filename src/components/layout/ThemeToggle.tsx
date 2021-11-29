@@ -10,7 +10,8 @@ const ThemeToggle = () => {
       color="white"
       bg="purple.200"
       _hover={{
-        background: "purple.700",
+        background: "white",
+        color: "purple.200",
       }}
       aria-label="theme toggle"
       icon={colorMode === "light" ? <RiMoonFill /> : <RiSunLine />}

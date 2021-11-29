@@ -9,9 +9,10 @@ import {
   ModalContent,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
+import { Web3Context } from "../contexts/Web3Provider";
 import CreateMemePage from "../views/CreateMemePage";
 import TagsField from "../views/TagsField";
 import Card from "components/custom/Card";
@@ -25,6 +26,7 @@ function CreateMemeModal({
   isOpen: boolean;
   onClose: any;
 }) {
+  const { account } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
   const methods = useForm();
   const [headers, setHeaders] = useState<{
@@ -35,13 +37,14 @@ function CreateMemeModal({
   useEffect(() => {
     // Perform localStorage action
     const token = localStorage.getItem("Authorization");
+    console.log({ token });
     if (token) {
       setHeaders({
         Authorization: `Token ${token}`,
         "Content-Type": "application/json",
       });
     }
-  }, []);
+  }, [account]);
 
   async function onSubmit() {
     setIsSumbitting(true);
@@ -102,7 +105,8 @@ function CreateMemeModal({
               <Button
                 mr="0.5rem"
                 _hover={{
-                  background: "purple.700",
+                  background: "white",
+                  color: "purple.200",
                 }}
                 color="white"
                 bg="purple.200"
