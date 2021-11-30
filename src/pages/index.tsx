@@ -2,7 +2,6 @@ import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
   VStack,
-  Heading,
   SimpleGrid,
   Tab,
   TabList,
