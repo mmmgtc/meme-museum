@@ -23,9 +23,11 @@ import CenteredFrame from "./layout/CenteredFrame";
 function CreateMemeModal({
   isOpen,
   onClose,
+  addMeme,
 }: {
   isOpen: boolean;
   onClose: any;
+  addMeme: any;
 }) {
   const { account } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
@@ -76,6 +78,7 @@ function CreateMemeModal({
       const createdMeme = await createMemeResponse.json();
       console.log({ createdMeme });
       setIsSumbitting(false);
+      addMeme(createdMeme);
     } catch (error) {
       console.log(error);
       setIsSumbitting(false);

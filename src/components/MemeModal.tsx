@@ -115,7 +115,7 @@ function MemeModal({
                   background: "purple.500",
                   color,
                 }}
-                onClick={handleUpvote}
+                onClick={() => handleUpvote(meme.id)}
               >
                 {meme.upvotes}
               </Button>
@@ -132,7 +132,7 @@ function MemeModal({
                   background: "purple.500",
                   color,
                 }}
-                onClick={handleDownvote}
+                onClick={() => handleDownvote(meme.id)}
               >
                 {meme.downvotes}
               </Button>

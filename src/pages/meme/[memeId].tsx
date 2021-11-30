@@ -2,7 +2,6 @@ import { EditIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
-  Heading,
   Spacer,
   HStack,
   Text,
@@ -18,12 +17,15 @@ import React, { useEffect, useState, useContext } from "react";
 import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
-import { MemeType } from "..";
 import Card from "../../components/custom/Card";
-import Layout from "../../components/layout";
 import Container from "../../components/layout/Container";
 import { Web3Context } from "../../contexts/Web3Provider";
-import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../../helpers";
+import {
+  brandColors,
+  getSlicedAddress,
+  MemeType,
+  W_FIT_CONTENT,
+} from "../../helpers";
 
 type Props = {
   memeId: string | null;

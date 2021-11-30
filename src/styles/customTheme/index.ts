@@ -1,9 +1,21 @@
 import { extendTheme, ThemeConfig } from "@chakra-ui/react";
+import { mode, Styles } from "@chakra-ui/theme-tools";
 
 import colors from "./colors";
 
+// setup light/dark mode global defaults
+const styles: Styles = {
+  global: (props) => ({
+    body: {
+      color: mode("purple.500", "white")(props),
+      bg: mode("white", "black")(props),
+    },
+  }),
+};
+
 const baseTheme = {
   colors,
+  styles,
   fonts: {
     heading: "Comic Sans MS",
     body: "Comic Sans MS",

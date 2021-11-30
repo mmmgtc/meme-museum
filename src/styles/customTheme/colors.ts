@@ -5,6 +5,7 @@ const extendedColors: DeepPartial<
   Record<string, Theme["colors"]["current" | "purple"]>
 > = {
   white: "#fff",
+  black: "#000000",
   space: "#0E0333",
   spacepink: "#301041",
   spacelight: "#1A103D",
