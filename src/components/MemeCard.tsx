@@ -25,7 +25,7 @@ import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../helpers";
 import Card from "./custom/Card";
 import CardMedia from "./custom/CardMedia";
 
-function MemeCard({ meme }: { meme: any }) {
+function MemeCard({ meme, openMeme }: { meme: any; openMeme: any }) {
   const router = useRouter();
   const { staticProvider } = useContext(Web3Context);
   const [updatedMeme, setUpdatedMeme] = useState(meme);
@@ -102,10 +102,6 @@ function MemeCard({ meme }: { meme: any }) {
     setUpdatedMeme(downvotedMeme);
   };
 
-  const openMeme = () => {
-    router.push(`/meme/${updatedMeme.id}`);
-  };
-
   const createdAt =
     updatedMeme.created_at ?? new Date().toDateString().toUpperCase();
 
@@ -113,16 +109,54 @@ function MemeCard({ meme }: { meme: any }) {
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
-    <Card bg={bg} color={color}>
-      <Image
+    <CardMedia
+      bg={bg}
+      color={color}
+      border={`solid 5px ${badgeBorderColor}`}
+      src={meme.image}
+      onClick={() => openMeme(meme)}
+    >
+      {/* <Image
         rounded="3xl"
         minH="100px"
         w="full"
         h="300px"
         objectFit="contain"
         src={meme.image}
-      />
-      <Flex w="full" direction="column" py="6" fontWeight="bold">
+      /> */}
+      <Flex pb="6" w="full" justify="space-around">
+        <Button
+          leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
+          rounded="full"
+          size="md"
+          variant="solid"
+          border="solid 1px #9AE6B4"
+          color={color}
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={handleUpvote}
+        >
+          {updatedMeme.upvotes}
+        </Button>
+        <Button
+          leftIcon={<FaArrowCircleDown color="#FEB2B2" fontSize="1.7rem" />}
+          rounded="full"
+          size="md"
+          variant="solid"
+          border="solid 1px #FEB2B2"
+          color={color}
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={handleDownvote}
+        >
+          {updatedMeme.downvotes}
+        </Button>
+      </Flex>
+      {/* <Flex w="full" direction="column" py="6" fontWeight="bold">
         <Text fontSize="2xl">{updatedMeme.title}</Text>
         <Text noOfLines={2} fontSize="xl">
           {updatedMeme.description || "This meme has no story, no soul!"}
@@ -262,8 +296,8 @@ function MemeCard({ meme }: { meme: any }) {
         >
           VIEW MEME
         </Button>
-      </Flex>
-    </Card>
+      </Flex> */}
+    </CardMedia>
   );
 }
 

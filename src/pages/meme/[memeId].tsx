@@ -51,12 +51,12 @@ export const getServerSideProps: GetStaticProps<Props, { memeId: string }> =
 function MemePage(prefetchedMeme: MemeType) {
   const { account, staticProvider } = useContext(Web3Context);
   const [meme, setMeme] = useState(prefetchedMeme);
-  const [ens, setENS] = useState<string | null>(null);
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
   }>();
 
+  const [ens, setENS] = useState<string | null>(null);
   useEffect(() => {
     // Address to ENS
     async function getENS() {
@@ -122,9 +122,9 @@ function MemePage(prefetchedMeme: MemeType) {
   const color = "white";
 
   return (
-    <Card bg="spacelightpurple" color={color}>
+    <Card bg={bg} color={color}>
       <Container>
-        <Image w="full" src={meme.image} objectFit="cover" rounded="3xl" />
+        <Image maxH="600px" src={meme.image} objectFit="cover" rounded="3xl" />
         <Flex w="full">
           <Spacer />
           {meme.poaster.username === account && (

@@ -1,13 +1,9 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
-  Flex,
   VStack,
   Heading,
   SimpleGrid,
-  HStack,
-  GridItem,
-  Spacer,
   Tab,
   TabList,
   TabPanel,
@@ -23,6 +19,7 @@ import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
+import MemeModal from "../components/MemeModal";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors } from "../helpers";
 
@@ -52,7 +49,14 @@ export type MemeType = {
 function Memes() {
   const { account } = useContext(Web3Context);
   const [memes, setMemes] = useState([]);
+  const [currentMeme, setCurrentMeme] = useState<MemeType>();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenMeme,
+    onOpen: onOpenMeme,
+    onClose: onCloseMeme,
+  } = useDisclosure();
+
   useEffect(() => {
     async function fetchMemes() {
       const memesResponse = await fetch(
@@ -64,8 +68,13 @@ function Memes() {
     }
     fetchMemes();
   }, []);
+
+  const handleOpenMeme = (meme: MemeType) => {
+    setCurrentMeme(meme);
+    onOpenMeme();
+  };
   return (
-    <Card>
+    <Card bg="purple.500">
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" />
@@ -74,19 +83,25 @@ function Memes() {
             size="lg"
             bg={brandColors.mainPurple}
             color="white"
-            fontSize="xl"
             onClick={onOpen}
             _hover={{
               background: "white",
               color: brandColors.mainPurple,
             }}
+            fontSize="xl"
             leftIcon={<AddIcon />}
           >
             CREATE MEME
           </Button>
         </VStack>
         <CreateMemeModal {...{ isOpen, onClose }} />
-
+        {currentMeme && (
+          <MemeModal
+            isOpen={isOpenMeme}
+            onClose={onCloseMeme}
+            meme={currentMeme}
+          />
+        )}
         <Tabs isFitted variant="soft-rounded" py="2rem" w="full">
           <TabList>
             <Tab
@@ -108,6 +123,18 @@ function Memes() {
                 background: "purple.200",
               }}
               borderLeftRadius="0"
+              borderRightRadius="0"
+            >
+              MEMEPALOZZA
+            </Tab>
+            <Tab
+              color="white"
+              backgroundColor="purple.200"
+              _selected={{
+                color: "white",
+                background: "purple.200",
+              }}
+              borderLeftRadius="0"
             >
               MY MEMES
             </Tab>
@@ -115,18 +142,26 @@ function Memes() {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={10}>
+              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {memes.map((meme: MemeType) => (
-                  <MemeCard key={meme.id} meme={meme} />
+                  <MemeCard
+                    key={meme.id}
+                    meme={meme}
+                    openMeme={handleOpenMeme}
+                  />
                 ))}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={{ sm: 1, md: 2 }} spacing={10}>
+              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {memes
                   .filter((meme: MemeType) => meme.poaster.username === account)
                   .map((meme: MemeType) => (
-                    <MemeCard key={meme.id} meme={meme} />
+                    <MemeCard
+                      key={meme.id}
+                      meme={meme}
+                      openMeme={handleOpenMeme}
+                    />
                   ))}
               </SimpleGrid>
             </TabPanel>

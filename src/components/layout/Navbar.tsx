@@ -1,15 +1,20 @@
+import { Search2Icon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
   HStack,
   Stack,
-  Heading,
+  Button,
   Container,
+  InputGroup,
+  InputLeftElement,
+  Input,
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React from "react";
 
+import { brandColors } from "../../helpers";
 import ConnectButton from "../Buttons/ConnectButton";
 import LogoIcon from "../Icons/LogoIcon";
 
@@ -21,18 +26,21 @@ import ThemeToggle from "./ThemeToggle";
 
 function Navbar() {
   const headingColor = "purple.200"; // useColorModeValue("white", "purple.200");
-  const navBg = "none"; // useColorModeValue("spacelightalpha", "spacelightpurple");
+  const navBg = "purple.500"; // useColorModeValue("spacelightalpha", "purple.500");
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const altColor = useColorModeValue("white", brandColors.mainPurple);
+  const borderColor = useColorModeValue("#8C65F7", "white");
   return (
-    <Box px={4} as="nav" w="100%" top="0" zIndex={1}>
+    <Box as="nav" w="100%" top="0" zIndex={1}>
       <Container
         display="flex"
         p={2}
-        maxW="7xl"
+        maxW="8xl"
         wrap="wrap"
         align="center"
         justify="space-between"
         bg={navBg}
-        rounded="3xl"
+        roundedBottom="3xl"
       >
         {/* <Flex h={16} alignItems="center" justifyContent="space-between"> */}
         <HStack w="full" spacing={8} alignItems="center">
@@ -43,9 +51,53 @@ function Navbar() {
               </Flex>
             </NextLink>
           </Flex>
+          <NextLink href="/">
+            <Button
+              rounded="full"
+              size="md"
+              variant="solid"
+              bg="purple.500"
+              border={`solid 1px ${borderColor}`}
+              color="white"
+              _hover={{
+                bg: altColor,
+                color,
+              }}
+            >
+              MEMES
+            </Button>
+          </NextLink>
+          <NextLink href="/about">
+            <Button
+              rounded="full"
+              size="md"
+              variant="solid"
+              bg="purple.500"
+              border={`solid 1px ${borderColor}`}
+              color="white"
+              _hover={{
+                bg: altColor,
+                color,
+              }}
+            >
+              ABOUT
+            </Button>
+          </NextLink>
         </HStack>
+
         <Flex alignItems="center">
           <Stack direction="row" spacing={3}>
+            <InputGroup>
+              <InputLeftElement pointerEvents="none">
+                <Search2Icon color="purple.200" />
+              </InputLeftElement>
+              <Input
+                rounded="full"
+                borderColor="purple.200"
+                type="search"
+                placeholder="Search..."
+              />
+            </InputGroup>
             <ConnectButton />
             <ThemeToggle />
           </Stack>
