@@ -9,10 +9,13 @@ import {
   Image,
   Input,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
+
+import { brandColors } from "../helpers";
 
 const ImageDropzone = () => {
   const [files, setFiles] = useState([]);
@@ -21,6 +24,9 @@ const ImageDropzone = () => {
     setValue,
     formState: { errors },
   } = useFormContext();
+
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles, e) => {
@@ -74,17 +80,26 @@ const ImageDropzone = () => {
 
   return (
     <FormControl py="2" isInvalid={errors.image} {...getRootProps()}>
-      <FormLabel htmlFor="image" fontWeight="bold">
+      <FormLabel color={color} htmlFor="image" fontWeight="bold">
         MEME IMAGE
       </FormLabel>
       {files && thumbs}
       {files.length === 0 && isDragActive && (
         <Center
-          _hover={{ cursor: "pointer" }}
           h="150px"
-          bg="white"
-          border="solid 5px #8C65F7"
-          color="purple.200"
+          borderColor="purple.700"
+          bg={bg}
+          border={`solid 5px ${brandColors.darkPurple}`}
+          color={color}
+          fontWeight="bold"
+          style={{
+            textTransform: "uppercase",
+          }}
+          _hover={{
+            bg: brandColors.darkPurple,
+            color: "white",
+            cursor: "pointer",
+          }}
           borderRadius="4"
         >
           DROP THE FILES HERE ...
@@ -102,15 +117,22 @@ const ImageDropzone = () => {
 
       {files.length === 0 && !isDragActive && (
         <Center
-          w="full"
-          _hover={{ cursor: "pointer" }}
           h="150px"
-          bg="white"
-          border="solid 5px #8C65F7"
-          color="purple.200"
+          bg={bg}
+          border={`solid 5px ${brandColors.darkPurple}`}
+          color={color}
+          fontWeight="bold"
+          style={{
+            textTransform: "uppercase",
+          }}
+          _hover={{
+            bg: brandColors.darkPurple,
+            color: "white",
+            cursor: "pointer",
+          }}
           borderRadius="4"
         >
-          DRAG &amp; DROP YOUR MEME HERE OR CLICK TO SELECT
+          DRAG &amp; DROP YOUR MEME zzz HERE OR CLICK TO SELECT
           <Input
             type="file"
             placeholder="Meme image"

@@ -1,10 +1,12 @@
 import { IconButton, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { FaFrog } from "react-icons/fa";
 import { RiMoonFill, RiSunLine } from "react-icons/ri";
 
 import { brandColors } from "../../helpers";
 
 const ThemeToggle = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { toggleColorMode } = useColorMode();
+  const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
@@ -13,15 +15,15 @@ const ThemeToggle = () => {
     <IconButton
       rounded="full"
       variant="solid"
-      bg="purple.200"
+      bg={bg}
       border={`solid 5px ${borderColor}`}
-      color="white"
+      color={color}
       _hover={{
-        bg: altColor,
-        color,
+        bg: brandColors.darkPurple,
+        color: "white",
       }}
       aria-label="theme toggle"
-      icon={colorMode === "light" ? <RiMoonFill /> : <RiSunLine />}
+      icon={<FaFrog />}
       onClick={toggleColorMode}
     />
   );

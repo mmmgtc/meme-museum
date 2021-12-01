@@ -49,7 +49,7 @@ function Navbar() {
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
             <NextLink href="/">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <LogoIcon size="200px" />
+                <LogoIcon size="230px" />
               </Flex>
             </NextLink>
           </Flex>
@@ -97,8 +97,8 @@ function Navbar() {
                 _placeholder={{
                   color,
                 }}
-                rounded="full"
                 variant="solid"
+                rounded="full"
                 bg={bg}
                 border={`solid 5px ${borderColor}`}
                 color={color}
@@ -106,11 +106,11 @@ function Navbar() {
                   bg: brandColors.darkPurple,
                   color: "white",
                 }}
-                type="search"
                 fontWeight="bold"
                 style={{
                   textTransform: "uppercase",
                 }}
+                type="search"
                 placeholder="SEARCH.."
               />
             </InputGroup>

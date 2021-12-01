@@ -8,6 +8,7 @@ import {
   Input,
   Image,
   Textarea,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, { useCallback, useState, useEffect } from "react";
@@ -15,6 +16,7 @@ import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
 import IconWithState from "../components/custom/IconWithState";
+import { brandColors } from "../helpers";
 
 import ImageDropzone from "./ImageDropzone";
 
@@ -30,6 +32,7 @@ const CreateMemePage: React.FunctionComponent = () => {
   const requiredText = "This is required";
   const purple = "purple.300";
   const purpleDark = "purple.700";
+
   useEffect(
     () => () => {
       // Make sure to revoke the data uris to avoid memory leaks
@@ -41,20 +44,35 @@ const CreateMemePage: React.FunctionComponent = () => {
   function goBack() {
     router.back();
   }
+
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  // const altColor = useColorModeValue("white", brandColors.darkPurple);
+  const altColor = useColorModeValue("white", brandColors.darkPurple);
+  const borderColor = useColorModeValue("#8C65F7", "white");
+
   return (
     <Box color="purple.200">
       <ImageDropzone />
       <FormControl py="2" isInvalid={errors.title}>
-        <FormLabel htmlFor="title" fontWeight="bold">
+        <FormLabel color={color} htmlFor="title" fontWeight="bold">
           TITLE
         </FormLabel>
         <Input
           borderColor={purple}
+          bg={bg}
+          border={`solid 5px ${borderColor}`}
+          color={color}
           _hover={{
-            borderColor: purple,
+            bg: brandColors.darkPurple,
+            color: "white",
+          }}
+          fontWeight="bold"
+          style={{
+            textTransform: "uppercase",
           }}
           _focus={{
-            borderColor: purpleDark,
+            borderColor,
             boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
           placeholder="Meme title"
@@ -71,16 +89,24 @@ const CreateMemePage: React.FunctionComponent = () => {
         </FormErrorMessage>
       </FormControl>
       <FormControl py="2" isInvalid={errors.meme_lord}>
-        <FormLabel htmlFor="meme_lord" fontWeight="bold">
+        <FormLabel color={color} htmlFor="meme_lord" fontWeight="bold">
           MEME LORD
         </FormLabel>
         <Input
           borderColor={purple}
+          bg={bg}
+          border={`solid 5px ${borderColor}`}
+          color={color}
           _hover={{
-            borderColor: purple,
+            bg: brandColors.darkPurple,
+            color: "white",
+          }}
+          fontWeight="bold"
+          style={{
+            textTransform: "uppercase",
           }}
           _focus={{
-            borderColor: purpleDark,
+            borderColor,
             boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
           placeholder="Meme lord"
@@ -97,16 +123,24 @@ const CreateMemePage: React.FunctionComponent = () => {
         </FormErrorMessage>
       </FormControl>
       <FormControl py="2" isInvalid={errors.description}>
-        <FormLabel htmlFor="description" fontWeight="bold">
+        <FormLabel color={color} htmlFor="description" fontWeight="bold">
           DESCRIPTION
         </FormLabel>
         <Textarea
           borderColor={purple}
+          bg={bg}
+          border={`solid 5px ${borderColor}`}
+          color={color}
           _hover={{
-            borderColor: purple,
+            bg: brandColors.darkPurple,
+            color: "white",
+          }}
+          fontWeight="bold"
+          style={{
+            textTransform: "uppercase",
           }}
           _focus={{
-            borderColor: purpleDark,
+            borderColor,
             boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
           placeholder="Meme description"
