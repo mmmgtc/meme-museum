@@ -46,7 +46,7 @@ function Navbar() {
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
             <NextLink href="/">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <LogoIcon size="230px" />
+                <LogoIcon size="225px" />
               </Flex>
             </NextLink>
           </Flex>
@@ -56,7 +56,7 @@ function Navbar() {
               rounded="full"
               variant="solid"
               bg={bg}
-              border={`solid 5px ${borderColor}`}
+              border={`solid 4px ${borderColor}`}
               color={color}
               _hover={{
                 bg: brandColors.darkPurple,
@@ -72,7 +72,7 @@ function Navbar() {
               rounded="full"
               variant="solid"
               bg={bg}
-              border={`solid 5px ${borderColor}`}
+              border={`solid 4px ${borderColor}`}
               color={color}
               _hover={{
                 bg: brandColors.darkPurple,
@@ -86,31 +86,6 @@ function Navbar() {
 
         <Flex alignItems="center" w="full">
           <Stack direction="row" spacing={3} w="full">
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <Search2Icon color={color} />
-              </InputLeftElement>
-              <Input
-                _placeholder={{
-                  color,
-                }}
-                variant="solid"
-                rounded="full"
-                bg={bg}
-                border={`solid 5px ${borderColor}`}
-                color={color}
-                _hover={{
-                  bg: brandColors.darkPurple,
-                  color: "white",
-                }}
-                fontWeight="bold"
-                style={{
-                  textTransform: "uppercase",
-                }}
-                type="search"
-                placeholder="SEARCH.."
-              />
-            </InputGroup>
             <ConnectButton />
             <ThemeToggle />
           </Stack>

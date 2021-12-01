@@ -29,7 +29,7 @@ function ConnectButton() {
           w="fit-content"
           variant="solid"
           bg={bg}
-          border={`solid 5px ${borderColor}`}
+          border={`solid 4px ${borderColor}`}
           color={color}
         >
           <HStack w="full">
@@ -58,7 +58,7 @@ function ConnectButton() {
             rounded="full"
             variant="solid"
             bg={bg}
-            border={`solid 5px ${borderColor}`}
+            border={`solid 4px ${borderColor}`}
             color={color}
             _hover={{
               bg: brandColors.darkPurple,
@@ -76,7 +76,7 @@ function ConnectButton() {
             rounded="full"
             variant="solid"
             bg={bg}
-            border={`solid 5px ${borderColor}`}
+            border={`solid 4px ${borderColor}`}
             color={color}
             _hover={{
               bg: brandColors.darkPurple,
@@ -90,7 +90,7 @@ function ConnectButton() {
         <Button
           rounded="full"
           bg={bg}
-          border={`solid 5px ${borderColor}`}
+          border={`solid 4px ${borderColor}`}
           color={color}
           _hover={{
             bg: brandColors.darkPurple,

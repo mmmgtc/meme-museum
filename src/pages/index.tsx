@@ -1,5 +1,5 @@
 import { useColorModeValue } from "@chakra-ui/color-mode";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, Search2Icon } from "@chakra-ui/icons";
 import {
   Button,
   VStack,
@@ -10,6 +10,10 @@ import {
   TabPanels,
   Tabs,
   Box,
+  HStack,
+  Input,
+  InputGroup,
+  InputLeftElement,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -25,6 +29,7 @@ import Container from "../components/layout/Container";
 import MemeModal from "../components/MemeModal";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors, MemeType } from "../helpers";
+import useDebounce from "../helpers/hooks";
 
 const MemeCard = dynamic(() => import("../components/MemeCard"), {
   ssr: false,
@@ -33,12 +38,21 @@ const MemeCard = dynamic(() => import("../components/MemeCard"), {
 function Memes() {
   const { account } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
+  const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
   }>();
-  const activeTabBg = useColorModeValue(brandColors.darkPurple, "white");
+  // State and setters for ...
+  // Search term
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Debounce search term so that it only gives us latest value ...
+  // ... if searchTerm has not been updated within last 500ms.
+  // The goal is to only have the API call fire when user stops typing ...
+  // ... so that we aren't hitting our API rapidly.
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -50,6 +64,7 @@ function Memes() {
 
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
+  const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
 
   useEffect(() => {
@@ -62,13 +77,38 @@ function Memes() {
       });
     }
   }, []);
+  const handleSearch = async (value: string) => {
+    const foundMemesRes = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/search/?query=${value}`,
+      {
+        method: "GET",
+        headers,
+      }
+    );
+    const memesResult = await foundMemesRes.json();
+    console.log({ memesResult });
+    return memesResult && memesResult.length > 0 ? memesResult : null;
+  };
+
+  useEffect(
+    () => {
+      if (debouncedSearchTerm) {
+        handleSearch(debouncedSearchTerm).then((memesResult) => {
+          setFoundMemes(memesResult);
+        });
+      } else {
+        setFoundMemes(undefined);
+      }
+    },
+    [debouncedSearchTerm] // Only call effect if debounced search term changes
+  );
 
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {
       toast({
         id: "not-connected-toast",
         position: "bottom",
-        variant: "left-accent",
+        variant: "solid",
         title: "Please connect your wallet first.",
         status: "error",
         duration: 9000,
@@ -176,7 +216,7 @@ function Memes() {
         </Box>
       ));
 
-  const allMemes = renderMemes(memes);
+  const allMemes = renderMemes(foundMemes || memes);
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
@@ -191,23 +231,51 @@ function Memes() {
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" />
-          <Button
-            size="lg"
-            rounded="full"
-            variant="solid"
-            bg="purple.200"
-            border={`solid 5px ${borderColor}`}
-            color="white"
-            _hover={{
-              bg: altColor,
-              color,
-            }}
-            fontSize="xl"
-            leftIcon={<AddIcon />}
-            onClick={onOpen}
-          >
-            UPLOAD MEME
-          </Button>
+          <HStack w="3xl" spacing="4">
+            <InputGroup size="lg">
+              <InputLeftElement pointerEvents="none">
+                <Search2Icon color={color} />
+              </InputLeftElement>
+              <Input
+                _placeholder={{
+                  color,
+                }}
+                variant="solid"
+                rounded="full"
+                bg={bg}
+                border={`solid 5px ${borderColor}`}
+                color={color}
+                _hover={{
+                  bg: brandColors.darkPurple,
+                  color: "white",
+                }}
+                fontWeight="bold"
+                style={{
+                  textTransform: "uppercase",
+                }}
+                type="search"
+                placeholder="SEARCH.."
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </InputGroup>
+            <Button
+              size="lg"
+              rounded="full"
+              variant="solid"
+              bg="purple.200"
+              color="white"
+              border={`solid 5px ${borderColor}`}
+              _hover={{
+                bg: altColor,
+                color,
+              }}
+              fontSize="lg"
+              leftIcon={<AddIcon />}
+              onClick={onOpen}
+            >
+              UPLOAD MEME
+            </Button>
+          </HStack>
         </VStack>
         <CreateMemeModal
           {...{ isOpen, onClose, addMeme: handleAddMeme, handleNotConnected }}

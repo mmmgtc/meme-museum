@@ -8,7 +8,6 @@ const ThemeToggle = () => {
   const { toggleColorMode } = useColorMode();
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
-  const altColor = useColorModeValue("white", brandColors.darkPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
 
   return (
@@ -16,7 +15,7 @@ const ThemeToggle = () => {
       rounded="full"
       variant="solid"
       bg={bg}
-      border={`solid 5px ${borderColor}`}
+      border={`solid 4px ${borderColor}`}
       color={color}
       _hover={{
         bg: brandColors.darkPurple,
