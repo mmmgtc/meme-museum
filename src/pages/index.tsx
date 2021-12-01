@@ -213,7 +213,7 @@ function Memes() {
             handleDownvote={handleDownvote}
           />
         )}
-        <Tabs isFitted variant="soft-rounded" py="2rem" w="full">
+        <Tabs isFitted variant="soft-rounded" w="full" py="4">
           <TabList
             border={`solid 5px ${brandColors.mainPurpleHex}`}
             rounded="3xl"
@@ -273,7 +273,7 @@ function Memes() {
             </Tab>
           </TabList>
 
-          <TabPanels w="full">
+          <TabPanels w="full" py="4">
             <TabPanel w="full" px="0">
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}
