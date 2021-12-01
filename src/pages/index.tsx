@@ -158,21 +158,22 @@ function Memes() {
     selectedMemes
       .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
       .map((m) => (
-        <Tilt
-          glareEnable
-          glareMaxOpacity={0.05}
-          scale={1.1}
-          tiltMaxAngleX={8}
-          tiltMaxAngleY={8}
-        >
-          <MemeCard
-            key={m.id}
-            handleDownvote={handleDownvote}
-            handleUpvote={handleUpvote}
-            meme={m}
-            openMeme={handleOpenMeme}
-          />
-        </Tilt>
+        <Box cursor="pointer" onClick={() => handleOpenMeme(m)}>
+          <Tilt
+            glareEnable
+            glareMaxOpacity={0.05}
+            scale={1.1}
+            tiltMaxAngleX={8}
+            tiltMaxAngleY={8}
+          >
+            <MemeCard
+              key={m.id}
+              handleDownvote={handleDownvote}
+              handleUpvote={handleUpvote}
+              meme={m}
+            />
+          </Tilt>
+        </Box>
       ));
 
   const allMemes = renderMemes(memes);
@@ -269,7 +270,7 @@ function Memes() {
               }}
               _disabled={{
                 color: brandColors.mainPurple,
-                background: "gray.300",
+                background: "spacelightpurple",
                 cursor: "not-allowed",
                 pointerEvents: "all",
               }}

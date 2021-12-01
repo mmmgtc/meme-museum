@@ -25,12 +25,9 @@ import LogoIcon from "../Icons/LogoIcon";
 import ThemeToggle from "./ThemeToggle";
 
 function Navbar() {
-  const headingColor = "purple.200"; // useColorModeValue("white", "purple.200");
   const navBg = "none"; // useColorModeValue("spacelightalpha", "purple.500");
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
-  // const altColor = useColorModeValue("white", brandColors.darkPurple);
-  const altColor = useColorModeValue("white", brandColors.darkPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
   return (
     <Box as="nav" w="100%" top="0" zIndex={1}>
@@ -53,7 +50,7 @@ function Navbar() {
               </Flex>
             </NextLink>
           </Flex>
-          <NextLink href="/">
+          {/* <NextLink href="/">
             <Button
               size="md"
               rounded="full"
@@ -68,7 +65,7 @@ function Navbar() {
             >
               MEMES
             </Button>
-          </NextLink>
+          </NextLink> */}
           <NextLink href="/about">
             <Button
               size="md"

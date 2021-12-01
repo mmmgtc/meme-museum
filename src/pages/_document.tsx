@@ -19,7 +19,7 @@ import theme from "../styles/customTheme";
 import createEmotionCache from "styles/createEmotionCache";
 
 const APP_NAME = "MEME.PARTY";
-const APP_DESCRIPTION = "MEME LORDS IN DA PARTY!";
+const APP_DESCRIPTION = "MEMELORDS IN DA PARTY!";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

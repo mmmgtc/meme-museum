@@ -90,7 +90,7 @@ const CreateMemePage: React.FunctionComponent = () => {
       </FormControl>
       <FormControl py="2" isInvalid={errors.meme_lord}>
         <FormLabel color={color} htmlFor="meme_lord" fontWeight="bold">
-          MEME LORD
+          MEMELORD
         </FormLabel>
         <Input
           borderColor={purple}
@@ -109,7 +109,7 @@ const CreateMemePage: React.FunctionComponent = () => {
             borderColor,
             boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
-          placeholder="Meme lord"
+          placeholder="Memelord"
           {...register("meme_lord", {
             required: requiredText,
             maxLength: {

@@ -132,7 +132,7 @@ const ImageDropzone = () => {
           }}
           borderRadius="4"
         >
-          DRAG &amp; DROP YOUR MEME zzz HERE OR CLICK TO SELECT
+          DRAG &amp; DROP YOUR MEME HERE OR CLICK TO SELECT
           <Input
             type="file"
             placeholder="Meme image"

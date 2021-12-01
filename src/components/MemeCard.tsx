@@ -8,12 +8,10 @@ import CardMedia from "./custom/CardMedia";
 
 function MemeCard({
   meme,
-  openMeme,
   handleUpvote,
   handleDownvote,
 }: {
   meme: MemeType;
-  openMeme: any;
   handleUpvote: any;
   handleDownvote: any;
 }) {
@@ -26,8 +24,6 @@ function MemeCard({
       color={color}
       border={`solid 5px ${badgeBorderColor}`}
       src={meme.image}
-      onClick={() => openMeme(meme)}
-      cursor="pointer"
     >
       <Flex pt="3" pb="4" w="full" justify="space-around">
         <Button
