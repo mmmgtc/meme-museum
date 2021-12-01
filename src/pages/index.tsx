@@ -182,8 +182,8 @@ function Memes() {
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" />
           <Button
-            rounded="full"
             size="lg"
+            rounded="full"
             variant="solid"
             bg="purple.200"
             border={`solid 5px ${borderColor}`}

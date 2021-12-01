@@ -5,6 +5,7 @@ import {
   Badge,
   Text,
   IconButton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import Blockies from "react-blockies";
@@ -15,29 +16,35 @@ import { brandColors } from "../../helpers";
 
 function ConnectButton() {
   const { account, ens, connectWeb3, logout } = useContext(Web3Context);
-  const hoverBg = "purple.700";
+
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const altColor = useColorModeValue("white", brandColors.darkPurple);
+  const borderColor = useColorModeValue("#8C65F7", "white");
   return (
     <Flex gridGap="4" w="full" justifyContent="flex-end">
       {account && (
         <Badge
           rounded="full"
-          bg={brandColors.mainPurple}
           fontWeight="600"
           w="fit-content"
+          variant="solid"
+          bg={bg}
+          border={`solid 5px ${borderColor}`}
+          color={color}
         >
           <HStack w="full">
             <Blockies
               size={10}
               seed={account.toLowerCase()}
               className="blockies"
-              scale={4}
+              scale={3}
             />
             <Text
               display={["none", "none", "flex", "flex"]}
-              color="white"
               fontWeight="bold"
+              color={color}
               isTruncated
-              p="2"
             >
               {ens || account}
             </Text>
@@ -50,12 +57,14 @@ function ConnectButton() {
           <Button
             aria-label="logout"
             rounded="full"
+            variant="solid"
+            bg={bg}
+            border={`solid 5px ${borderColor}`}
+            color={color}
             _hover={{
-              background: "white",
-              color: brandColors.mainPurple,
+              bg: brandColors.darkPurple,
+              color: "white",
             }}
-            color="white"
-            bg={brandColors.mainPurple}
             onClick={logout}
             display={["none", "none", "flex", "flex"]}
           >
@@ -64,14 +73,16 @@ function ConnectButton() {
           {/** MOBILE* */}
           <IconButton
             aria-label="logout"
-            rounded="full"
             icon={<FiLogOut />}
+            rounded="full"
+            variant="solid"
+            bg={bg}
+            border={`solid 5px ${borderColor}`}
+            color={color}
             _hover={{
-              background: "white",
-              color: brandColors.mainPurple,
+              bg: brandColors.darkPurple,
+              color: "white",
             }}
-            color="white"
-            bg={brandColors.mainPurple}
             onClick={logout}
             display={["flex", "flex", "none", "none"]}
           />
@@ -79,12 +90,13 @@ function ConnectButton() {
       ) : (
         <Button
           rounded="full"
+          bg={bg}
+          border={`solid 5px ${borderColor}`}
+          color={color}
           _hover={{
-            background: "white",
-            color: "purple.200",
+            bg: brandColors.darkPurple,
+            color: "white",
           }}
-          color="white"
-          bg="purple.200"
           onClick={connectWeb3}
         >
           CONNECT

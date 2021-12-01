@@ -27,7 +27,9 @@ import ThemeToggle from "./ThemeToggle";
 function Navbar() {
   const headingColor = "purple.200"; // useColorModeValue("white", "purple.200");
   const navBg = "none"; // useColorModeValue("spacelightalpha", "purple.500");
+  const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
+  // const altColor = useColorModeValue("white", brandColors.darkPurple);
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
   return (
@@ -47,21 +49,21 @@ function Navbar() {
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
             <NextLink href="/">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <LogoIcon size="160px" />
+                <LogoIcon size="200px" />
               </Flex>
             </NextLink>
           </Flex>
           <NextLink href="/">
             <Button
-              rounded="full"
               size="md"
+              rounded="full"
               variant="solid"
-              bg="purple.200"
+              bg={bg}
               border={`solid 5px ${borderColor}`}
-              color="white"
+              color={color}
               _hover={{
-                bg: altColor,
-                color,
+                bg: brandColors.darkPurple,
+                color: "white",
               }}
             >
               MEMES
@@ -69,15 +71,15 @@ function Navbar() {
           </NextLink>
           <NextLink href="/about">
             <Button
-              rounded="full"
               size="md"
+              rounded="full"
               variant="solid"
-              bg="purple.200"
+              bg={bg}
               border={`solid 5px ${borderColor}`}
-              color="white"
+              color={color}
               _hover={{
-                bg: altColor,
-                color,
+                bg: brandColors.darkPurple,
+                color: "white",
               }}
             >
               ABOUT
@@ -89,18 +91,20 @@ function Navbar() {
           <Stack direction="row" spacing={3} w="full">
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <Search2Icon color="white" />
+                <Search2Icon color={color} />
               </InputLeftElement>
               <Input
-                rounded="full"
-                size="md"
-                variant="solid"
-                bg="purple.200"
-                border={`solid 5px ${borderColor}`}
-                color="white"
-                _hover={{
-                  bg: altColor,
+                _placeholder={{
                   color,
+                }}
+                rounded="full"
+                variant="solid"
+                bg={bg}
+                border={`solid 5px ${borderColor}`}
+                color={color}
+                _hover={{
+                  bg: brandColors.darkPurple,
+                  color: "white",
                 }}
                 type="search"
                 fontWeight="bold"

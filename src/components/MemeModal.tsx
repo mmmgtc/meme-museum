@@ -54,6 +54,7 @@ function MemeModal({
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const borderColor = useColorModeValue("#8C65F7", "white");
+  const altColor = useColorModeValue("white", brandColors.darkPurple);
 
   useEffect(() => {
     // Address to ENS
@@ -135,13 +136,16 @@ function MemeModal({
               <NextLink href="/edit-meme" passHref>
                 <Button
                   rounded="full"
-                  color={color}
-                  bg={bg}
-                  // onClick={onOpen}
+                  size="md"
+                  variant="solid"
+                  bg="purple.200"
+                  border={`solid 5px ${borderColor}`}
+                  color="white"
                   _hover={{
-                    background: "white",
-                    color: brandColors.mainPurple,
+                    bg: altColor,
+                    color,
                   }}
+                  // onClick={onOpen}
                   leftIcon={<EditIcon />}
                 >
                   EDIT MEME

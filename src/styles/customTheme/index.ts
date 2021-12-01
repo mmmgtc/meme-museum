@@ -16,6 +16,9 @@ const styles: Styles = {
 const baseTheme = {
   colors,
   styles,
+  shadows: {
+    outline: "none",
+  },
   fonts: {
     heading: "Comic Sans MS",
     body: "Comic Sans MS",
