@@ -15,6 +15,7 @@ import {
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { useCallback, useContext, useEffect, useState } from "react";
+import Tilt from "react-parallax-tilt";
 
 import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
@@ -156,13 +157,15 @@ function Memes() {
     selectedMemes
       .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
       .map((m) => (
-        <MemeCard
-          key={m.id}
-          handleDownvote={handleDownvote}
-          handleUpvote={handleUpvote}
-          meme={m}
-          openMeme={handleOpenMeme}
-        />
+        <Tilt glareEnable glareMaxOpacity={0.15} scale={1.05}>
+          <MemeCard
+            key={m.id}
+            handleDownvote={handleDownvote}
+            handleUpvote={handleUpvote}
+            meme={m}
+            openMeme={handleOpenMeme}
+          />
+        </Tilt>
       ));
 
   const allMemes = renderMemes(memes);
