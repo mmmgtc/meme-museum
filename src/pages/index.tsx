@@ -77,18 +77,22 @@ function Memes() {
       });
     }
   }, []);
-  const handleSearch = async (value: string) => {
-    const foundMemesRes = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/search/?query=${value}`,
-      {
-        method: "GET",
-        headers,
-      }
-    );
-    const memesResult = await foundMemesRes.json();
-    console.log({ memesResult });
-    return memesResult && memesResult.length > 0 ? memesResult : null;
-  };
+
+  const handleSearch = useCallback(
+    async (value: string) => {
+      const foundMemesRes = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/search/?query=${value}`,
+        {
+          method: "GET",
+          headers,
+        }
+      );
+      const memesResult = await foundMemesRes.json();
+      console.log({ memesResult });
+      return memesResult && memesResult.length > 0 ? memesResult : null;
+    },
+    [headers]
+  );
 
   useEffect(
     () => {
@@ -100,7 +104,7 @@ function Memes() {
         setFoundMemes(undefined);
       }
     },
-    [debouncedSearchTerm] // Only call effect if debounced search term changes
+    [debouncedSearchTerm, handleSearch] // Only call effect if debounced search term changes
   );
 
   const handleNotConnected = useCallback(() => {
@@ -117,11 +121,13 @@ function Memes() {
     }
   }, [toast]);
 
-  const handleAddMeme = (meme: MemeType) =>
+  const handleAddMeme = (meme: MemeType) => {
     setMemes((previousMemes) => [
       ...previousMemes.filter((m) => m.id !== meme.id),
       meme,
     ]);
+    onOpenMeme();
+  };
 
   const handleUpvote = async (memeId: number) => {
     if (!account) {

@@ -60,7 +60,7 @@ const ImageDropzone = () => {
       />
       <Flex pl="4" d="column" v="full" alignSelf="center">
         <IconButton
-          colorScheme="pink"
+          colorScheme="red"
           onClick={() => setFiles([])}
           aria-label="Remove Image"
           icon={<CloseIcon />}

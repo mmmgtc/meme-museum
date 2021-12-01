@@ -45,7 +45,7 @@ const TagsField = () => {
   return (
     <FormControl isInvalid={errors.tags} py="4">
       <HStack justifyContent="space-between">
-        <FormLabel htmlFor="tags" fontWeight="bold">
+        <FormLabel htmlFor="tags" color={color} fontWeight="bold">
           TAGS:
         </FormLabel>
         <Button
@@ -69,23 +69,26 @@ const TagsField = () => {
         {fields.map((item, index) => (
           <Tag
             key={item.id}
-            borderRadius="full"
-            bg={color}
+            borderRadius="xl"
+            bg={brandColors.darkPurple}
             size="sm"
             maxW="180px"
             variant="solid"
           >
-            <TagLabel fontWeight="bold" color={bg} alt={item.id}>
+            <TagLabel fontWeight="bold" color={bg} alt={item.id} py="1">
               <Input
                 placeholder="web3"
-                border="none"
-                size="sm"
+                _placeholder={{
+                  color,
+                }}
+                rounded="xl"
+                variant="solid"
+                bg={bg}
+                color={color}
                 fontWeight="bold"
+                size="sm"
                 style={{
                   textTransform: "uppercase",
-                }}
-                _focus={{
-                  border: "none",
                 }}
                 {...register(`tags.${index}.name`, {
                   maxLength: {
