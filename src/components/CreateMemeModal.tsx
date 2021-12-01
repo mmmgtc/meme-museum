@@ -9,25 +9,26 @@ import {
   ModalContent,
   ModalCloseButton,
   ModalHeader,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
 import { Web3Context } from "../contexts/Web3Provider";
+import { brandColors } from "../helpers";
 import CreateMemePage from "../views/CreateMemePage";
 import TagsField from "../views/TagsField";
-import Card from "components/custom/Card";
-
-import CenteredFrame from "./layout/CenteredFrame";
 
 function CreateMemeModal({
   isOpen,
   onClose,
   addMeme,
+  handleNotConnected,
 }: {
   isOpen: boolean;
   onClose: any;
   addMeme: any;
+  handleNotConnected: any;
 }) {
   const { account } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
@@ -50,6 +51,9 @@ function CreateMemeModal({
   }, [account]);
 
   async function onSubmit() {
+    if (!account) {
+      return handleNotConnected();
+    }
     setIsSumbitting(true);
     const values = methods.getValues();
     console.log({ values });
@@ -79,26 +83,37 @@ function CreateMemeModal({
       console.log({ createdMeme });
       setIsSumbitting(false);
       addMeme(createdMeme);
+      methods.reset();
+      return onClose();
     } catch (error) {
       console.log(error);
-      setIsSumbitting(false);
+      return setIsSumbitting(false);
     }
   }
+
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const borderColor = useColorModeValue("#8C65F7", "white");
 
   return (
     <Modal
       closeOnOverlayClick={false}
       isOpen={isOpen}
       onClose={onClose}
-      size="2xl"
+      size="4xl"
     >
       <ModalOverlay />
-      <ModalContent rounded="3xl" bg="white">
+      <ModalContent
+        rounded="3xl"
+        color={color}
+        bg={bg}
+        border={`solid 5px ${borderColor}`}
+      >
         <ModalHeader display="flex">
-          <Heading color="purple.200">JUST MEME IT!</Heading>
+          <Heading color={color}>JUST MEME IT!</Heading>
           <ModalCloseButton
-            border="solid 1px #8C65F7"
-            color="purple.200"
+            border={`solid 5px ${borderColor}`}
+            color={color}
             mt="4"
             mr="4"
             cursor="pointer"
@@ -117,14 +132,16 @@ function CreateMemeModal({
               py="4"
             >
               <Button
+                isLoading={isSubmitting || methods.formState.isSubmitting}
                 mr="0.5rem"
-                _hover={{
-                  background: "white",
-                  color: "purple.200",
-                }}
+                rounded="full"
+                bg={brandColors.mainPurple}
                 color="white"
-                bg="purple.200"
-                isLoading={methods.formState.isSubmitting}
+                border={`solid 5px ${borderColor}`}
+                _hover={{
+                  background: brandColors.darkPurple,
+                  color: "white",
+                }}
                 onClick={() => onSubmit()}
                 fontSize="md"
                 size="md"
@@ -132,18 +149,17 @@ function CreateMemeModal({
                 SUBMIT
               </Button>
               <Button
-                variant="outline"
-                _hover={{
-                  background: "white",
-                  color: "purple.200",
-                }}
-                outlineColor="purple.200"
-                color="purple.200"
                 rounded="full"
-                px="1.25rem"
+                bg={bg}
+                color={color}
+                border={`solid 5px ${borderColor}`}
+                _hover={{
+                  background: brandColors.darkPurple,
+                  color: "white",
+                }}
                 onClick={onClose}
                 fontSize="md"
-                size="sm"
+                size="md"
               >
                 CANCEL
               </Button>

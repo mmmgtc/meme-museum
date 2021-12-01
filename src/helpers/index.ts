@@ -3,6 +3,7 @@ export const getSlicedAddress = (address: string) =>
 
 export const brandColors = {
   mainPurple: "purple.200",
+  mainPurpleHex: "#8C65F7",
   darkPurple: "#6F3FF5",
 };
 

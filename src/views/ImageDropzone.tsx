@@ -73,7 +73,7 @@ const ImageDropzone = () => {
   );
 
   return (
-    <FormControl isInvalid={errors.image} {...getRootProps()}>
+    <FormControl py="2" isInvalid={errors.image} {...getRootProps()}>
       <FormLabel htmlFor="image" fontWeight="bold">
         MEME IMAGE
       </FormLabel>
@@ -83,7 +83,7 @@ const ImageDropzone = () => {
           _hover={{ cursor: "pointer" }}
           h="150px"
           bg="white"
-          border="solid 1px #8C65F7"
+          border="solid 5px #8C65F7"
           color="purple.200"
           borderRadius="4"
         >
@@ -106,7 +106,7 @@ const ImageDropzone = () => {
           _hover={{ cursor: "pointer" }}
           h="150px"
           bg="white"
-          border="solid 1px #8C65F7"
+          border="solid 5px #8C65F7"
           color="purple.200"
           borderRadius="4"
         >

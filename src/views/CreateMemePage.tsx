@@ -44,7 +44,7 @@ const CreateMemePage: React.FunctionComponent = () => {
   return (
     <Box color="purple.200">
       <ImageDropzone />
-      <FormControl isInvalid={errors.title}>
+      <FormControl py="2" isInvalid={errors.title}>
         <FormLabel htmlFor="title" fontWeight="bold">
           TITLE
         </FormLabel>
@@ -70,7 +70,7 @@ const CreateMemePage: React.FunctionComponent = () => {
           {errors.title && errors.title.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={errors.meme_lord}>
+      <FormControl py="2" isInvalid={errors.meme_lord}>
         <FormLabel htmlFor="meme_lord" fontWeight="bold">
           MEME LORD
         </FormLabel>
@@ -96,7 +96,7 @@ const CreateMemePage: React.FunctionComponent = () => {
           {errors.meme_lord && errors.meme_lord.message}
         </FormErrorMessage>
       </FormControl>
-      <FormControl isInvalid={errors.description}>
+      <FormControl py="2" isInvalid={errors.description}>
         <FormLabel htmlFor="description" fontWeight="bold">
           DESCRIPTION
         </FormLabel>

@@ -84,9 +84,9 @@ function MemeModal({
         border={`solid 5px ${borderColor}`}
       >
         <ModalHeader display="flex">
-          <Heading color="purple.200">{meme.title}</Heading>
+          <Heading color={color}>{meme.title}</Heading>
           <ModalCloseButton
-            border={`solid 1px ${borderColor}`}
+            border={`solid 5px ${borderColor}`}
             color={color}
             mt="4"
             mr="4"
@@ -94,22 +94,16 @@ function MemeModal({
           />
         </ModalHeader>
         <ModalBody>
-          <Image
-            w="full"
-            maxH="4xl"
-            src={meme.image}
-            objectFit="cover"
-            rounded="3xl"
-          />
+          <Image w="full" maxH="xl" src={meme.image} objectFit="contain" />
 
-          <Flex w="full" py="3">
+          <Flex w="full" pt="6">
             <Flex w="full" justify="space-around" alignItems="center">
               <Button
                 leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
                 rounded="full"
                 size="md"
                 variant="solid"
-                border="solid 1px #9AE6B4"
+                border="solid 5px #9AE6B4"
                 color={color}
                 _hover={{
                   background: "purple.500",
@@ -126,7 +120,7 @@ function MemeModal({
                 rounded="full"
                 size="md"
                 variant="solid"
-                border="solid 1px #FEB2B2"
+                border="solid 5px #FEB2B2"
                 color={color}
                 _hover={{
                   background: "purple.500",
@@ -173,7 +167,7 @@ function MemeModal({
                   rounded="full"
                   color={color}
                   bg={bg}
-                  border={`solid 1px ${borderColor}`}
+                  border={`solid 5px ${borderColor}`}
                   w={{
                     base: "full",
                     md: W_FIT_CONTENT,

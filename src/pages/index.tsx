@@ -1,3 +1,4 @@
+import { useColorModeValue } from "@chakra-ui/color-mode";
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
@@ -9,10 +10,11 @@ import {
   TabPanels,
   Tabs,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
@@ -34,6 +36,7 @@ function Memes() {
     Authorization: string;
     [key: string]: string;
   }>();
+  const activeTabBg = useColorModeValue(brandColors.darkPurple, "white");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -41,6 +44,11 @@ function Memes() {
     onOpen: onOpenMeme,
     onClose: onCloseMeme,
   } = useDisclosure();
+  const toast = useToast();
+
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const altColor = useColorModeValue("white", brandColors.darkPurple);
+  const borderColor = useColorModeValue("#8C65F7", "white");
 
   useEffect(() => {
     // Perform localStorage action
@@ -53,6 +61,20 @@ function Memes() {
     }
   }, []);
 
+  const handleNotConnected = useCallback(() => {
+    if (!toast.isActive("not-connected-toast")) {
+      toast({
+        id: "not-connected-toast",
+        position: "bottom",
+        variant: "left-accent",
+        title: "Please connect your wallet first.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  }, [toast]);
+
   const handleAddMeme = (meme: MemeType) =>
     setMemes((previousMemes) => [
       ...previousMemes.filter((m) => m.id !== meme.id),
@@ -60,6 +82,9 @@ function Memes() {
     ]);
 
   const handleUpvote = async (memeId: number) => {
+    if (!account) {
+      return handleNotConnected();
+    }
     console.log({ headers });
     const upvoteMemeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/upvote/`,
@@ -80,9 +105,13 @@ function Memes() {
     if (isOpenMeme) {
       setCurrentMeme(upvotedMeme);
     }
+    return upvotedMeme;
   };
 
   const handleDownvote = async (memeId: number) => {
+    if (!account) {
+      return handleNotConnected();
+    }
     const downvoteMemeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/downvote/`,
       {
@@ -102,6 +131,7 @@ function Memes() {
     if (isOpenMeme) {
       setCurrentMeme(downvotedMeme);
     }
+    return downvotedMeme;
   };
 
   useEffect(() => {
@@ -122,43 +152,56 @@ function Memes() {
   };
 
   const renderMemes = (selectedMemes: MemeType[]) =>
-    selectedMemes.map((meme: MemeType) => (
-      <MemeCard
-        key={meme.id}
-        handleDownvote={handleDownvote}
-        handleUpvote={handleUpvote}
-        meme={meme}
-        openMeme={handleOpenMeme}
-      />
-    ));
+    selectedMemes &&
+    selectedMemes
+      .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
+      .sort((a: MemeType, b: MemeType) => (a.downvotes > b.downvotes ? 1 : -1))
+      .map((m) => (
+        <MemeCard
+          key={m.id}
+          handleDownvote={handleDownvote}
+          handleUpvote={handleUpvote}
+          meme={m}
+          openMeme={handleOpenMeme}
+        />
+      ));
 
   const allMemes = renderMemes(memes);
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
+  const memePaloozaMemes = renderMemes(
+    memes.filter((meme: MemeType) =>
+      meme.tags.map((tag) => tag.name.toLowerCase()).includes("memepalooza")
+    )
+  );
 
   return (
-    <Card bg="purple.500">
+    <Card>
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" />
           <Button
             rounded="full"
             size="lg"
-            bg={brandColors.mainPurple}
+            variant="solid"
+            bg="purple.200"
+            border={`solid 5px ${borderColor}`}
             color="white"
-            onClick={onOpen}
             _hover={{
-              background: "white",
-              color: brandColors.mainPurple,
+              bg: altColor,
+              color,
             }}
+            onClick={onOpen}
             fontSize="xl"
             leftIcon={<AddIcon />}
           >
-            CREATE MEME
+            UPLOAD MEME
           </Button>
         </VStack>
-        <CreateMemeModal {...{ isOpen, onClose, addMeme: handleAddMeme }} />
+        <CreateMemeModal
+          {...{ isOpen, onClose, addMeme: handleAddMeme, handleNotConnected }}
+        />
         {currentMeme && (
           <MemeModal
             isOpen={isOpenMeme}
@@ -169,7 +212,10 @@ function Memes() {
           />
         )}
         <Tabs isFitted variant="soft-rounded" py="2rem" w="full">
-          <TabList>
+          <TabList
+            border={`solid 5px ${brandColors.mainPurpleHex}`}
+            rounded="3xl"
+          >
             <Tab
               color="white"
               backgroundColor="purple.200"
@@ -177,7 +223,10 @@ function Memes() {
                 color: brandColors.mainPurple,
                 background: "white",
               }}
-              borderX={`solid 5px ${brandColors.darkPurple}`}
+              _hover={{
+                color: "white",
+                background: brandColors.darkPurple,
+              }}
               borderRightRadius="0"
             >
               ALL MEMES
@@ -189,11 +238,14 @@ function Memes() {
                 color: brandColors.mainPurple,
                 background: "white",
               }}
-              borderX={`solid 5px ${brandColors.darkPurple}`}
+              _hover={{
+                color: "white",
+                background: brandColors.darkPurple,
+              }}
               borderLeftRadius="0"
               borderRightRadius="0"
             >
-              MEMEPALOZZA
+              MEMEPALOOZA
             </Tab>
             <Tab
               color="white"
@@ -202,8 +254,18 @@ function Memes() {
                 color: brandColors.mainPurple,
                 background: "white",
               }}
+              _hover={{
+                color: "white",
+                background: brandColors.darkPurple,
+              }}
+              _disabled={{
+                color: brandColors.mainPurple,
+                background: "gray.300",
+                cursor: "not-allowed",
+                pointerEvents: "all",
+              }}
               borderLeftRadius="0"
-              borderX={`solid 5px ${brandColors.darkPurple}`}
+              isDisabled={!account || !myMemes || myMemes.length === 0}
             >
               MY MEMES
             </Tab>
@@ -213,6 +275,11 @@ function Memes() {
             <TabPanel w="full" px="0">
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}
+              </SimpleGrid>
+            </TabPanel>
+            <TabPanel w="full" px="0">
+              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                {memePaloozaMemes}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">

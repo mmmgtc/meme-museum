@@ -27,14 +27,15 @@ function MemeCard({
       border={`solid 5px ${badgeBorderColor}`}
       src={meme.image}
       onClick={() => openMeme(meme)}
+      cursor="pointer"
     >
-      <Flex pb="6" w="full" justify="space-around">
+      <Flex pt="3" pb="4" w="full" justify="space-around">
         <Button
           leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
           rounded="full"
           size="md"
           variant="solid"
-          border="solid 1px #9AE6B4"
+          border="solid 5px #9AE6B4"
           color={color}
           _hover={{
             background: "purple.500",
@@ -52,7 +53,7 @@ function MemeCard({
           rounded="full"
           size="md"
           variant="solid"
-          border="solid 1px #FEB2B2"
+          border="solid 5px #FEB2B2"
           color={color}
           _hover={{
             background: "purple.500",

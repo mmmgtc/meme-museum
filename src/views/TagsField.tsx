@@ -10,9 +10,13 @@ import {
   SimpleGrid,
   TagCloseButton,
   HStack,
+  Flex,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
+
+import { brandColors, W_FIT_CONTENT } from "../helpers";
 
 const TagsField = () => {
   const {
@@ -28,14 +32,18 @@ const TagsField = () => {
   });
 
   useEffect(() => {
-    append({ name: "" });
+    append({ name: "memepalooza" });
     return () => {
       remove();
     };
   }, [append, remove]);
 
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const borderColor = useColorModeValue("#8C65F7", "white");
+
   return (
-    <FormControl isInvalid={errors.tags}>
+    <FormControl isInvalid={errors.tags} py="4">
       <HStack justifyContent="space-between">
         <FormLabel htmlFor="tags" fontWeight="bold">
           TAGS:
@@ -44,22 +52,30 @@ const TagsField = () => {
           leftIcon={<AddIcon />}
           my="5"
           size="sm"
+          rounded="full"
+          bg={brandColors.mainPurple}
           color="white"
-          bg="purple.200"
+          border={`solid 5px ${borderColor}`}
+          _hover={{
+            background: "white",
+            color: brandColors.mainPurple,
+          }}
           onClick={() => append({ name: "" })}
         >
           ADD TAG
         </Button>
       </HStack>
-      <SimpleGrid columns={4} spacing={4} mt="5">
+      <SimpleGrid minChildWidth="120px" spacing="10px" mt="4">
         {fields.map((item, index) => (
           <Tag
             key={item.id}
             borderRadius="full"
-            bg="purple.200"
+            bg={color}
+            size="sm"
+            maxW="180px"
             variant="solid"
           >
-            <TagLabel>
+            <TagLabel fontWeight="bold" color={bg} alt={item.id}>
               <Input
                 placeholder="web3"
                 border="none"
@@ -79,7 +95,7 @@ const TagsField = () => {
                 })}
               />
             </TagLabel>
-            <TagCloseButton onClick={() => remove(index)} />
+            <TagCloseButton color={bg} onClick={() => remove(index)} />
           </Tag>
         ))}
       </SimpleGrid>
