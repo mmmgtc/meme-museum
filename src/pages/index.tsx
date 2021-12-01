@@ -9,6 +9,7 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
+  Box,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -157,7 +158,13 @@ function Memes() {
     selectedMemes
       .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
       .map((m) => (
-        <Tilt glareEnable glareMaxOpacity={0.15} scale={1.05}>
+        <Tilt
+          glareEnable
+          glareMaxOpacity={0.05}
+          scale={1.1}
+          tiltMaxAngleX={8}
+          tiltMaxAngleY={8}
+        >
           <MemeCard
             key={m.id}
             handleDownvote={handleDownvote}
@@ -194,9 +201,9 @@ function Memes() {
               bg: altColor,
               color,
             }}
-            onClick={onOpen}
             fontSize="xl"
             leftIcon={<AddIcon />}
+            onClick={onOpen}
           >
             UPLOAD MEME
           </Button>
