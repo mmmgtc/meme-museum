@@ -361,7 +361,7 @@ function Memes() {
             </Tab>
           </TabList>
 
-          <TabPanels w="full" py="4">
+          <TabPanels w="full">
             <TabPanel w="full" px="0">
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}

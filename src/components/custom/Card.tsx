@@ -5,7 +5,6 @@ function Card(props: StackProps) {
   return (
     <VStack
       background={others.bg || "none"}
-      py="6"
       px="8"
       h="auto"
       borderRadius="3xl"
