@@ -42,6 +42,9 @@ const CreateMemeForm: React.FunctionComponent = () => {
           TITLE
         </FormLabel>
         <Input
+          _placeholder={{
+            color: useColorModeValue("spacelightpurple", "purple.200"),
+          }}
           borderColor={purple}
           bg={bg}
           border={`solid 5px ${borderColor}`}
@@ -62,8 +65,8 @@ const CreateMemeForm: React.FunctionComponent = () => {
           {...register("title", {
             required: requiredText,
             maxLength: {
-              value: 150,
-              message: "Maximum length should be 150",
+              value: 200,
+              message: "Maximum length should be 150 characters",
             },
           })}
         />
@@ -94,10 +97,9 @@ const CreateMemeForm: React.FunctionComponent = () => {
           }}
           placeholder="Memelord"
           {...register("meme_lord", {
-            required: requiredText,
             maxLength: {
-              value: 150,
-              message: "Maximum length should be 150",
+              value: 200,
+              message: "Maximum length should be 150 characters",
             },
           })}
         />
@@ -110,6 +112,7 @@ const CreateMemeForm: React.FunctionComponent = () => {
           DESCRIPTION
         </FormLabel>
         <Textarea
+          minH="230px"
           borderColor={purple}
           bg={bg}
           border={`solid 5px ${borderColor}`}
@@ -119,19 +122,15 @@ const CreateMemeForm: React.FunctionComponent = () => {
             color: "white",
           }}
           fontWeight="bold"
-          style={{
-            textTransform: "uppercase",
-          }}
           _focus={{
             borderColor,
             boxShadow: `0 0 0 1px ${purpleDark}`,
           }}
           placeholder="Meme description"
           {...register("description", {
-            required: requiredText,
             maxLength: {
-              value: 1200,
-              message: "Maximum length should be 1200",
+              value: 500,
+              message: "Maximum length should be 500 characters",
             },
           })}
         />

@@ -1,6 +1,7 @@
 import { EditIcon } from "@chakra-ui/icons";
 import {
   HStack,
+  VStack,
   Heading,
   Button,
   SimpleGrid,
@@ -80,13 +81,12 @@ function MemeModal({
             border={`solid 5px ${borderColor}`}
             color={color}
             mt="4"
-            mr="4"
+            mr="2"
             cursor="pointer"
           />
         </ModalHeader>
         <ModalBody>
           <Image w="full" maxH="xl" src={meme.image} objectFit="contain" />
-
           <Flex w="full" pt="6">
             <Flex w="full" justify="space-around" alignItems="center">
               <Button
@@ -222,16 +222,14 @@ function MemeModal({
                   </HStack>
                 </Badge>
               )}
-              <Text
-                align={{
-                  sm: "start",
-                  md: "end",
-                }}
-                fontSize="xl"
-                py="2"
-              >
-                CREDITS: {meme.meme_lord}
-              </Text>
+              <VStack w="full" ml="2">
+                <Text fontSize="lg" alignSelf="flex-start">
+                  CREDITS:
+                </Text>
+                <Text fontSize="xl" w="full">
+                  {meme.meme_lord}
+                </Text>
+              </VStack>
             </SimpleGrid>
 
             {meme.tags && meme.tags.length > 0 && (
@@ -245,7 +243,12 @@ function MemeModal({
                 ))}
               </Flex>
             )}
-            <Text fontSize="2xl" py="2">
+            <Text
+              fontSize="2xl"
+              py="2"
+              textTransform="none"
+              whiteSpace="break-spaces"
+            >
               {meme.description}
             </Text>
           </Flex>

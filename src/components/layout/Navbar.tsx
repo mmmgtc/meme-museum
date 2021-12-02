@@ -6,9 +6,7 @@ import {
   Stack,
   Button,
   Container,
-  InputGroup,
-  InputLeftElement,
-  Input,
+  Link,
   useColorModeValue,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
@@ -33,7 +31,8 @@ function Navbar() {
     <Box as="nav" w="100%" top="0" zIndex={1}>
       <Container
         display="flex"
-        p={2}
+        px="8"
+        py="2"
         maxW="8xl"
         wrap="wrap"
         align="center"
@@ -44,11 +43,15 @@ function Navbar() {
         {/* <Flex h={16} alignItems="center" justifyContent="space-between"> */}
         <HStack w="full" spacing={8} alignItems="center">
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-            <NextLink href="/">
+            <Link
+              href="https://m-m-m.xyz/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <LogoIcon size="225px" />
+                <LogoIcon size="100px" logoPath="/M-test.gif" />
               </Flex>
-            </NextLink>
+            </Link>
           </Flex>
           {/* <NextLink href="/">
             <Button
@@ -65,8 +68,8 @@ function Navbar() {
             >
               MEMES
             </Button>
-          </NextLink> */}
-          {/* <NextLink href="/about">
+          </NextLink>
+          <NextLink href="/about">
             <Button
               size="md"
               rounded="full"

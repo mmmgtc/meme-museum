@@ -36,7 +36,7 @@ const MemeCard = dynamic(() => import("../components/MemeCard"), {
 });
 
 function Memes() {
-  const { account } = useContext(Web3Context);
+  const { account, connectWeb3 } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
@@ -117,22 +117,27 @@ function Memes() {
         duration: 9000,
         isClosable: true,
       });
+      connectWeb3();
     }
-  }, [toast]);
+  }, [toast, connectWeb3]);
+
+  const handleOpenMeme = (meme: MemeType) => {
+    setCurrentMeme(meme);
+    onOpenMeme();
+  };
 
   const handleAddMeme = (meme: MemeType) => {
     setMemes((previousMemes) => [
       ...previousMemes.filter((m) => m.id !== meme.id),
       meme,
     ]);
-    onOpenMeme();
+    handleOpenMeme(meme);
   };
 
   const handleUpvote = async (memeId: number) => {
     if (!account) {
       return handleNotConnected();
     }
-    console.log({ headers });
     const upvoteMemeResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/upvote/`,
       {
@@ -190,17 +195,12 @@ function Memes() {
     fetchMemes();
   }, []);
 
-  const handleOpenMeme = (meme: MemeType) => {
-    setCurrentMeme(meme);
-    onOpenMeme();
-  };
-
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes &&
     selectedMemes
       .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
       .map((m) => (
-        <Box cursor="pointer" onClick={() => handleOpenMeme(m)}>
+        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
           <Tilt
             glareEnable
             glareMaxOpacity={0.05}
@@ -209,7 +209,6 @@ function Memes() {
             tiltMaxAngleY={7}
           >
             <MemeCard
-              key={m.id}
               handleDownvote={handleDownvote}
               handleUpvote={handleUpvote}
               meme={m}
@@ -224,7 +223,9 @@ function Memes() {
   );
   const memePaloozaMemes = renderMemes(
     memes.filter((meme: MemeType) =>
-      meme.tags.map((tag) => tag.name.toLowerCase()).includes("memepalooza")
+      meme.tags
+        .map((tag) => tag?.name && tag.name.toLowerCase())
+        .includes("memepalooza")
     )
   );
 
@@ -232,7 +233,7 @@ function Memes() {
     <Card>
       <Container>
         <VStack w="full" alignItems="center">
-          <LogoIcon size="600px" />
+          <LogoIcon size="600px" logoPath="/memes-party.png" />
           <SimpleGrid
             columns={{
               sm: 1,

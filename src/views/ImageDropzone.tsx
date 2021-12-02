@@ -32,7 +32,9 @@ const ImageDropzone = () => {
     (acceptedFiles, rejectedFiles, e) => {
       if (acceptedFiles) {
         const { name } = e.target;
+        console.log(e.target.files[0]);
         setValue(name, e.target.files);
+        setValue("title", e.target.files[0].name);
         setFiles(
           acceptedFiles.map((file: File) =>
             Object.assign(file, {

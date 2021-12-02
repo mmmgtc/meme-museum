@@ -2259,6 +2259,21 @@
     "@ethersproject/properties" "^5.5.0"
     "@ethersproject/strings" "^5.5.0"
 
+"@fontsource/acme@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/acme/-/acme-4.5.0.tgz#922a3b49b311e3095d1aaab58cdd92b5281ce9ed"
+  integrity sha512-gyN3/QA0+qGfCLbMnGojctbZOAOr5L50kBb9cyqS06CGCafCTwnoAZXse74tSpmfCEgWav3qUx9cECaBCy196A==
+
+"@fontsource/akaya-kanadaka@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/akaya-kanadaka/-/akaya-kanadaka-4.5.0.tgz#6301de3452854287ada0894300d2bc3100bcedfb"
+  integrity sha512-jmyusMTc6Y78oYMA+KP1EggG1rGvRXASvBuvJ3AYDptTdq4Mm5vUy5LPc+qXmfxk5IQeyhmSMzVCbw3VvwPoLA==
+
+"@fontsource/comic-mono@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/comic-mono/-/comic-mono-4.5.0.tgz#ce0889565037b85bf60b8754d9579ecf901309fb"
+  integrity sha512-21jmxTq7LB0Aac4zR9L4+TRCe4iZSwSMuc/iQH151LWaVLRy0CQJhqUnF/SoV8RkLyNybzHDg2ndOuJlII/AOQ==
+
 "@fontsource/lexend@^4.5.1":
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/@fontsource/lexend/-/lexend-4.5.1.tgz#905f5ed1f3f40e7150b79d6c11e7b4839977999e"

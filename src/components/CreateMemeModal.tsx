@@ -31,11 +31,7 @@ function CreateMemeModal({
 }) {
   const { account } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
-  const methods = useForm({
-    defaultValues: {
-      tags: [{ name: "memepalooza" }],
-    } as Record<string, any>,
-  });
+  const methods = useForm();
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
@@ -75,6 +71,9 @@ function CreateMemeModal({
           method: "POST",
           body: JSON.stringify({
             ...values,
+            tags: values.tags.filter(
+              (tag: { name: string }) => tag.name && tag.name !== ""
+            ),
             image: `https://ipfs.io/ipfs/${cids.image}`,
           }),
           headers,
@@ -123,46 +122,46 @@ function CreateMemeModal({
           <FormProvider {...methods}>
             <Stack as="form" onSubmit={methods.handleSubmit(onSubmit)}>
               <CreateMemeForm />
+              <HStack
+                w="full"
+                justifyContent="flex-end"
+                alignItems="center"
+                py="4"
+              >
+                <Button
+                  isLoading={isSubmitting || methods.formState.isSubmitting}
+                  mr="0.5rem"
+                  rounded="full"
+                  bg={brandColors.mainPurple}
+                  color="white"
+                  border={`solid 5px ${borderColor}`}
+                  _hover={{
+                    background: brandColors.darkPurple,
+                    color: "white",
+                  }}
+                  type="submit"
+                  fontSize="md"
+                  size="md"
+                >
+                  SUBMIT
+                </Button>
+                <Button
+                  rounded="full"
+                  bg={bg}
+                  color={color}
+                  border={`solid 5px ${borderColor}`}
+                  _hover={{
+                    background: brandColors.darkPurple,
+                    color: "white",
+                  }}
+                  onClick={onClose}
+                  fontSize="md"
+                  size="md"
+                >
+                  CANCEL
+                </Button>
+              </HStack>
             </Stack>
-            <HStack
-              w="full"
-              justifyContent="flex-end"
-              alignItems="center"
-              py="4"
-            >
-              <Button
-                isLoading={isSubmitting || methods.formState.isSubmitting}
-                mr="0.5rem"
-                rounded="full"
-                bg={brandColors.mainPurple}
-                color="white"
-                border={`solid 5px ${borderColor}`}
-                _hover={{
-                  background: brandColors.darkPurple,
-                  color: "white",
-                }}
-                onClick={() => onSubmit()}
-                fontSize="md"
-                size="md"
-              >
-                SUBMIT
-              </Button>
-              <Button
-                rounded="full"
-                bg={bg}
-                color={color}
-                border={`solid 5px ${borderColor}`}
-                _hover={{
-                  background: brandColors.darkPurple,
-                  color: "white",
-                }}
-                onClick={onClose}
-                fontSize="md"
-                size="md"
-              >
-                CANCEL
-              </Button>
-            </HStack>
           </FormProvider>
         </ModalBody>
       </ModalContent>

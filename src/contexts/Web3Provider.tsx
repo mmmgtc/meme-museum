@@ -1,7 +1,12 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import Authereum from "authereum";
 import { ethers } from "ethers";
-import React, { createContext, useReducer, useCallback } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useCallback,
+  useEffect,
+} from "react";
 import Web3Modal from "web3modal";
 
 import { State, Web3Reducer } from "./Web3Reducer";
@@ -60,6 +65,14 @@ export const Web3Provider = ({ children }: { children: any }) => {
     });
   };
 
+  useEffect(() => {
+    const knowAccount = localStorage.getItem("knownAccount");
+    console.log({ knowAccount });
+    if (knowAccount) {
+      setAccount(knowAccount);
+    }
+  }, []);
+
   const logout = async () => {
     setAccount(null);
     setProvider(null);
@@ -85,23 +98,27 @@ export const Web3Provider = ({ children }: { children: any }) => {
       setENS(null);
     }
     setAccount(account);
-    const signature = await ethersProvider.send("personal_sign", [
-      "meme party",
-      account,
-    ]);
+    localStorage.setItem("knownAccount", account);
 
-    const authResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
-      {
-        method: "POST",
-        body: JSON.stringify({ signed: signature, address: account }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const authToken = await authResponse.json();
-    localStorage.setItem("Authorization", authToken.token);
+    const token = localStorage.getItem("Authorization");
+    if (!token || token === "") {
+      const signature = await ethersProvider.send("personal_sign", [
+        "meme party",
+        account,
+      ]);
+      const authResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
+        {
+          method: "POST",
+          body: JSON.stringify({ signed: signature, address: account }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const authToken = await authResponse.json();
+      localStorage.setItem("Authorization", authToken.token);
+    }
 
     provider.on("chainChanged", () => {
       // window.location.reload();
