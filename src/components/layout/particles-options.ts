@@ -218,64 +218,44 @@ export const memeticles = {
         },
         image: [
           {
-            src: "https://i.kym-cdn.com/entries/icons/original/000/031/051/cover4.jpg",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897767832997898/hey.gif",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897774665506836/feelsgood.png",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897773121998868/FEbkX93XIAAjvqm.jpg",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897777232441374/FEkmOy3XMAAMFBM.jpg",
             width: 52,
-            height: 32,
+            height: 72,
           },
           {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/865/673/cc9.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/936/373/58d.png",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897779698667530/gm.gif",
             width: 72,
             height: 42,
           },
           {
-            src: "https://pbs.twimg.com/media/FBwQdrSXEAAVX2w.jpg",
-            width: 72,
-            height: 42,
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897782764716072/green_pill.png",
+            width: 80,
+            height: 80,
           },
           {
-            src: "https://i.pinimg.com/originals/94/b5/65/94b565ce7e77eefdcef0fae4894e3fa2.gif",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/865/686/07a.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://upload.wikimedia.org/wikipedia/en/c/cc/Wojak_cropped.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Mydoomer.png/220px-Mydoomer.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://ih1.redbubble.net/image.838053714.1459/pp,840x830-pad,1000x1000,f8f8f8.u2.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.imgflip.com/5q4ohs.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://c.tenor.com/Sya8sngqByoAAAAM/pump-and-dump-doge-coin.gif",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/914911104000467024/dark_theme.png",
             width: 50,
             height: 50,
           },
           {
             src: "https://images.squarespace-cdn.com/content/v1/5d641c0fc8f92f0001cd9358/1568860160976-EZX0LXYDNLXXO54QB1GQ/green+wojak+crypto+meme+2.jpg",
-            width: 73,
-            height: 78,
+            width: 80,
+            height: 80,
           },
           {
             src: "https://c.tenor.com/TCKfBcXic2oAAAAd/ethereum-eth.gif",
@@ -290,64 +270,44 @@ export const memeticles = {
         ],
         images: [
           {
-            src: "https://i.kym-cdn.com/entries/icons/original/000/031/051/cover4.jpg",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897767832997898/hey.gif",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897774665506836/feelsgood.png",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897773121998868/FEbkX93XIAAjvqm.jpg",
+            width: 32,
+            height: 32,
+          },
+          {
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897777232441374/FEkmOy3XMAAMFBM.jpg",
             width: 52,
-            height: 32,
+            height: 72,
           },
           {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/865/673/cc9.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/936/373/58d.png",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897779698667530/gm.gif",
             width: 72,
             height: 42,
           },
           {
-            src: "https://pbs.twimg.com/media/FBwQdrSXEAAVX2w.jpg",
-            width: 72,
-            height: 42,
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/915897782764716072/green_pill.png",
+            width: 80,
+            height: 80,
           },
           {
-            src: "https://i.pinimg.com/originals/94/b5/65/94b565ce7e77eefdcef0fae4894e3fa2.gif",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.kym-cdn.com/photos/images/newsfeed/001/865/686/07a.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://upload.wikimedia.org/wikipedia/en/c/cc/Wojak_cropped.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Mydoomer.png/220px-Mydoomer.png",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://ih1.redbubble.net/image.838053714.1459/pp,840x830-pad,1000x1000,f8f8f8.u2.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://i.imgflip.com/5q4ohs.jpg",
-            width: 32,
-            height: 32,
-          },
-          {
-            src: "https://c.tenor.com/Sya8sngqByoAAAAM/pump-and-dump-doge-coin.gif",
+            src: "https://cdn.discordapp.com/attachments/906238436028059698/914911104000467024/dark_theme.png",
             width: 50,
             height: 50,
           },
           {
             src: "https://images.squarespace-cdn.com/content/v1/5d641c0fc8f92f0001cd9358/1568860160976-EZX0LXYDNLXXO54QB1GQ/green+wojak+crypto+meme+2.jpg",
-            width: 73,
-            height: 78,
+            width: 80,
+            height: 80,
           },
           {
             src: "https://c.tenor.com/TCKfBcXic2oAAAAd/ethereum-eth.gif",

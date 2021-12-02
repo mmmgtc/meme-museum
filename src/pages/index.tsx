@@ -208,9 +208,9 @@ function Memes() {
           <Tilt
             glareEnable
             glareMaxOpacity={0.05}
-            scale={1.1}
-            tiltMaxAngleX={8}
-            tiltMaxAngleY={8}
+            scale={1.03}
+            tiltMaxAngleX={7}
+            tiltMaxAngleY={7}
           >
             <MemeCard
               key={m.id}
@@ -237,7 +237,13 @@ function Memes() {
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" />
-          <HStack w="3xl" spacing="4">
+          <SimpleGrid
+            columns={{
+              sm: 1,
+              md: 2,
+            }}
+            spacing={4}
+          >
             <InputGroup size="lg">
               <InputLeftElement pointerEvents="none">
                 <Search2Icon color={color} />
@@ -281,7 +287,7 @@ function Memes() {
             >
               UPLOAD MEME
             </Button>
-          </HStack>
+          </SimpleGrid>
         </VStack>
         <CreateMemeModal
           {...{ isOpen, onClose, addMeme: handleAddMeme, handleNotConnected }}
@@ -295,10 +301,10 @@ function Memes() {
             handleDownvote={handleDownvote}
           />
         )}
-        <Tabs isFitted variant="soft-rounded" w="full" py="4">
+        <Tabs isFitted variant="soft-rounded" py="4">
           <TabList
             border={`solid 5px ${brandColors.mainPurpleHex}`}
-            rounded="3xl"
+            rounded="full"
           >
             <Tab
               color="white"

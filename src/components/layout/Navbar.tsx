@@ -66,7 +66,7 @@ function Navbar() {
               MEMES
             </Button>
           </NextLink> */}
-          <NextLink href="/about">
+          {/* <NextLink href="/about">
             <Button
               size="md"
               rounded="full"
@@ -81,7 +81,7 @@ function Navbar() {
             >
               ABOUT
             </Button>
-          </NextLink>
+          </NextLink> */}
         </HStack>
 
         <Flex alignItems="center" w="full">
