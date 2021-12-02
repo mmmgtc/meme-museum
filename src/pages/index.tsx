@@ -88,7 +88,6 @@ function Memes() {
         }
       );
       const memesResult = await foundMemesRes.json();
-      console.log({ memesResult });
       return memesResult && memesResult.length > 0 ? memesResult : null;
     },
     [headers]
@@ -145,7 +144,6 @@ function Memes() {
       }
     );
     const upvotedMeme = await upvoteMemeResponse.json();
-    console.log({ upvotedMeme });
     setMemes((previousMemes) => [
       ...previousMemes.filter((m) => m.id !== memeId),
       upvotedMeme,
@@ -171,7 +169,6 @@ function Memes() {
       }
     );
     const downvotedMeme = await downvoteMemeResponse.json();
-    console.log({ downvotedMeme });
     setMemes((previousMemes) => [
       ...previousMemes.filter((m) => m.id !== memeId),
       downvotedMeme,
@@ -188,7 +185,6 @@ function Memes() {
         `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
       );
       const memesResult = await memesResponse.json();
-      console.log({ memesResult });
       setMemes(memesResult);
     }
     fetchMemes();

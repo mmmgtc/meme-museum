@@ -64,6 +64,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
     setAccount(null);
     setProvider(null);
     localStorage.setItem("defaultWallet", "");
+    localStorage.setItem("Authorization", "");
   };
 
   const connectWeb3 = useCallback(async () => {
@@ -78,7 +79,6 @@ export const Web3Provider = ({ children }: { children: any }) => {
     const account = await signer.getAddress();
     try {
       const ens = await ethersProvider.lookupAddress(account);
-      console.log({ ens });
       setENS(ens);
     } catch (error) {
       console.log({ error });
@@ -89,6 +89,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
       "meme party",
       account,
     ]);
+
     const authResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
       {

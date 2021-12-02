@@ -33,7 +33,7 @@ function IconWithState({ icon, active = false }: IconWithStateProps) {
   } = useForm();
 
   function onSubmit(values: any) {
-    console.log(values);
+    // console.log(values);
   }
 
   let SiIcon;

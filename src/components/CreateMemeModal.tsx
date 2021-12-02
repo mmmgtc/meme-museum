@@ -41,7 +41,6 @@ function CreateMemeModal({
   useEffect(() => {
     // Perform localStorage action
     const token = localStorage.getItem("Authorization");
-    console.log({ token });
     if (token) {
       setHeaders({
         Authorization: `Token ${token}`,
@@ -56,7 +55,6 @@ function CreateMemeModal({
     }
     setIsSumbitting(true);
     const values = methods.getValues();
-    console.log({ values });
     const formData = new FormData();
     if (values.image) {
       formData.append("image", values.image[0]);
@@ -80,7 +78,6 @@ function CreateMemeModal({
         }
       );
       const createdMeme = await createMemeResponse.json();
-      console.log({ createdMeme });
       setIsSumbitting(false);
       addMeme(createdMeme);
       methods.reset();

@@ -48,7 +48,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         return { field: file.fieldName, cid };
       })
   );
-  console.log({ cids });
 
   return res.status(200).json({
     cids: cids.reduce((formattedCids, curr) => {

@@ -3,7 +3,7 @@ import {
   HStack,
   Heading,
   Button,
-  Stack,
+  SimpleGrid,
   Modal,
   ModalOverlay,
   ModalBody,
@@ -23,7 +23,6 @@ import {
 import NextLink from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
-import { FormProvider, useForm } from "react-hook-form";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
@@ -47,7 +46,6 @@ function MemeModal({
   handleUpvote?: any;
   handleDownvote?: any;
 }) {
-  console.log({ meme });
   const { account, staticProvider } = useContext(Web3Context);
   const [ens, setENS] = useState<string | null>(null);
 
@@ -64,7 +62,6 @@ function MemeModal({
           const resolvedENS = await staticProvider.lookupAddress(
             meme.poaster.username
           );
-          console.log({ resolvedENS });
           setENS(resolvedENS);
         } catch (error) {
           console.log({ error });
@@ -155,27 +152,21 @@ function MemeModal({
           </Flex>
 
           <Flex w="full" direction="column" pt="4" fontWeight="bold">
-            <Text noOfLines={2} fontSize="2xl" py="2">
-              {meme.description || "This meme has no story, no soul!"}
-            </Text>
-            <Flex
-              align="center"
-              w={{
-                sm: "full",
-                md: W_FIT_CONTENT,
+            <SimpleGrid
+              columns={{
+                sm: 1,
+                md: 2,
               }}
-              py="2"
+              w="full"
+              alignItems="center"
             >
               {meme.poaster && (
                 <Badge
+                  w="fit-content"
                   rounded="full"
                   color={color}
                   bg={bg}
                   border={`solid 5px ${borderColor}`}
-                  w={{
-                    base: "full",
-                    md: W_FIT_CONTENT,
-                  }}
                   pr={4}
                   py={2}
                   fontWeight="400"
@@ -238,10 +229,20 @@ function MemeModal({
                   </HStack>
                 </Badge>
               )}
-            </Flex>
+              <Text
+                align={{
+                  sm: "start",
+                  md: "end",
+                }}
+                fontSize="xl"
+                py="2"
+              >
+                CREDITS: {meme.meme_lord}
+              </Text>
+            </SimpleGrid>
 
             {meme.tags && meme.tags.length > 0 && (
-              <Flex wrap="wrap" w={W_FIT_CONTENT} py="2" gridGap="2">
+              <Flex wrap="wrap" w={W_FIT_CONTENT} pt="2" gridGap="2">
                 {meme.tags.map(({ name }) => (
                   <Tag flexGrow={1} rounded="full" size="md" key={name}>
                     <TagLabel fontWeight="bold" color={color} alt={name}>
@@ -251,6 +252,9 @@ function MemeModal({
                 ))}
               </Flex>
             )}
+            <Text fontSize="2xl" py="2">
+              {meme.description}
+            </Text>
           </Flex>
         </ModalBody>
       </ModalContent>
