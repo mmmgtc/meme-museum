@@ -11,14 +11,12 @@ import {
   ModalCloseButton,
   ModalHeader,
   Image,
-  Container,
   useColorModeValue,
   Text,
   Tag,
   TagLabel,
   Badge,
   Flex,
-  Spacer,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import React, { useContext, useEffect, useState } from "react";
@@ -27,11 +25,6 @@ import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors, W_FIT_CONTENT, getSlicedAddress } from "../helpers";
-import CreateMemePage from "../views/CreateMemePage";
-import TagsField from "../views/TagsField";
-import Card from "components/custom/Card";
-
-import CenteredFrame from "./layout/CenteredFrame";
 
 function MemeModal({
   meme,

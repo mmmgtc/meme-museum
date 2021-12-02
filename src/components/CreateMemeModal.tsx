@@ -16,8 +16,7 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors } from "../helpers";
-import CreateMemePage from "../views/CreateMemePage";
-import TagsField from "../views/TagsField";
+import CreateMemeForm from "../views/CreateMemeForm";
 
 function CreateMemeModal({
   isOpen,
@@ -32,7 +31,11 @@ function CreateMemeModal({
 }) {
   const { account } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: {
+      tags: [{ name: "memepalooza" }],
+    } as Record<string, any>,
+  });
   const [headers, setHeaders] = useState<{
     Authorization: string;
     [key: string]: string;
@@ -119,8 +122,7 @@ function CreateMemeModal({
         <ModalBody>
           <FormProvider {...methods}>
             <Stack as="form" onSubmit={methods.handleSubmit(onSubmit)}>
-              <CreateMemePage />
-              <TagsField />
+              <CreateMemeForm />
             </Stack>
             <HStack
               w="full"

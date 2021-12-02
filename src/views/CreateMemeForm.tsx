@@ -19,36 +19,19 @@ import IconWithState from "../components/custom/IconWithState";
 import { brandColors } from "../helpers";
 
 import ImageDropzone from "./ImageDropzone";
+import TagsField from "./TagsField";
 
-const CreateMemePage: React.FunctionComponent = () => {
-  const router = useRouter();
-  const [files, setFiles] = useState([]);
+const CreateMemeForm: React.FunctionComponent = () => {
   const {
     register,
-    setValue,
     formState: { errors },
   } = useFormContext();
 
   const requiredText = "This is required";
   const purple = "purple.300";
   const purpleDark = "purple.700";
-
-  useEffect(
-    () => () => {
-      // Make sure to revoke the data uris to avoid memory leaks
-      files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-    },
-    [files]
-  );
-
-  function goBack() {
-    router.back();
-  }
-
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
-  // const altColor = useColorModeValue("white", brandColors.darkPurple);
-  const altColor = useColorModeValue("white", brandColors.darkPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
 
   return (
@@ -156,8 +139,9 @@ const CreateMemePage: React.FunctionComponent = () => {
           {errors.description && errors.description.message}
         </FormErrorMessage>
       </FormControl>
+      <TagsField />
     </Box>
   );
 };
 
-export default CreateMemePage;
+export default CreateMemeForm;

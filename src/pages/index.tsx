@@ -286,7 +286,12 @@ function Memes() {
           </SimpleGrid>
         </VStack>
         <CreateMemeModal
-          {...{ isOpen, onClose, addMeme: handleAddMeme, handleNotConnected }}
+          {...{
+            isOpen,
+            onClose,
+            addMeme: handleAddMeme,
+            handleNotConnected,
+          }}
         />
         {currentMeme && (
           <MemeModal

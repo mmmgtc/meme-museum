@@ -31,13 +31,6 @@ const TagsField = () => {
     // keyName: "id", default to "id", you can change the key name
   });
 
-  useEffect(() => {
-    append({ name: "memepalooza" });
-    return () => {
-      remove();
-    };
-  }, [append, remove]);
-
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
