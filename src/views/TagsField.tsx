@@ -36,12 +36,12 @@ const TagsField = () => {
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
 
-  useEffect(() => {
-    append({ name: "memepalooza 4" });
-    return () => {
-      remove();
-    };
-  }, [append, remove]);
+  // useEffect(() => {
+  //   append({ name: "memepalooza 5" });
+  //   return () => {
+  //     remove();
+  //   };
+  // }, [append, remove]);
 
   return (
     <FormControl isInvalid={errors.tags} py="4">
