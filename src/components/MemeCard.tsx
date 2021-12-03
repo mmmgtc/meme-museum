@@ -1,101 +1,68 @@
-import {
-  Avatar,
-  Button,
-  Flex,
-  Heading,
-  Spacer,
-  Text,
-  Tag,
-  TagLabel,
-  VStack,
-  Stack,
-  HStack,
-} from "@chakra-ui/react";
-import { useRouter } from "next/router";
+import { Button, Flex, useColorModeValue } from "@chakra-ui/react";
+import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
+
+import { brandColors, MemeType } from "../helpers";
 
 import CardMedia from "./custom/CardMedia";
 
-type Meme = {
-  image: string;
-  name: string;
-  avatar: string;
-  owner: string;
-  description: string;
-  website: string;
-  whitepaper: string;
-  social: {
-    github: string;
-  };
-  upvotes: string[];
-  downvotes: string[];
-  created: string;
-};
-
-function MemeCard({ meme }: { meme: Meme }) {
-  const router = useRouter();
-
-  function openMeme() {
-    router.push("/meme/example");
-  }
-
+function MemeCard({
+  meme,
+  handleUpvote,
+  handleDownvote,
+}: {
+  meme: MemeType;
+  handleUpvote: any;
+  handleDownvote: any;
+}) {
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
-    <CardMedia>
-      <VStack px="6" align="left" w="full">
-        <Heading fontSize="2xl">{meme.name}</Heading>
-        <Text fontSize="xs">Created on {meme.created}</Text>
-        <Flex align="center">
-          <Avatar mr="0.5rem" boxSize="1.5em" src={meme.avatar} />
-          <Text fontSize="sm">{meme.owner}</Text>
-        </Flex>
-        <Text noOfLines={2}>{meme.description}</Text>
-        <Spacer />
-        <Flex direction="column" fontSize="xs" w="full">
-          <Stack direction="row" justifyContent="space-between">
-            <Stack spacing={0} align="center">
-              <Tag
-                size="lg"
-                w="110px"
-                colorScheme="green"
-                borderRadius="full"
-                cursor="pointer"
-              >
-                <HStack w="full" justifyContent="space-between">
-                  <FaArrowCircleUp />
-                  <TagLabel>{meme.upvotes.length}</TagLabel>
-                </HStack>
-              </Tag>
-
-              {/* <Text fontWeight={600}>{meme.upvotes.length}</Text>
-            <Text fontSize="sm" color="gray.500">
-              Upvotes
-            </Text> */}
-            </Stack>
-            <Stack spacing={0} align="center">
-              {/* <Text fontWeight={600}>{meme.downvotes.length}</Text>
-            <Text fontSize="sm" color="gray.500">
-              Downvotes
-            </Text> */}
-              <Tag
-                size="lg"
-                w="110px"
-                colorScheme="red"
-                borderRadius="full"
-                cursor="pointer"
-              >
-                <HStack w="full" justifyContent="space-between">
-                  <FaArrowCircleDown />
-                  <TagLabel>{meme.downvotes.length}</TagLabel>
-                </HStack>
-              </Tag>
-            </Stack>
-          </Stack>
-        </Flex>
-        <Spacer />
-        <Button w="100%" fontSize="md" onClick={() => openMeme()}>
-          View Meme
+    <CardMedia
+      bg={bg}
+      color={color}
+      border={`solid 5px ${badgeBorderColor}`}
+      src={meme.image}
+    >
+      <Flex pt="3" pb="4" w="full" justify="space-around">
+        <Button
+          leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
+          rounded="full"
+          size="md"
+          variant="solid"
+          border="solid 5px #9AE6B4"
+          color={color}
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleUpvote(meme.id);
+          }}
+        >
+          {meme.upvotes}
         </Button>
-      </VStack>
+        <Button
+          leftIcon={<FaArrowCircleDown color="#FEB2B2" fontSize="1.7rem" />}
+          rounded="full"
+          size="md"
+          variant="solid"
+          border="solid 5px #FEB2B2"
+          color={color}
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDownvote(meme.id);
+          }}
+        >
+          {meme.downvotes}
+        </Button>
+      </Flex>
     </CardMedia>
   );
 }

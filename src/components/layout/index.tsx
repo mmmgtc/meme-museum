@@ -1,19 +1,44 @@
 import { Box } from "@chakra-ui/react";
 import { ReactNode } from "react";
+import Particles from "react-tsparticles";
 
 import Footer from "./Footer";
-import Header from "./Header";
+import Navbar from "./Navbar";
+import { memeticles } from "./particles-options";
 
 type LayoutProps = {
   children: ReactNode;
 };
 
 const Layout = ({ children }: LayoutProps) => {
+  const particlesInit = (main) => {
+    // console.log(main);
+    // you can initialize the tsParticles instance (main) here, adding custom shapes or presets
+  };
+
+  const particlesLoaded = (container) => {
+    // console.log(container);
+  };
   return (
     <>
-      <Header />
-      <Box pt="12" margin="0 auto" maxWidth="7xl" transition="0.5s ease-out">
-        <Box margin="8">
+      <Navbar />
+      <Particles
+        key="bg"
+        style={{
+          zIndex: -1,
+        }}
+        init={particlesInit}
+        loaded={particlesLoaded}
+        options={memeticles as any}
+      />
+
+      <Box
+        zIndex="10"
+        margin="0 auto"
+        maxWidth="8xl"
+        transition="0.5s ease-out"
+      >
+        <Box>
           <Box as="main" marginY={22}>
             {children}
           </Box>

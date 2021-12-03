@@ -1,17 +1,26 @@
 import WalletConnectProvider from "@walletconnect/web3-provider";
 // import Authereum from "authereum";
 import { ethers } from "ethers";
-import React, { createContext, useReducer, useCallback } from "react";
+import React, {
+  createContext,
+  useReducer,
+  useCallback,
+  useEffect,
+} from "react";
 import Web3Modal from "web3modal";
 
 import { State, Web3Reducer } from "./Web3Reducer";
 
+const { NEXT_PUBLIC_INFURA_ID } = process.env;
+const staticProvider = new ethers.providers.StaticJsonRpcProvider(
+  `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`
+);
 const initialState = {
   loading: false,
   account: null,
   provider: null,
+  staticProvider,
 } as State;
-const { NEXT_PUBLIC_INFURA_ID } = process.env;
 
 const providerOptions = {
   walletconnect: {
@@ -43,6 +52,12 @@ export const Web3Provider = ({ children }: { children: any }) => {
     });
   };
 
+  const setENS = (ens: null | string) => {
+    dispatch({
+      type: "SET_ENS",
+      payload: ens,
+    });
+  };
   const setProvider = (provider: null | any) => {
     dispatch({
       type: "SET_PROVIDER",
@@ -50,10 +65,20 @@ export const Web3Provider = ({ children }: { children: any }) => {
     });
   };
 
+  useEffect(() => {
+    const knowAccount = localStorage.getItem("knownAccount");
+    console.log({ knowAccount });
+    if (knowAccount) {
+      setAccount(knowAccount);
+    }
+  }, []);
+
   const logout = async () => {
     setAccount(null);
     setProvider(null);
     localStorage.setItem("defaultWallet", "");
+    localStorage.setItem("knownAccount", "");
+    localStorage.setItem("Authorization", "");
   };
 
   const connectWeb3 = useCallback(async () => {
@@ -66,14 +91,42 @@ export const Web3Provider = ({ children }: { children: any }) => {
     setProvider(ethersProvider);
     const signer = ethersProvider.getSigner();
     const account = await signer.getAddress();
+    try {
+      const ens = await ethersProvider.lookupAddress(account);
+      setENS(ens);
+    } catch (error) {
+      console.log({ error });
+      setENS(null);
+    }
     setAccount(account);
+    localStorage.setItem("knownAccount", account);
+
+    const token = localStorage.getItem("Authorization");
+    if (!token || token === "") {
+      const signature = await signer.signMessage("meme party");
+      const authResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            signed: signature,
+            address: account,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const authToken = await authResponse.json();
+      localStorage.setItem("Authorization", authToken.token);
+    }
 
     provider.on("chainChanged", () => {
-      window.location.reload();
+      // window.location.reload();
     });
 
     provider.on("accountsChanged", () => {
-      window.location.reload();
+      // window.location.reload();
     });
   }, []);
 

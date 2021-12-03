@@ -1,1 +1,9 @@
 /* Global Styling here */
+
+body {
+  text-transform: uppercase;
+}
+
+.blockies {
+  border-radius: 50%;
+}

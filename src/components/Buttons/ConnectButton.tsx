@@ -1,64 +1,107 @@
 import {
   Button,
   HStack,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-  MenuList,
+  Flex,
+  Badge,
   Text,
+  IconButton,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import React, { useContext } from "react";
-import { AiFillSetting } from "react-icons/ai";
-import { BsFillPersonLinesFill } from "react-icons/bs";
+import Blockies from "react-blockies";
+import { FiLogOut } from "react-icons/fi";
 
 import { Web3Context } from "../../contexts/Web3Provider";
+import { brandColors } from "../../helpers";
 
 function ConnectButton() {
-  const { account, connectWeb3, logout } = useContext(Web3Context);
+  const { account, ens, connectWeb3, logout } = useContext(Web3Context);
+  const bg = useColorModeValue("white", brandColors.mainPurple);
+  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const borderColor = useColorModeValue("#8C65F7", "white");
 
   return (
-    <HStack w="full">
-      <Text>{account}</Text>
-      {account ? (
-        <Button onClick={logout}>Logout</Button>
-      ) : (
-        <Button onClick={connectWeb3}>Connect</Button>
-      )}
-      <Menu>
-        <MenuButton
-          as={Button}
+    <Flex gridGap="4" w="full" justifyContent="flex-end">
+      {account && (
+        <Badge
           rounded="full"
-          variant="link"
-          cursor="pointer"
-          minW={0}
+          fontWeight="600"
+          w="fit-content"
+          variant="solid"
+          bg={bg}
+          border={`solid 4px ${borderColor}`}
+          color={color}
         >
-          {/* <Avatar
-            w="40px"
-            h="40px"
-            src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-          /> */}
-        </MenuButton>
-        <MenuList rounded="3xl">
-          <MenuItem>
-            <Link href="/profile" passHref>
-              <Button leftIcon={<BsFillPersonLinesFill />} w="full">
-                Profile
-              </Button>
-            </Link>
-          </MenuItem>
-          <MenuItem>
-            <Link href="/settings" passHref>
-              <Button leftIcon={<AiFillSetting />} w="full">
-                Settings
-              </Button>
-            </Link>
-          </MenuItem>
-          <MenuDivider />
-        </MenuList>
-      </Menu>
-    </HStack>
+          <HStack w="full">
+            <Blockies
+              size={10}
+              seed={account.toLowerCase()}
+              className="blockies"
+              scale={3}
+            />
+            <Text
+              display={["none", "none", "flex", "flex"]}
+              fontWeight="bold"
+              color={color}
+              isTruncated
+            >
+              {ens || account}
+            </Text>
+          </HStack>
+        </Badge>
+      )}
+      {account ? (
+        <>
+          {/** DESKTOP* */}
+          <Button
+            aria-label="logout"
+            rounded="full"
+            variant="solid"
+            bg={bg}
+            border={`solid 4px ${borderColor}`}
+            color={color}
+            _hover={{
+              bg: brandColors.darkPurple,
+              color: "white",
+            }}
+            onClick={logout}
+            display={["none", "none", "flex", "flex"]}
+          >
+            LOGOUT
+          </Button>
+          {/** MOBILE* */}
+          <IconButton
+            aria-label="logout"
+            icon={<FiLogOut />}
+            rounded="full"
+            variant="solid"
+            bg={bg}
+            border={`solid 4px ${borderColor}`}
+            color={color}
+            _hover={{
+              bg: brandColors.darkPurple,
+              color: "white",
+            }}
+            onClick={logout}
+            display={["flex", "flex", "none", "none"]}
+          />
+        </>
+      ) : (
+        <Button
+          rounded="full"
+          bg={bg}
+          border={`solid 4px ${borderColor}`}
+          color={color}
+          _hover={{
+            bg: brandColors.darkPurple,
+            color: "white",
+          }}
+          onClick={connectWeb3}
+        >
+          CONNECT
+        </Button>
+      )}
+    </Flex>
   );
 }
 

@@ -7,7 +7,7 @@ interface Children {
 const Container = (props: Children) => {
   const { children } = props;
   return (
-    <VStack pt="7" w="full" minH={{ sm: "400px", md: "600px" }}>
+    <VStack pt="7" w="full" minH={{ sm: "400px", md: "700px" }}>
       {children}
     </VStack>
   );

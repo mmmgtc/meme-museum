@@ -1,23 +1,20 @@
-import { VStack, StackProps, Image } from "@chakra-ui/react";
+import { useColorModeValue } from "@chakra-ui/color-mode";
+import { VStack, Image, Box } from "@chakra-ui/react";
 
-function CardMedia(props: StackProps) {
-  const { children, ...others } = props;
+function CardMedia(props: any) {
+  const { children, src, ...others } = props;
+  // const bg = useColorModeValue("purple.200", "white");
   return (
     <VStack
-      bg="spacelightalpha"
+      alignItems="center"
+      bg="none"
       h="auto"
-      pb="6"
-      borderRadius="base"
-      spacing="4"
-      align="start"
+      w="full"
+      rounded="3xl"
+      color="purple.200"
       {...others}
     >
-      <Image
-        maxH="400px"
-        w="full"
-        src="https://pbs.twimg.com/media/FD4GHmPVcAAwufb?format=jpg&name=large"
-        objectFit="contain"
-      />
+      <Image h="360px" w="full" src={src} roundedTop="2xl" objectFit="cover" />
       {children}
     </VStack>
   );

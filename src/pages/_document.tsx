@@ -3,6 +3,7 @@
  * @todo: remove this comment below when ready
  * ref: https://github.com/vercel/next.js/issues/13712#issuecomment-910409023
  * */
+import { ColorModeScript } from "@chakra-ui/react";
 import createEmotionServer from "@emotion/server/create-instance";
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, {
@@ -14,11 +15,11 @@ import Document, {
 } from "next/document";
 import * as React from "react";
 
+import theme from "../styles/customTheme";
 import createEmotionCache from "styles/createEmotionCache";
 
-const APP_NAME = "quadratic-diplomacy";
-const APP_DESCRIPTION =
-  "Distribute tokens among your team members based on quadratic voting.";
+const APP_NAME = "MEMES.PARTY";
+const APP_DESCRIPTION = "Upload, upvote and downvote your best memes!";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -69,7 +70,28 @@ class MyDocument extends Document {
           <meta name="description" content={APP_DESCRIPTION} />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="theme-color" content="#FFFFFF" />
+
+          <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+          />
+          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="theme-color" content="#ffffff" />
 
           {/* add your own app-icon */}
           {/* <link
@@ -81,6 +103,7 @@ class MyDocument extends Document {
           <link rel="manifest" href="/manifest.json" />
         </Head>
         <body>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <Main />
           <NextScript />
         </body>
