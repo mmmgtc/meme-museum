@@ -8,7 +8,7 @@ const Footer = () => {
     <Box as="footer" width="full" alignContent="center" py="6">
       <Flex alignItems="center" justifyContent="center">
         <Link
-          href="https://m-m-m.xyz/"
+          href="https://gitcoin.co/"
           target="_blank"
           rel="noopener noreferrer"
         >
