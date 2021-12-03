@@ -86,7 +86,13 @@ function MemeModal({
           />
         </ModalHeader>
         <ModalBody>
-          <Image w="full" maxH="xl" src={meme.image} objectFit="contain" />
+          <Image
+            w="full"
+            maxH="xl"
+            src={meme.image}
+            objectFit="contain"
+            fallbackSrc="/404FACE.png"
+          />
           <Flex w="full" pt="6">
             <Flex w="full" justify="space-around" alignItems="center">
               <Button

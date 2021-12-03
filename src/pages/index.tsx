@@ -223,10 +223,12 @@ function Memes() {
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
   const memePaloozaMemes = renderMemes(
-    memes.filter((meme: MemeType) =>
-      meme.tags
-        .map((tag) => tag?.name && tag.name.toLowerCase())
-        .includes("memepalooza")
+    memes.filter(
+      (meme: MemeType) =>
+        meme?.tags &&
+        meme.tags
+          .map((tag) => tag?.name && tag.name.toLowerCase())
+          .includes("memepalooza")
     )
   );
 
