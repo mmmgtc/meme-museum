@@ -49,7 +49,7 @@ function Navbar() {
               rel="noopener noreferrer"
             >
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-                <LogoIcon size="100px" logoPath="/M-test.gif" />
+                <LogoIcon size="100px" logoPath="/MMMpurplelogo.png" />
               </Flex>
             </Link>
           </Flex>
