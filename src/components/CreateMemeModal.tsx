@@ -29,24 +29,9 @@ function CreateMemeModal({
   addMeme: any;
   handleNotConnected: any;
 }) {
-  const { account, provider } = useContext(Web3Context);
+  const { account, headers } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
   const methods = useForm();
-  const [headers, setHeaders] = useState<{
-    Authorization: string;
-    [key: string]: string;
-  }>();
-
-  useEffect(() => {
-    // Perform localStorage action
-    const token = localStorage.getItem("Authorization");
-    if (token) {
-      setHeaders({
-        Authorization: `Token ${token}`,
-        "Content-Type": "application/json",
-      });
-    }
-  }, []);
 
   async function onSubmit() {
     if (!account) {

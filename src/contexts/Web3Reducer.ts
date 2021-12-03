@@ -7,9 +7,11 @@ export type State = {
   provider: null | any;
   staticProvider: ethers.providers.Web3Provider;
   self: null | any;
+  headers: Record<string, any>;
   connectWeb3?: any;
   logout?: any;
 };
+
 export const Web3Reducer = (state: State, action: Record<string, any>) => {
   switch (action.type) {
     case "SET_ACCOUNT":
@@ -26,6 +28,11 @@ export const Web3Reducer = (state: State, action: Record<string, any>) => {
       return {
         ...state,
         provider: action.payload,
+      };
+    case "SET_HEADERS":
+      return {
+        ...state,
+        headers: action.payload,
       };
     default:
       return state;
