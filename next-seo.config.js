@@ -3,16 +3,16 @@ const defaultSEOConfig = {
   title: "MEMES.PARTY",
   titleTemplate: "%s | MEMES.PARTY",
   defaultTitle: "MEMES.PARTY",
-  description: "MEMELORDS IN DA PARTY ༼⌐ ■ل͟■ ༽",
+  description: "Upload, upvote and downvote your best memes!",
   canonical: "https://memes.party",
   openGraph: {
     url: "https://memes.party",
     title: "MEMES.PARTY",
-    description: "MEMELORDS IN DA PARTY ༼⌐ ■ل͟■ ༽",
+    description: "Upload, upvote and downvote your best memes!",
     images: [
       {
-        url: "https://og-image.sznm.dev/**nextarter-chakra**.sznm.dev.png?theme=dark&md=1&fontSize=125px&images=https%3A%2F%2Fsznm.dev%2Favataaars.svg&widths=250",
-        alt: "nextarter-chakra.sznm.dev og-image",
+        url: "https://bafybeicejjr2sgursyasjphtzf4s63pq4gswx7qwv6lumxv6myunoe4nyi.ipfs.dweb.link/memes-party.png",
+        alt: "MEMES.PARTY og-image",
       },
     ],
     site_name: "MEMES.PARTY",

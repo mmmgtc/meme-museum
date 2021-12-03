@@ -18,8 +18,8 @@ import * as React from "react";
 import theme from "../styles/customTheme";
 import createEmotionCache from "styles/createEmotionCache";
 
-const APP_NAME = "MEME.PARTY";
-const APP_DESCRIPTION = "MEMELORDS IN DA PARTY!";
+const APP_NAME = "MEMES.PARTY";
+const APP_DESCRIPTION = "Upload, upvote and downvote your best memes!";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

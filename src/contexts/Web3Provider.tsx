@@ -77,6 +77,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
     setAccount(null);
     setProvider(null);
     localStorage.setItem("defaultWallet", "");
+    localStorage.setItem("knownAccount", "");
     localStorage.setItem("Authorization", "");
   };
 

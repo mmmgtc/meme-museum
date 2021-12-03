@@ -16,8 +16,9 @@ export type MemeType = {
   upvotes: number;
   downvotes: number;
   description: string;
-  source: string;
-  meme_lord: null;
+  source?: string;
+  meme_lord: null | string;
+  meme_score: null | number;
   tags: {
     name: string;
   }[];

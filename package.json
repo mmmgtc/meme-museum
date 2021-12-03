@@ -2,7 +2,7 @@
   "name": "@mmm/meme-museum",
   "version": "0.1.0",
   "private": true,
-  "author": "Super Shadowy Coders",
+  "author": "Gitcoin Community",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
