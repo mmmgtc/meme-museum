@@ -14,7 +14,14 @@ function CardMedia(props: any) {
       color="purple.200"
       {...others}
     >
-      <Image h="360px" w="full" src={src} roundedTop="2xl" objectFit="cover" />
+      <Image
+        h="360px"
+        w="full"
+        src={src}
+        roundedTop="2xl"
+        objectFit="cover"
+        fallbackSrc="/404FACE.png"
+      />
       {children}
     </VStack>
   );

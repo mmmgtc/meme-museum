@@ -29,7 +29,7 @@ function CreateMemeModal({
   addMeme: any;
   handleNotConnected: any;
 }) {
-  const { account } = useContext(Web3Context);
+  const { account, provider } = useContext(Web3Context);
   const [isSubmitting, setIsSumbitting] = useState(false);
   const methods = useForm();
   const [headers, setHeaders] = useState<{
@@ -46,7 +46,7 @@ function CreateMemeModal({
         "Content-Type": "application/json",
       });
     }
-  }, [account]);
+  }, []);
 
   async function onSubmit() {
     if (!account) {
