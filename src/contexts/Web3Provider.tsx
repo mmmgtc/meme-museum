@@ -103,15 +103,15 @@ export const Web3Provider = ({ children }: { children: any }) => {
 
     const token = localStorage.getItem("Authorization");
     if (!token || token === "") {
-      const signature = await ethersProvider.send("personal_sign", [
-        "meme party",
-        account,
-      ]);
+      const signature = await signer.signMessage("meme party");
       const authResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
         {
           method: "POST",
-          body: JSON.stringify({ signed: signature, address: account }),
+          body: JSON.stringify({
+            signed: signature,
+            address: account,
+          }),
           headers: {
             "Content-Type": "application/json",
           },
