@@ -1,4 +1,4 @@
-import { EditIcon } from "@chakra-ui/icons";
+import { CheckIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   HStack,
   VStack,
@@ -18,8 +18,10 @@ import {
   TagLabel,
   Badge,
   Flex,
+  useClipboard,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
@@ -41,6 +43,9 @@ function MemeModal({
   handleDownvote?: any;
 }) {
   const { account, staticProvider } = useContext(Web3Context);
+  const { hasCopied, onCopy } = useClipboard(
+    `https://memes.party/?meme=${meme.id}`
+  );
   const [ens, setENS] = useState<string | null>(null);
 
   const bg = useColorModeValue("white", brandColors.mainPurple);
@@ -128,7 +133,25 @@ function MemeModal({
                 {meme.downvotes}
               </Button>
             </Flex>
-            {account && meme.poaster && meme.poaster?.username === account && (
+            <Button
+              onClick={onCopy}
+              w="140px"
+              rounded="full"
+              size="md"
+              variant="solid"
+              bg="purple.200"
+              border={`solid 5px ${borderColor}`}
+              color="white"
+              _hover={{
+                bg: altColor,
+                color,
+              }}
+              leftIcon={hasCopied ? <CheckIcon /> : <LinkIcon />}
+            >
+              {hasCopied ? "COPIED" : "COPY"}
+            </Button>
+
+            {/* {account && meme.poaster && meme.poaster?.username === account && (
               <NextLink href="/edit-meme" passHref>
                 <Button
                   rounded="full"
@@ -147,7 +170,7 @@ function MemeModal({
                   EDIT MEME
                 </Button>
               </NextLink>
-            )}
+            )} */}
           </Flex>
 
           <Flex w="full" direction="column" pt="4" fontWeight="bold">
