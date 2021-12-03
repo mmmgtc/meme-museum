@@ -10,7 +10,6 @@ import {
   TabPanels,
   Tabs,
   Box,
-  HStack,
   Input,
   InputGroup,
   InputLeftElement,
@@ -311,6 +310,7 @@ function Memes() {
             rounded="full"
           >
             <Tab
+              key="all-memes"
               color="white"
               backgroundColor="purple.200"
               _selected={{
@@ -326,6 +326,7 @@ function Memes() {
               ALL MEMES
             </Tab>
             <Tab
+              key="memepalooza"
               color="white"
               backgroundColor="purple.200"
               _selected={{
@@ -342,6 +343,7 @@ function Memes() {
               MEMEPALOOZA
             </Tab>
             <Tab
+              key="my-memes"
               color="white"
               backgroundColor={brandColors.mainPurple}
               _selected={{

@@ -86,6 +86,7 @@ const TagsField = () => {
             </Tag>
           )),
           <Button
+            key="addTag"
             leftIcon={<AddIcon />}
             maxW="150px"
             size="md"
