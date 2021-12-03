@@ -19,6 +19,7 @@ const initialState = {
   loading: false,
   account: null,
   provider: null,
+  headers: {},
   staticProvider,
 } as State;
 
@@ -56,6 +57,12 @@ export const Web3Provider = ({ children }: { children: any }) => {
     dispatch({
       type: "SET_ENS",
       payload: ens,
+    });
+  };
+  const setHeaders = (headers: null | Record<string, any>) => {
+    dispatch({
+      type: "SET_HEADERS",
+      payload: headers,
     });
   };
   const setProvider = (provider: null | any) => {
@@ -118,8 +125,15 @@ export const Web3Provider = ({ children }: { children: any }) => {
         }
       );
       const authToken = await authResponse.json();
-      localStorage.setItem("Authorization", authToken.token);
+      localStorage.setItem("Authorization", `Token ${authToken.token}`);
     }
+
+    const latestToken = localStorage.getItem("Authorization");
+    const headers = {
+      Authorization: latestToken,
+      "Content-Type": "application/json",
+    };
+    setHeaders(headers);
 
     provider.on("chainChanged", () => {
       // window.location.reload();
