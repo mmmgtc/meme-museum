@@ -16,8 +16,10 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
+import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Tilt from "react-parallax-tilt";
 
@@ -35,6 +37,9 @@ const MemeCard = dynamic(() => import("../components/MemeCard"), {
 });
 
 function Memes() {
+  const router = useRouter();
+  const preOpenedMemeId = parseInt(router.query.meme as string, 10);
+  console.log(preOpenedMemeId);
   const { account, connectWeb3 } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
@@ -105,6 +110,24 @@ function Memes() {
     [debouncedSearchTerm, handleSearch] // Only call effect if debounced search term changes
   );
 
+  const handleOpenMeme = useCallback(
+    (meme: MemeType) => {
+      setCurrentMeme(meme);
+      onOpenMeme();
+    },
+    [onOpenMeme]
+  );
+
+  useEffect(() => {
+    // Perform localStorage action
+    if (memes && preOpenedMemeId) {
+      const foundMeme = memes.find((meme) => meme.id === preOpenedMemeId);
+      if (foundMeme) {
+        handleOpenMeme(foundMeme);
+      }
+    }
+  }, [handleOpenMeme, preOpenedMemeId, memes]);
+
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {
       toast({
@@ -119,11 +142,6 @@ function Memes() {
       connectWeb3();
     }
   }, [toast, connectWeb3]);
-
-  const handleOpenMeme = (meme: MemeType) => {
-    setCurrentMeme(meme);
-    onOpenMeme();
-  };
 
   const handleAddMeme = (meme: MemeType) => {
     setMemes((previousMemes) => [

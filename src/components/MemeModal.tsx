@@ -228,14 +228,16 @@ function MemeModal({
                   </HStack>
                 </Badge>
               )}
-              <VStack w="full" ml="2">
-                <Text fontSize="lg" alignSelf="flex-start">
-                  CREDITS:
-                </Text>
-                <Text fontSize="xl" w="full">
-                  {meme.meme_lord}
-                </Text>
-              </VStack>
+              {meme.meme_lord && (
+                <VStack w="full" ml="2">
+                  <Text fontSize="lg" alignSelf="flex-start">
+                    CREDITS:
+                  </Text>
+                  <Text fontSize="xl" w="full">
+                    {meme.meme_lord}
+                  </Text>
+                </VStack>
+              )}
             </SimpleGrid>
 
             {meme.tags && meme.tags.length > 0 && (
