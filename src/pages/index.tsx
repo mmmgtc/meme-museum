@@ -198,7 +198,7 @@ function Memes() {
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes &&
     selectedMemes
-      .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
+      // .sort((a: MemeType, b: MemeType) => (a.upvotes > b.upvotes ? -1 : 1))
       .map((m) => (
         <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
           <Tilt
