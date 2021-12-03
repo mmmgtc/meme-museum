@@ -240,13 +240,14 @@ function Memes() {
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
+  console.log({ memes });
   const memePaloozaMemes = renderMemes(
     memes.filter(
       (meme: MemeType) =>
         meme?.tags &&
         meme.tags
-          .map((tag) => tag?.name && tag.name.toLowerCase())
-          .includes("memepalooza")
+          .flatMap((tag) => tag?.name && tag.name.toLowerCase())
+          .includes("memepalooza 4")
     )
   );
 
