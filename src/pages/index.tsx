@@ -15,7 +15,9 @@ import {
   InputLeftElement,
   useDisclosure,
   useToast,
+  Heading,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -236,6 +238,18 @@ function Memes() {
       ));
 
   const allMemes = renderMemes(foundMemes || memes);
+  const latestMemes = renderMemes(
+    memes
+      .sort((a, b) =>
+        dayjs(dayjs(a.created_at).format("LLLL")).isAfter(
+          dayjs(dayjs(b.created_at).format("LLLL"))
+        )
+          ? -1
+          : 1
+      )
+      .slice(0, 8)
+      .reverse()
+  );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
@@ -389,6 +403,11 @@ function Memes() {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
+              <Heading py="6">LATEST MEMES</Heading>
+              <SimpleGrid pb="6" columns={{ sm: 1, md: 4 }} spacing={10}>
+                {latestMemes}
+              </SimpleGrid>
+              <Heading py="6">ALL MEMES</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}
               </SimpleGrid>
