@@ -15,11 +15,32 @@ const { NEXT_PUBLIC_INFURA_ID } = process.env;
 const staticProvider = new ethers.providers.StaticJsonRpcProvider(
   `https://mainnet.infura.io/v3/${NEXT_PUBLIC_INFURA_ID}`
 );
+let authToken = "";
+if (typeof window !== "undefined") {
+  const lastToken = localStorage.getItem("Authorization");
+  console.log({ lastToken });
+  // clean up bugged tokens
+  if (
+    lastToken &&
+    (lastToken.includes("Token Token") || lastToken.includes("Token undefined"))
+  ) {
+    authToken = "";
+  } else {
+    authToken = lastToken || "";
+  }
+  localStorage.setItem("Authorization", authToken);
+}
+const contentTypeHeadrs = {
+  "Content-Type": "application/json",
+};
 const initialState = {
   loading: false,
   account: null,
   provider: null,
-  headers: {},
+  headers: {
+    Authorization: authToken,
+    ...contentTypeHeadrs,
+  },
   staticProvider,
 } as State;
 
@@ -120,18 +141,19 @@ export const Web3Provider = ({ children }: { children: any }) => {
             address: account,
           }),
           headers: {
-            "Content-Type": "application/json",
+            ...contentTypeHeadrs,
           },
         }
       );
-      const authToken = await authResponse.json();
-      localStorage.setItem("Authorization", `Token ${authToken.token}`);
+      const authTokenResult = await authResponse.json();
+      console.log(authTokenResult);
+      localStorage.setItem("Authorization", `Token ${authTokenResult.token}`);
     }
 
     const latestToken = localStorage.getItem("Authorization");
     const headers = {
       Authorization: latestToken,
-      "Content-Type": "application/json",
+      ...contentTypeHeadrs,
     };
     setHeaders(headers);
 

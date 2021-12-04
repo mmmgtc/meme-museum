@@ -17,7 +17,6 @@ import {
   useToast,
   Heading,
 } from "@chakra-ui/react";
-import dayjs from "dayjs";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
@@ -39,16 +38,14 @@ const MemeCard = dynamic(() => import("../views/MemeCard"), {
 
 function Memes() {
   const router = useRouter();
-  const preOpenedMemeId = parseInt(router.query.meme as string, 10);
-  console.log(preOpenedMemeId);
-  const { account, connectWeb3 } = useContext(Web3Context);
+  const [preOpenedMemeId] = useState(() =>
+    router.query?.meme ? parseInt(router.query.meme as string, 10) : null
+  );
+  const { account, connectWeb3, headers } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
-  const [headers, setHeaders] = useState<{
-    Authorization: string;
-    [key: string]: string;
-  }>();
+
   // State and setters for ...
   // Search term
   const [searchTerm, setSearchTerm] = useState("");
@@ -71,17 +68,6 @@ function Memes() {
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
-
-  useEffect(() => {
-    // Perform localStorage action
-    const token = localStorage.getItem("Authorization");
-    if (token) {
-      setHeaders({
-        Authorization: `Token ${token}`,
-        "Content-Type": "application/json",
-      });
-    }
-  }, []);
 
   const handleSearch = useCallback(
     async (value: string) => {
@@ -239,16 +225,7 @@ function Memes() {
 
   const allMemes = renderMemes(foundMemes || memes);
   const latestMemes = renderMemes(
-    memes
-      .sort((a, b) =>
-        dayjs(dayjs(a.created_at).format("LLLL")).isAfter(
-          dayjs(dayjs(b.created_at).format("LLLL"))
-        )
-          ? -1
-          : 1
-      )
-      .slice(0, 8)
-      .reverse()
+    memes.sort((a, b) => b.id - a.id).slice(0, 8)
   );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
@@ -260,7 +237,7 @@ function Memes() {
         meme?.tags &&
         meme.tags
           .flatMap((tag) => tag?.name && tag.name.toLowerCase())
-          .includes("memepalooza 4")
+          .includes("memepalooza 4" || "memepalooza")
     )
   );
 
