@@ -241,8 +241,8 @@ function Memes() {
   const latestMemes = renderMemes(
     memes
       .sort((a, b) =>
-        dayjs(dayjs(a.created_at).format("LLLL")).isAfter(
-          dayjs(dayjs(b.created_at).format("LLLL"))
+        dayjs(new Date(dayjs(a.created_at).format("LLLL"))).isAfter(
+          dayjs(new Date(dayjs(b.created_at).format("LLLL")))
         )
           ? 1
           : -1
