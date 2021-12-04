@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
-import { brandColors } from "../helpers";
+import { brandColors } from "../../helpers";
 
 const ImageDropzone = () => {
   const [files, setFiles] = useState([]);
