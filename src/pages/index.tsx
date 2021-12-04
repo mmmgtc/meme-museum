@@ -244,11 +244,10 @@ function Memes() {
         dayjs(dayjs(a.created_at).format("LLLL")).isAfter(
           dayjs(dayjs(b.created_at).format("LLLL"))
         )
-          ? -1
-          : 1
+          ? 1
+          : -1
       )
       .slice(0, 8)
-      .reverse()
   );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)

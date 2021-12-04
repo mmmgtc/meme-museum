@@ -221,7 +221,9 @@ function MemeModal({
                           CREATED ON
                         </Text>
                         <Text fontWeight="bold" isTruncated pr="2">
-                          {dayjs(meme.created_at).format("LLL").toUpperCase()}
+                          {new Date(dayjs(meme.created_at).format("YYYY-MM-DD"))
+                            .toLocaleDateString()
+                            .toUpperCase()}
                         </Text>
                       </HStack>
                       <HStack w="full">
