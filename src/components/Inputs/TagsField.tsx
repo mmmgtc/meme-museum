@@ -16,7 +16,7 @@ import {
 import React, { useEffect } from "react";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 
-import { brandColors, W_FIT_CONTENT } from "../helpers";
+import { brandColors, W_FIT_CONTENT } from "../../helpers";
 
 const TagsField = () => {
   const {

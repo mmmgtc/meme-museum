@@ -16,7 +16,8 @@ import { FormProvider, useForm } from "react-hook-form";
 
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors } from "../helpers";
-import CreateMemeForm from "../views/CreateMemeForm";
+
+import CreateMemeForm from "./CreateMemeForm";
 
 function CreateMemeModal({
   isOpen,

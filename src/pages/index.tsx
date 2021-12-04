@@ -16,23 +16,22 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Tilt from "react-parallax-tilt";
 
-import CreateMemeModal from "../components/CreateMemeModal";
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
-import MemeModal from "../components/MemeModal";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors, MemeType } from "../helpers";
 import useDebounce from "../helpers/hooks";
+import CreateMemeModal from "../views/CreateMemeModal";
+import MemeModal from "../views/MemeModal";
 
-const MemeCard = dynamic(() => import("../components/MemeCard"), {
+const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 

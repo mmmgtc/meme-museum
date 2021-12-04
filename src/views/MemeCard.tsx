@@ -1,10 +1,8 @@
 import { Button, Flex, useColorModeValue } from "@chakra-ui/react";
-import Blockies from "react-blockies";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
+import CardMedia from "../components/custom/CardMedia";
 import { brandColors, MemeType } from "../helpers";
-
-import CardMedia from "./custom/CardMedia";
 
 function MemeCard({
   meme,

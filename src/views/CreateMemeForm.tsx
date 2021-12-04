@@ -16,10 +16,9 @@ import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
 
 import IconWithState from "../components/custom/IconWithState";
+import ImageDropzone from "../components/Inputs/ImageDropzone";
+import TagsField from "../components/Inputs/TagsField";
 import { brandColors } from "../helpers";
-
-import ImageDropzone from "./ImageDropzone";
-import TagsField from "./TagsField";
 
 const CreateMemeForm: React.FunctionComponent = () => {
   const {
