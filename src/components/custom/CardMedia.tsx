@@ -20,7 +20,7 @@ function CardMedia(props: any) {
         src={src}
         roundedTop="2xl"
         objectFit="cover"
-        fallbackSrc="/404FACE.png"
+        fallbackSrc="/not-sure-if-loading_o_427193.webp"
       />
       {children}
     </VStack>

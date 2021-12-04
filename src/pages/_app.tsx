@@ -18,7 +18,6 @@ import Layout from "components/layout";
 import createEmotionCache from "styles/createEmotionCache";
 import theme from "styles/customTheme";
 
-import("dayjs/locale/en");
 const clientSideEmotionCache = createEmotionCache();
 
 interface MyAppProps extends AppProps {

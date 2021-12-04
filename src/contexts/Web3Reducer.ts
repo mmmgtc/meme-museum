@@ -7,7 +7,7 @@ export type State = {
   provider: null | any;
   staticProvider: ethers.providers.Web3Provider;
   self: null | any;
-  headers: Record<string, any>;
+  headers: any;
   connectWeb3?: any;
   logout?: any;
 };
