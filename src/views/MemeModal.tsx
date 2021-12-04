@@ -20,6 +20,7 @@ import {
   Flex,
   useClipboard,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useState } from "react";
@@ -220,9 +221,7 @@ function MemeModal({
                           CREATED ON
                         </Text>
                         <Text fontWeight="bold" isTruncated pr="2">
-                          {new Date(meme.created_at)
-                            .toDateString()
-                            .toUpperCase()}
+                          {dayjs(meme.created_at).format("LLL").toUpperCase()}
                         </Text>
                       </HStack>
                       <HStack w="full">
