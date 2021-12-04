@@ -30,13 +30,16 @@ if (typeof window !== "undefined") {
   }
   localStorage.setItem("Authorization", authToken);
 }
+const contentTypeHeadrs = {
+  "Content-Type": "application/json",
+};
 const initialState = {
   loading: false,
   account: null,
   provider: null,
   headers: {
     Authorization: authToken,
-    "Content-Type": "application/json",
+    ...contentTypeHeadrs,
   },
   staticProvider,
 } as State;
@@ -138,7 +141,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
             address: account,
           }),
           headers: {
-            "Content-Type": "application/json",
+            ...contentTypeHeadrs,
           },
         }
       );
@@ -150,7 +153,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
     const latestToken = localStorage.getItem("Authorization");
     const headers = {
       Authorization: latestToken,
-      "Content-Type": "application/json",
+      ...contentTypeHeadrs,
     };
     setHeaders(headers);
 
