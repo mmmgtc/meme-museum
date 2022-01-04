@@ -16,9 +16,9 @@ import {
   useDisclosure,
   useToast,
   Heading,
+  Select,
 } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Tilt from "react-parallax-tilt";
@@ -45,6 +45,9 @@ function Memes() {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+
+  const tags = ["MMM", "MEMEPALOOZA"];
+  const [selectedTag, setSelectedTag] = useState<string>(tags[1]);
 
   // State and setters for ...
   // Search term
@@ -230,14 +233,14 @@ function Memes() {
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
-  console.log({ memes });
-  const memePaloozaMemes = renderMemes(
+
+  const filteredMemes = renderMemes(
     memes.filter(
       (meme: MemeType) =>
         meme?.tags &&
         meme.tags
           .flatMap((tag) => tag?.name && tag.name.toLowerCase())
-          .includes("memepalooza 4" || "memepalooza")
+          .includes(selectedTag.toLowerCase())
     )
   );
 
@@ -351,7 +354,7 @@ function Memes() {
               borderLeftRadius="0"
               borderRightRadius="0"
             >
-              MEMEPALOOZA
+              {selectedTag}
             </Tab>
             <Tab
               key="my-memes"
@@ -390,8 +393,23 @@ function Memes() {
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
+              <Heading py="6">{selectedTag} Memes</Heading>
+              <Select
+                borderColor={borderColor}
+                mt={3}
+                mb={10}
+                placeholder="Select tags"
+                onChange={(e) => setSelectedTag(e.target.value)}
+                defaultValue="MEMEPALOOZA"
+              >
+                {tags.map((tag) => (
+                  <option key={tag} value={tag}>
+                    {tag}
+                  </option>
+                ))}
+              </Select>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {memePaloozaMemes}
+                {filteredMemes}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
