@@ -53,16 +53,16 @@ function Memes() {
 
   const tags = [
     {
-      label: "MMM",
-      value: "mmm",
-    },
-    {
       label: "MEMEPALOOZA",
       value: "memepalooza",
     },
+    {
+      label: "MMM",
+      value: "mmm",
+    },
   ];
 
-  const [selectedTag, setSelectedTag] = useState<string[]>([tags[1].value]);
+  const [selectedTag, setSelectedTag] = useState<string[]>([tags[0].value]);
 
   // State and setters for ...
   // Search term
@@ -423,7 +423,6 @@ function Memes() {
             <TabPanel w="full" px="0">
               <Heading py="6">{selectedTag} Memes</Heading>
               <Select
-                // style={customStyles}
                 isMulti
                 options={tags}
                 defaultValue={tags[0]}
