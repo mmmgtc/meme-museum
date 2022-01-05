@@ -10,7 +10,7 @@ body {
 
 .chakra-emotion-css-o38mw0 {
   border: 5px solid #8c65f7;
-  border-right-width: 0px;
+  border-right-width: 0;
   background: rgb(140, 101, 247, 50%);
   font-weight: bold;
   color: #fff;
@@ -20,7 +20,7 @@ body {
 .chakra-emotion-css-hfbj6y {
   border: 5px solid #8c65f7;
   border-left-width: 3px;
-  background: rgb(140, 101, 247, 50%);
+  background: rgb(140 101 247 / 0.5);
   color: #fff;
   font-weight: 700;
 }
@@ -31,7 +31,7 @@ body {
 }
 
 chakra-emotion-css-1khbh7z {
-  background: rgb(140, 101, 247, 50%);
+  background: rgb(140 101 247 / 0.5);
   color: #fff;
   font-weight: 700;
 }
