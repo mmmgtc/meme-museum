@@ -423,6 +423,7 @@ function Memes() {
             <TabPanel w="full" px="0">
               <Heading py="6">{selectedTag} Memes</Heading>
               <Select
+                // style={customStyles}
                 isMulti
                 options={tags}
                 defaultValue={tags[0]}
@@ -433,7 +434,7 @@ function Memes() {
                   );
                   setSelectedTag(newTags);
                 }}
-                placeholder="Select some colors..."
+                placeholder="Filter by tags"
                 closeMenuOnSelect={false}
                 hasStickyGroupHeaders
               />
