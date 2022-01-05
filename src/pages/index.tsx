@@ -425,6 +425,7 @@ function Memes() {
               <Select
                 isMulti
                 options={tags}
+                defaultValue={tags[0]}
                 onChange={(option) => {
                   const newTags: string[] = [];
                   option.map((tag: { label: string; value: string }) =>
@@ -436,20 +437,6 @@ function Memes() {
                 closeMenuOnSelect={false}
                 hasStickyGroupHeaders
               />
-              {/* <Select
-                borderColor={borderColor}
-                mt={3}
-                mb={10}
-                placeholder="Select tags"
-                onChange={(e) => setSelectedTag(e.target.value)}
-                defaultValue="MEMEPALOOZA"
-              >
-                {tags.map((tag) => (
-                  <option key={tag} value={tag}>
-                    {tag}
-                  </option>
-                ))}
-              </Select> */}
               <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
                 {filteredMemes}
               </SimpleGrid>
