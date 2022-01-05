@@ -85,7 +85,7 @@ function Memes() {
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const bg = useColorModeValue("white", brandColors.mainPurple);
-  const borderColor = useColorModeValue("#8C65F7", "white");
+  const borderColor = useColorModeValue("#8c65f7", "white");
 
   const handleSearch = useCallback(
     async (value: string) => {
