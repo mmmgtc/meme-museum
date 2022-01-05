@@ -16,8 +16,13 @@ import {
   useDisclosure,
   useToast,
   Heading,
-  Select,
 } from "@chakra-ui/react";
+import {
+  Select,
+  AsyncSelect,
+  CreatableSelect,
+  AsyncCreatableSelect,
+} from "chakra-react-select";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -46,8 +51,18 @@ function Memes() {
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
 
-  const tags = ["MMM", "MEMEPALOOZA"];
-  const [selectedTag, setSelectedTag] = useState<string>(tags[1]);
+  const tags = [
+    {
+      label: "MMM",
+      value: "mmm",
+    },
+    {
+      label: "MEMEPALOOZA",
+      value: "memepalooza",
+    },
+  ];
+
+  const [selectedTag, setSelectedTag] = useState<string[]>([tags[1].value]);
 
   // State and setters for ...
   // Search term
@@ -240,9 +255,20 @@ function Memes() {
         meme?.tags &&
         meme.tags
           .flatMap((tag) => tag?.name && tag.name.toLowerCase())
-          .includes(selectedTag.toLowerCase())
+          .some((tag) =>
+            selectedTag.length === 0 ? true : selectedTag.includes(tag)
+          )
     )
   );
+
+  useEffect(() => {
+    console.log("filteredMemes: ", { filteredMemes });
+    console.log("memes", { memes });
+  }, [filteredMemes, memes]);
+
+  useEffect(() => {
+    console.log("selectedTag", { selectedTag });
+  }, [selectedTag]);
 
   return (
     <Card>
@@ -354,7 +380,9 @@ function Memes() {
               borderLeftRadius="0"
               borderRightRadius="0"
             >
-              {selectedTag}
+              {selectedTag.length === 0
+                ? "ALL MEMES"
+                : `${selectedTag.join(", ").toUpperCase()} MEMES`}
             </Tab>
             <Tab
               key="my-memes"
@@ -395,6 +423,20 @@ function Memes() {
             <TabPanel w="full" px="0">
               <Heading py="6">{selectedTag} Memes</Heading>
               <Select
+                isMulti
+                options={tags}
+                onChange={(option) => {
+                  const newTags: string[] = [];
+                  option.map((tag: { label: string; value: string }) =>
+                    newTags.push(tag.value)
+                  );
+                  setSelectedTag(newTags);
+                }}
+                placeholder="Select some colors..."
+                closeMenuOnSelect={false}
+                hasStickyGroupHeaders
+              />
+              {/* <Select
                 borderColor={borderColor}
                 mt={3}
                 mb={10}
@@ -407,8 +449,8 @@ function Memes() {
                     {tag}
                   </option>
                 ))}
-              </Select>
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+              </Select> */}
+              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
                 {filteredMemes}
               </SimpleGrid>
             </TabPanel>
