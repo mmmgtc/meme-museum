@@ -17,8 +17,13 @@ import {
   useToast,
   Heading,
 } from "@chakra-ui/react";
+import {
+  Select,
+  AsyncSelect,
+  CreatableSelect,
+  AsyncCreatableSelect,
+} from "chakra-react-select";
 import dynamic from "next/dynamic";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Tilt from "react-parallax-tilt";
@@ -46,6 +51,19 @@ function Memes() {
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
 
+  const tags = [
+    {
+      label: "MEMEPALOOZA",
+      value: "memepalooza",
+    },
+    {
+      label: "MMM",
+      value: "mmm",
+    },
+  ];
+
+  const [selectedTag, setSelectedTag] = useState<string[]>([tags[0].value]);
+
   // State and setters for ...
   // Search term
   const [searchTerm, setSearchTerm] = useState("");
@@ -67,7 +85,7 @@ function Memes() {
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const bg = useColorModeValue("white", brandColors.mainPurple);
-  const borderColor = useColorModeValue("#8C65F7", "white");
+  const borderColor = useColorModeValue("#8c65f7", "white");
 
   const handleSearch = useCallback(
     async (value: string) => {
@@ -230,16 +248,27 @@ function Memes() {
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
-  console.log({ memes });
-  const memePaloozaMemes = renderMemes(
+
+  const filteredMemes = renderMemes(
     memes.filter(
       (meme: MemeType) =>
         meme?.tags &&
         meme.tags
           .flatMap((tag) => tag?.name && tag.name.toLowerCase())
-          .includes("memepalooza 4" || "memepalooza")
+          .some((tag) =>
+            selectedTag.length === 0 ? true : selectedTag.includes(tag)
+          )
     )
   );
+
+  useEffect(() => {
+    console.log("filteredMemes: ", { filteredMemes });
+    console.log("memes", { memes });
+  }, [filteredMemes, memes]);
+
+  useEffect(() => {
+    console.log("selectedTag", { selectedTag });
+  }, [selectedTag]);
 
   return (
     <Card>
@@ -351,7 +380,9 @@ function Memes() {
               borderLeftRadius="0"
               borderRightRadius="0"
             >
-              MEMEPALOOZA
+              {selectedTag.length === 0
+                ? "ALL MEMES"
+                : `${selectedTag.join(", ").toUpperCase()} MEMES`}
             </Tab>
             <Tab
               key="my-memes"
@@ -390,8 +421,24 @@ function Memes() {
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {memePaloozaMemes}
+              <Heading py="6">{selectedTag} Memes</Heading>
+              <Select
+                isMulti
+                options={tags}
+                defaultValue={tags[0]}
+                onChange={(option) => {
+                  const newTags: string[] = [];
+                  option.map((tag: { label: string; value: string }) =>
+                    newTags.push(tag.value)
+                  );
+                  setSelectedTag(newTags);
+                }}
+                placeholder="Filter by tags"
+                closeMenuOnSelect={false}
+                hasStickyGroupHeaders
+              />
+              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
+                {filteredMemes}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">

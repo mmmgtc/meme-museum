@@ -7,3 +7,31 @@ body {
 .blockies {
   border-radius: 50%;
 }
+
+.chakra-emotion-css-o38mw0 {
+  border: 5px solid #8c65f7;
+  border-right-width: 0;
+  background: rgb(140 101 247 / 50%);
+  font-weight: bold;
+  color: #fff;
+  font-size: 1.3rem;
+}
+
+.chakra-emotion-css-hfbj6y {
+  border: 5px solid #8c65f7;
+  border-left-width: 3px;
+  background: rgb(140 101 247 / 50%);
+  color: #fff;
+  font-weight: 700;
+}
+
+.chakra-emotion-css-1jvl5cx {
+  font-weight: bold !important;
+  font-size: medium !important;
+}
+
+chakra-emotion-css-1khbh7z {
+  background: rgb(140 101 247 / 50%);
+  color: #fff;
+  font-weight: 700;
+}
