@@ -38,32 +38,28 @@ import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
+interface MemesProps {
+  id: number;
+  title: string;
+  image: string;
+  upvotes: number;
+  downvotes: number;
+  description: string;
+  source: null;
+  meme_lord: string;
+  tags: string[];
+  poaster: {
+    username: string;
+    userprofile: { display_name: string; karma: number };
+  };
+  created_at: string;
+}
+
 const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes({
-  memeFromId,
-}: {
-  memeFromId: [
-    {
-      id: number;
-      title: string;
-      image: string;
-      upvotes: number;
-      downvotes: number;
-      description: string;
-      source: null;
-      meme_lord: string;
-      tags: string[];
-      poaster: {
-        username: string;
-        userprofile: { display_name: string; karma: number };
-      };
-      created_at: string;
-    }
-  ];
-}) {
+function Memes({ memeFromId }: { memeFromId?: MemesProps[] }) {
   const router = useRouter();
   const [preOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
@@ -491,25 +487,25 @@ function Memes({
   );
 }
 
-// export async function getServerSideProps({ query }) {
-//   const id = query.MEME;
-//   console.log("id: ", id);
-//   let memeFromId = null;
-//   if (id) {
-//     const memesResponse = await fetch(
-//       `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
-//     );
-//     const memesResult = await memesResponse.json();
-//     memeFromId = memesResult.filter(
-//       (m: any) => m.id.toString() === id.toString()
-//     );
-//     console.log("meme: ", memeFromId);
-//   }
-//   return {
-//     props: {
-//       memeFromId,
-//     },
-//   };
-// }
+export async function getServerSideProps({ query }) {
+  const id = query.MEME;
+  console.log("id: ", id);
+  let memeFromId = null;
+  if (id) {
+    const memesResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
+    );
+    const memesResult = await memesResponse.json();
+    memeFromId = memesResult.filter(
+      (m: any) => m.id.toString() === id.toString()
+    );
+    console.log("meme: ", memeFromId);
+  }
+  return {
+    props: {
+      memeFromId,
+    },
+  };
+}
 
 export default Memes;
