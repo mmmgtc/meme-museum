@@ -16,6 +16,8 @@ import {
   useDisclosure,
   useToast,
   Heading,
+  Stack,
+  HStack,
 } from "@chakra-ui/react";
 import {
   Select,
@@ -26,13 +28,15 @@ import {
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
+import Blockies from "react-blockies";
+import { render } from "react-dom";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
-import { brandColors, MemeType } from "../helpers";
+import { brandColors, MemeType, MemeLordType } from "../helpers";
 import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
@@ -50,6 +54,9 @@ function Memes() {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const [memeLords, setMemeLords] = useState<MemeLordType[]>([]);
+  const [selectMemeLord, setSelectMemeLord] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<any>();
 
   const tags = [
     {
@@ -119,9 +126,28 @@ function Memes() {
     (meme: MemeType) => {
       setCurrentMeme(meme);
       onOpenMeme();
+
+      if (
+        !memeLords.some((e) => e.value === meme.poaster.username) &&
+        meme.poaster.username !== account
+      ) {
+        setMemeLords([
+          ...memeLords,
+          {
+            label: meme.poaster.username.toUpperCase(),
+            value: meme.poaster.username,
+          },
+        ]);
+      } else {
+        setMemeLords([...memeLords]);
+      }
     },
-    [onOpenMeme]
+    [onOpenMeme, memeLords, account]
   );
+
+  useEffect(() => {
+    console.log("meme Lords", memeLords);
+  });
 
   useEffect(() => {
     // Perform localStorage action
@@ -248,6 +274,46 @@ function Memes() {
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
+
+  const memeLordMemes = renderMemes(
+    memes.filter((meme: MemeType) => meme.poaster?.username === selectMemeLord)
+  );
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const userProfileResponse = await fetch(
+        `https://evening-anchorage-43225.herokuapp.com/museum/poaster/${account}/`
+      );
+      setUserProfile(await userProfileResponse.json());
+    };
+    getUserProfile();
+  }, [account]);
+
+  const renderUserProfile = () => {
+    return (
+      <HStack
+        padding={4}
+        backgroundColor={bg}
+        border={`5px solid ${borderColor}`}
+        borderRadius={5}
+        spacing={5}
+        marginY={5}
+      >
+        <Blockies
+          size={10}
+          seed={userProfile?.username.toLowerCase()}
+          className="blockies"
+          scale={6}
+        />
+        <Stack>
+          <Heading size="lg">
+            Name: {userProfile?.userprofile.display_name}
+          </Heading>
+          <Heading size="md">Karma: {userProfile?.userprofile.karma}</Heading>
+        </Stack>
+      </HStack>
+    );
+  };
 
   const filteredMemes = renderMemes(
     memes.filter(
@@ -442,8 +508,23 @@ function Memes() {
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
+              {renderUserProfile()}
+              <Select
+                options={memeLords}
+                placeholder="Select meme lord"
+                onChange={(option) => {
+                  setSelectMemeLord(option.value);
+                }}
+              />
+              <Heading paddingY="2rem">My Memes</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {myMemes}
+              </SimpleGrid>
+              {selectMemeLord && (
+                <Heading paddingY="2rem">Meme Lord Memes</Heading>
+              )}
+              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                {memeLordMemes}
               </SimpleGrid>
             </TabPanel>
           </TabPanels>
