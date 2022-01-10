@@ -285,16 +285,13 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps[] }) {
       {memeFromId && (
         <Helmet>
           <meta name="application-name" content="MEMES.PARTY" />
-          {/* eslint-disable-next-line react/prop-types */}
           <meta
             name="description"
-            content={`Description: ${memeFromId[0]?.description} \n ${
-              // eslint-disable-next-line sonarjs/no-nested-template-literals
-              memeFromId[0]?.meme_lord && `ENS: ${memeFromId[0]?.meme_lord}`
-            }
-            `}
+            content={`Description: ${memeFromId[0]?.description}`}
           />
-          {/* eslint-disable-next-line react/prop-types */}
+          {memeFromId[0].meme_lord && (
+            <meta name="author" content={`ENS : ${memeFromId[0].meme_lord}`} />
+          )}
           <meta name="og:title" content={memeFromId[0]?.title} />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
