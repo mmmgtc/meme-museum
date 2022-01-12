@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-document-import-in-page */
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { AddIcon, Search2Icon } from "@chakra-ui/icons";
 import {
@@ -24,7 +23,8 @@ import {
   CreatableSelect,
   AsyncCreatableSelect,
 } from "chakra-react-select";
-import { Head } from "next/document";
+import { NextPageContext } from "next";
+import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -492,10 +492,11 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   );
 }
 
-export async function getServerSideProps({ query }) {
-  const id = query.MEME;
+export async function getServerSideProps(ctx: NextPageContext) {
+  const id = ctx.query.MEME;
   console.log("id: ", id);
   let memeFromId = null;
+
   if (id) {
     const memesResponse = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${id}`
