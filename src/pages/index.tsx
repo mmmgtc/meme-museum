@@ -26,8 +26,8 @@ import {
   AsyncCreatableSelect,
 } from "chakra-react-select";
 import { NextPageContext } from "next";
-import Head from "next/head";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
@@ -73,8 +73,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
-  const [memeLords, setMemeLords] = useState<MemeLordType[]>([]);
-  const [selectMemeLord, setSelectMemeLord] = useState<string | null>(null);
+
   const [userProfile, setUserProfile] = useState<any>();
 
   const tags = [
@@ -145,28 +144,9 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     (meme: MemeType) => {
       setCurrentMeme(meme);
       onOpenMeme();
-
-      if (
-        !memeLords.some((e) => e.value === meme.poaster.username) &&
-        meme.poaster.username !== account
-      ) {
-        setMemeLords([
-          ...memeLords,
-          {
-            label: meme.poaster.username.toUpperCase(),
-            value: meme.poaster.username,
-          },
-        ]);
-      } else {
-        setMemeLords([...memeLords]);
-      }
     },
-    [onOpenMeme, memeLords, account]
+    [onOpenMeme]
   );
-
-  useEffect(() => {
-    console.log("meme Lords", memeLords);
-  });
 
   useEffect(() => {
     // Perform localStorage action
@@ -293,10 +273,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
-  );
-
-  const memeLordMemes = renderMemes(
-    memes.filter((meme: MemeType) => meme.poaster?.username === selectMemeLord)
   );
 
   useEffect(() => {
@@ -548,22 +524,9 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
             </TabPanel>
             <TabPanel w="full" px="0">
               {renderUserProfile()}
-              <Select
-                options={memeLords}
-                placeholder="Select meme lord"
-                onChange={(option) => {
-                  setSelectMemeLord(option.value);
-                }}
-              />
               <Heading paddingY="2rem">My Memes</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {myMemes}
-              </SimpleGrid>
-              {selectMemeLord && (
-                <Heading paddingY="2rem">Meme Lord Memes</Heading>
-              )}
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {memeLordMemes}
               </SimpleGrid>
             </TabPanel>
           </TabPanels>
