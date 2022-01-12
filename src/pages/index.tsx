@@ -28,7 +28,6 @@ import { Head } from "next/document";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
