@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-document-import-in-page */
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { AddIcon, Search2Icon } from "@chakra-ui/icons";
 import {
@@ -23,7 +24,6 @@ import {
   CreatableSelect,
   AsyncCreatableSelect,
 } from "chakra-react-select";
-// eslint-disable-next-line @next/next/no-document-import-in-page
 import { Head } from "next/document";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
