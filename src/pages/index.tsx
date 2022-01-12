@@ -23,6 +23,8 @@ import {
   CreatableSelect,
   AsyncCreatableSelect,
 } from "chakra-react-select";
+import { NextPageContext } from "next";
+import Head from "next/head";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -37,11 +39,28 @@ import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
+interface MemesProps {
+  id: number;
+  title: string;
+  image: string;
+  upvotes: number;
+  downvotes: number;
+  description: string;
+  source: null;
+  meme_lord: string;
+  tags: string[];
+  poaster: {
+    username: string;
+    userprofile: { display_name: string; karma: number };
+  };
+  created_at: string;
+}
+
 const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes() {
+function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const router = useRouter();
   const [preOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
@@ -212,6 +231,7 @@ function Memes() {
         `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
       );
       const memesResult = await memesResponse.json();
+      console.log("memesResult: ", { memesResult });
       setMemes(memesResult);
     }
     fetchMemes();
@@ -261,17 +281,36 @@ function Memes() {
     )
   );
 
-  useEffect(() => {
-    console.log("filteredMemes: ", { filteredMemes });
-    console.log("memes", { memes });
-  }, [filteredMemes, memes]);
-
-  useEffect(() => {
-    console.log("selectedTag", { selectedTag });
-  }, [selectedTag]);
-
   return (
     <Card>
+      {memeFromId && (
+        <Head>
+          <meta name="application-name" content="MEMES.PARTY" />
+          <meta
+            name="description"
+            content={`Description: ${memeFromId?.description}`}
+          />
+          {memeFromId.meme_lord && (
+            <meta name="author" content={`ENS : ${memeFromId.meme_lord}`} />
+          )}
+          <meta name="og:title" content={memeFromId?.title} />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href={memeFromId.image}
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href={memeFromId.image}
+          />
+        </Head>
+      )}
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -451,6 +490,25 @@ function Memes() {
       </Container>
     </Card>
   );
+}
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const id = ctx.query.MEME;
+  console.log("id: ", id);
+  let memeFromId = null;
+
+  if (id) {
+    const memesResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${id}`
+    );
+    memeFromId = await memesResponse.json();
+    console.log("memeFromId: ", memeFromId);
+  }
+  return {
+    props: {
+      memeFromId,
+    },
+  };
 }
 
 export default Memes;
