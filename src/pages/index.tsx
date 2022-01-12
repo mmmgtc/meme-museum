@@ -23,6 +23,8 @@ import {
   CreatableSelect,
   AsyncCreatableSelect,
 } from "chakra-react-select";
+// eslint-disable-next-line @next/next/no-document-import-in-page
+import { Head } from "next/document";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
@@ -59,7 +61,7 @@ const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes({ memeFromId }: { memeFromId?: MemesProps[] }) {
+function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const router = useRouter();
   const [preOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
@@ -283,16 +285,16 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps[] }) {
   return (
     <Card>
       {memeFromId && (
-        <Helmet>
+        <Head>
           <meta name="application-name" content="MEMES.PARTY" />
           <meta
             name="description"
-            content={`Description: ${memeFromId[0]?.description}`}
+            content={`Description: ${memeFromId?.description}`}
           />
-          {memeFromId[0].meme_lord && (
-            <meta name="author" content={`ENS : ${memeFromId[0].meme_lord}`} />
+          {memeFromId.meme_lord && (
+            <meta name="author" content={`ENS : ${memeFromId.meme_lord}`} />
           )}
-          <meta name="og:title" content={memeFromId[0]?.title} />
+          <meta name="og:title" content={memeFromId?.title} />
           <meta name="format-detection" content="telephone=no" />
           <meta name="mobile-web-app-capable" content="yes" />
 
@@ -300,15 +302,15 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps[] }) {
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href={memeFromId[0].image}
+            href={memeFromId.image}
           />
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href={memeFromId[0].image}
+            href={memeFromId.image}
           />
-        </Helmet>
+        </Head>
       )}
       <Container>
         <VStack w="full" alignItems="center">
@@ -497,13 +499,10 @@ export async function getServerSideProps({ query }) {
   let memeFromId = null;
   if (id) {
     const memesResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${id}`
     );
-    const memesResult = await memesResponse.json();
-    memeFromId = memesResult.filter(
-      (m: any) => m.id.toString() === id.toString()
-    );
-    console.log("meme: ", memeFromId);
+    memeFromId = await memesResponse.json();
+    console.log("memeFromId: ", memeFromId);
   }
   return {
     props: {
