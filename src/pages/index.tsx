@@ -16,27 +16,49 @@ import {
   useDisclosure,
   useToast,
   Heading,
+  Stack,
+  HStack,
 } from "@chakra-ui/react";
+import { Select } from "chakra-react-select";
+import { NextPageContext } from "next";
 import dynamic from "next/dynamic";
-import NextLink from "next/link";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
+import Blockies from "react-blockies";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
-import { brandColors, MemeType } from "../helpers";
+import { brandColors, MemeType, MemeLordType } from "../helpers";
 import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
+
+interface MemesProps {
+  id: number;
+  title: string;
+  image: string;
+  upvotes: number;
+  downvotes: number;
+  description: string;
+  source: null;
+  meme_lord: string;
+  tags: string[];
+  poaster: {
+    username: string;
+    userprofile: { display_name: string; karma: number };
+  };
+  created_at: string;
+}
 
 const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes() {
+function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const router = useRouter();
   const [preOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
@@ -45,6 +67,21 @@ function Memes() {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+
+  const [userProfile, setUserProfile] = useState<any>();
+
+  const tags = [
+    {
+      label: "MEMEPALOOZA 5",
+      value: "memepalooza 5",
+    },
+    {
+      label: "MMM",
+      value: "mmm",
+    },
+  ];
+
+  const [selectedTag, setSelectedTag] = useState<string[]>([tags[0].value]);
 
   // State and setters for ...
   // Search term
@@ -67,7 +104,7 @@ function Memes() {
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const bg = useColorModeValue("white", brandColors.mainPurple);
-  const borderColor = useColorModeValue("#8C65F7", "white");
+  const borderColor = useColorModeValue("#8c65f7", "white");
 
   const handleSearch = useCallback(
     async (value: string) => {
@@ -194,6 +231,7 @@ function Memes() {
         `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
       );
       const memesResult = await memesResponse.json();
+      console.log("memesResult: ", { memesResult });
       setMemes(memesResult);
     }
     fetchMemes();
@@ -223,26 +261,92 @@ function Memes() {
         </Box>
       ));
 
-  const allMemes = renderMemes(foundMemes || memes);
+  const allMemes = renderMemes(foundMemes || memes).slice(0, 50);
   const latestMemes = renderMemes(
     memes.sort((a, b) => b.id - a.id).slice(0, 8)
   );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
-  console.log({ memes });
-  const memePaloozaMemes = renderMemes(
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const userProfileResponse = await fetch(
+        `https://evening-anchorage-43225.herokuapp.com/museum/poaster/${account}/`
+      );
+      setUserProfile(await userProfileResponse.json());
+    };
+    getUserProfile();
+  }, [account]);
+
+  const renderUserProfile = () => {
+    return (
+      <HStack
+        padding={4}
+        backgroundColor={bg}
+        border={`5px solid ${borderColor}`}
+        borderRadius={5}
+        spacing={5}
+        marginY={5}
+      >
+        <Blockies
+          size={10}
+          seed={userProfile?.username.toLowerCase()}
+          className="blockies"
+          scale={6}
+        />
+        <Stack>
+          <Heading size="lg">
+            Name: {userProfile?.userprofile.display_name}
+          </Heading>
+          <Heading size="md">Karma: {userProfile?.userprofile.karma}</Heading>
+        </Stack>
+      </HStack>
+    );
+  };
+
+  const filteredMemes = renderMemes(
     memes.filter(
       (meme: MemeType) =>
         meme?.tags &&
         meme.tags
           .flatMap((tag) => tag?.name && tag.name.toLowerCase())
-          .includes("memepalooza 4" || "memepalooza")
+          .some((tag) =>
+            selectedTag.length === 0 ? true : selectedTag.includes(tag)
+          )
     )
   );
 
   return (
     <Card>
+      {memeFromId && (
+        <Head>
+          <meta name="application-name" content="MEMES.PARTY" />
+          <meta
+            name="description"
+            content={`Description: ${memeFromId?.description}`}
+          />
+          {memeFromId.meme_lord && (
+            <meta name="author" content={`ENS : ${memeFromId.meme_lord}`} />
+          )}
+          <meta name="og:title" content={memeFromId?.title} />
+          <meta name="format-detection" content="telephone=no" />
+          <meta name="mobile-web-app-capable" content="yes" />
+
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href={memeFromId.image}
+          />
+          <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href={memeFromId.image}
+          />
+        </Head>
+      )}
       <Container>
         <VStack w="full" alignItems="center">
           <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -351,7 +455,9 @@ function Memes() {
               borderLeftRadius="0"
               borderRightRadius="0"
             >
-              MEMEPALOOZA
+              {selectedTag.length === 0
+                ? "ALL MEMES"
+                : `${selectedTag.join(", ").toUpperCase()} MEMES`}
             </Tab>
             <Tab
               key="my-memes"
@@ -390,11 +496,29 @@ function Memes() {
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {memePaloozaMemes}
+              <Heading py="6">{selectedTag} Memes</Heading>
+              <Select
+                isMulti
+                options={tags}
+                defaultValue={tags[0]}
+                onChange={(option) => {
+                  const newTags: string[] = [];
+                  option.map((tag: { label: string; value: string }) =>
+                    newTags.push(tag.value)
+                  );
+                  setSelectedTag(newTags);
+                }}
+                placeholder="Filter by tags"
+                closeMenuOnSelect={false}
+                hasStickyGroupHeaders
+              />
+              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
+                {filteredMemes}
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
+              {renderUserProfile()}
+              <Heading paddingY="2rem">My Memes</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {myMemes}
               </SimpleGrid>
@@ -404,6 +528,25 @@ function Memes() {
       </Container>
     </Card>
   );
+}
+
+export async function getServerSideProps(ctx: NextPageContext) {
+  const id = ctx.query.MEME;
+  console.log("id: ", id);
+  let memeFromId = null;
+
+  if (id) {
+    const memesResponse = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${id}`
+    );
+    memeFromId = await memesResponse.json();
+    console.log("memeFromId: ", memeFromId);
+  }
+  return {
+    props: {
+      memeFromId,
+    },
+  };
 }
 
 export default Memes;

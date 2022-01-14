@@ -48,6 +48,8 @@ function MemeModal({
   );
   const [ens, setENS] = useState<string | null>(null);
 
+  const router = useRouter();
+
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const borderColor = useColorModeValue("#8C65F7", "white");
@@ -192,6 +194,10 @@ function MemeModal({
                   pr={4}
                   py={2}
                   fontWeight="400"
+                  onClick={() =>
+                    router.push(`/profile/${meme.poaster.username}`)
+                  }
+                  cursor="pointer"
                 >
                   <HStack
                     w={{

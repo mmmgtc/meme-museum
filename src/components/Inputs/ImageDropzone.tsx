@@ -11,6 +11,7 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
+import Compressor from "compressorjs";
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { useFormContext } from "react-hook-form";
@@ -33,15 +34,23 @@ const ImageDropzone = () => {
       if (acceptedFiles) {
         const { name } = e.target;
         console.log(e.target.files[0]);
-        setValue(name, e.target.files);
-        setValue("title", e.target.files[0].name);
-        setFiles(
-          acceptedFiles.map((file: File) =>
-            Object.assign(file, {
-              preview: URL.createObjectURL(file),
-            })
-          )
-        );
+        console.log("before compressing", e.target.files[0].size);
+        // eslint-disable-next-line no-new
+        new Compressor(e.target.files[0], {
+          quality: 0.5,
+          success(result) {
+            console.log("after compressing", result.size);
+            setValue(name, result);
+            setValue("title", e.target.files[0].name);
+            setFiles(
+              acceptedFiles.map((file: File) =>
+                Object.assign(file, {
+                  preview: URL.createObjectURL(file),
+                })
+              )
+            );
+          },
+        });
       }
     },
     [setValue]
