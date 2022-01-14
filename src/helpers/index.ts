@@ -28,3 +28,8 @@ export type MemeType = {
   };
   created_at: string;
 };
+
+export type MemeLordType = {
+  label: string;
+  value: string;
+};

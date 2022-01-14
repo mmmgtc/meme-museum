@@ -16,6 +16,8 @@ import {
   useDisclosure,
   useToast,
   Heading,
+  Stack,
+  HStack,
 } from "@chakra-ui/react";
 import {
   Select,
@@ -24,17 +26,19 @@ import {
   AsyncCreatableSelect,
 } from "chakra-react-select";
 import { NextPageContext } from "next";
-import Head from "next/head";
 import dynamic from "next/dynamic";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
+import Blockies from "react-blockies";
+import { render } from "react-dom";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
-import { brandColors, MemeType } from "../helpers";
+import { brandColors, MemeType, MemeLordType } from "../helpers";
 import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
@@ -69,6 +73,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+
+  const [userProfile, setUserProfile] = useState<any>();
 
   const tags = [
     {
@@ -268,6 +274,42 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      const userProfileResponse = await fetch(
+        `https://evening-anchorage-43225.herokuapp.com/museum/poaster/${account}/`
+      );
+      setUserProfile(await userProfileResponse.json());
+    };
+    getUserProfile();
+  }, [account]);
+
+  const renderUserProfile = () => {
+    return (
+      <HStack
+        padding={4}
+        backgroundColor={bg}
+        border={`5px solid ${borderColor}`}
+        borderRadius={5}
+        spacing={5}
+        marginY={5}
+      >
+        <Blockies
+          size={10}
+          seed={userProfile?.username.toLowerCase()}
+          className="blockies"
+          scale={6}
+        />
+        <Stack>
+          <Heading size="lg">
+            Name: {userProfile?.userprofile.display_name}
+          </Heading>
+          <Heading size="md">Karma: {userProfile?.userprofile.karma}</Heading>
+        </Stack>
+      </HStack>
+    );
+  };
 
   const filteredMemes = renderMemes(
     memes.filter(
@@ -481,6 +523,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
               </SimpleGrid>
             </TabPanel>
             <TabPanel w="full" px="0">
+              {renderUserProfile()}
+              <Heading paddingY="2rem">My Memes</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {myMemes}
               </SimpleGrid>
