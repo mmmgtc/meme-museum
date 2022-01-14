@@ -19,19 +19,13 @@ import {
   Stack,
   HStack,
 } from "@chakra-ui/react";
-import {
-  Select,
-  AsyncSelect,
-  CreatableSelect,
-  AsyncCreatableSelect,
-} from "chakra-react-select";
+import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
-import { render } from "react-dom";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
@@ -78,8 +72,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   const tags = [
     {
-      label: "MEMEPALOOZA",
-      value: "memepalooza",
+      label: "MEMEPALOOZA 5",
+      value: "memepalooza 5",
     },
     {
       label: "MMM",
@@ -267,7 +261,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         </Box>
       ));
 
-  const allMemes = renderMemes(foundMemes || memes);
+  const allMemes = renderMemes(foundMemes || memes).slice(0, 50);
   const latestMemes = renderMemes(
     memes.sort((a, b) => b.id - a.id).slice(0, 8)
   );

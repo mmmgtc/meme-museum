@@ -9,19 +9,16 @@ import {
   TagLabel,
   SimpleGrid,
   TagCloseButton,
-  HStack,
-  Flex,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useFieldArray, useForm, useFormContext } from "react-hook-form";
 
-import { brandColors, W_FIT_CONTENT } from "../../helpers";
+import { brandColors } from "../../helpers";
 
 const TagsField = () => {
   const {
     register,
-    setValue,
     formState: { errors, isSubmitting },
     control,
   } = useFormContext();
@@ -36,12 +33,12 @@ const TagsField = () => {
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8C65F7", "white");
 
-  // useEffect(() => {
-  //   append({ name: "memepalooza 5" });
-  //   return () => {
-  //     remove();
-  //   };
-  // }, [append, remove]);
+  useEffect(() => {
+    append({ name: "memepalooza 5" });
+    return () => {
+      remove();
+    };
+  }, [append, remove]);
 
   return (
     <FormControl isInvalid={errors.tags} py="4">
