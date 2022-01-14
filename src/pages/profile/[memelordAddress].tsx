@@ -203,8 +203,12 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
         />
 
         <Stack>
-          <Heading size="lg">name: {profileName}</Heading>
-          <Heading size="md">karma: {userKarma}</Heading>
+          <Heading color="purple.200" size="lg">
+            name: {profileName}
+          </Heading>
+          <Heading color="purple.200" size="md">
+            karma: {userKarma}
+          </Heading>
         </Stack>
       </HStack>
       <Heading>Memes</Heading>
