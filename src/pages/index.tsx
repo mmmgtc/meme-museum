@@ -23,7 +23,6 @@ import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
