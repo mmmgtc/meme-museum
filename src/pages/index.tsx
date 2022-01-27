@@ -21,8 +21,8 @@ import {
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
+import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
@@ -320,32 +320,20 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   return (
     <Card>
       {memeFromId && (
-        <Head>
-          <meta name="application-name" content="MEMES.PARTY" />
-          <meta
-            name="description"
-            content={`Description: ${memeFromId?.description}`}
-          />
-          {memeFromId.meme_lord && (
-            <meta name="author" content={`ENS : ${memeFromId.meme_lord}`} />
-          )}
-          <meta name="og:title" content={memeFromId?.title} />
-          <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href={memeFromId.image}
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href={memeFromId.image}
-          />
-        </Head>
+        <NextSeo
+          openGraph={{
+            title: memeFromId?.title,
+            description: memeFromId?.description,
+            images: [
+              {
+                url: memeFromId?.image,
+                width: 800,
+                height: 800,
+                alt: memeFromId?.title.slice(0, 50),
+              },
+            ],
+          }}
+        />
       )}
       <Container>
         <VStack w="full" alignItems="center">
@@ -531,7 +519,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const id = ctx.query.MEME;
+  const id = ctx.query.MEME || ctx.query.meme;
   console.log("id: ", id);
   let memeFromId = null;
 
