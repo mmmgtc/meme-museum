@@ -341,7 +341,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
           <SimpleGrid
             columns={{
               sm: 1,
-              md: 2,
+              md: 3,
             }}
             spacing={4}
           >
@@ -387,6 +387,19 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
               onClick={onOpen}
             >
               UPLOAD MEME
+            </Button>
+            <Button
+              width="14"
+              height="14"
+              background={brandColors.mainPurple}
+              onClick={() => router.push("/leaderboard")}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/leaderboard.png"
+                style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                alt=""
+              />
             </Button>
           </SimpleGrid>
         </VStack>
