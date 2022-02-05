@@ -18,4 +18,4 @@ services:
       NEXT_PUBLIC_INFURA_ID: "${NEXT_PUBLIC_INFURA_ID}"
       WEB3STORAGE_TOKEN: "${WEB3STORAGE_TOKEN}"
       NEXT_PUBLIC_API_URL: "${NEXT_PUBLIC_API_URL}"
-    command: yarn dev
+      PORT: "3000"

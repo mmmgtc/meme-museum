@@ -1,15 +1,24 @@
 # Docker
 
-To run docker for your local environment:
+Start your local docker environment:
 
 ```
 make up
 ```
 
-To log into your container:
+Login to your docker container and run yarn for development:
 
 ```
 make in
+yarn dev
+```
+
+Login to your docker container and run yarn for production:
+
+```
+make in
+yarn build
+yarn start
 ```
 
 Then access http://localhost:3000
