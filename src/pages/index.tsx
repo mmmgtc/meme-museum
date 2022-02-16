@@ -26,6 +26,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
+import handleViewport from "react-in-viewport";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
@@ -71,6 +72,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const [userProfile, setUserProfile] = useState<any>();
 
   const tags = [
+    {
+      label: "ETHDENVER",
+      value: "ethdenver",
+    },
     {
       label: "MEMEPALOOZA 5",
       value: "memepalooza 5",
@@ -536,5 +541,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
+
+// const ViewPortMemes = handleViewport(Memes, {}, { disconnectOnLeave: false });
 
 export default Memes;
