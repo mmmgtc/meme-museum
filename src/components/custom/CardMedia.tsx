@@ -8,6 +8,8 @@ function CardMedia(props: any) {
   const { children, src, ...others } = props;
   const myRef = useRef();
   const { inViewport } = useInViewport(myRef, {}, {}, props);
+  const ipfsId = src.split("/")[4];
+  const newSrc = `https://salty-depths-06030.herokuapp.com/image/${ipfsId}?height=30&width=400&height=400&quality=100`;
 
   return (
     <VStack
@@ -23,7 +25,7 @@ function CardMedia(props: any) {
       <Image
         h="360px"
         w="full"
-        src={inViewport ? src : "/not-sure-if-loading_o_427193.webp"}
+        src={inViewport ? newSrc : "/not-sure-if-loading_o_427193.webp"}
         roundedTop="2xl"
         objectFit="cover"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
