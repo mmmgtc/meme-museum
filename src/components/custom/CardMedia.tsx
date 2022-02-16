@@ -9,7 +9,10 @@ function CardMedia(props: any) {
   const myRef = useRef();
   const { inViewport } = useInViewport(myRef, {}, {}, props);
 
-  const ipfsId = src.toString().substring(21);
+  const ipfsId = src.toString().includes("ipfs.io")
+    ? src.toString().substring(21)
+    : src.toString().substring(8, src.toString().length - 15);
+
   const newSrc = `https://salty-depths-06030.herokuapp.com/image/${ipfsId}?height=30&width=400&height=400&quality=100`;
 
   return (

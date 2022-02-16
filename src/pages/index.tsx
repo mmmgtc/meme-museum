@@ -91,6 +91,13 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const [latestId, setLatestId] = useState<number>(1);
   const [oldestId, setOldestId] = useState<number>(1);
 
+  useEffect(() => {
+    if (memes.length > 0) {
+      setLatestId(memes[0].id);
+      setOldestId(memes[memes.length - 1].id);
+    }
+  }, [memes]);
+
   // State and setters for ...
   // Search term
   const [searchTerm, setSearchTerm] = useState("");
