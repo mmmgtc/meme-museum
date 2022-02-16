@@ -29,7 +29,7 @@ function CardMedia(props: any) {
       <Image
         h="360px"
         w="full"
-        src={inViewport ? newSrc : "/not-sure-if-loading_o_427193.webp"}
+        src={inViewport ? newSrc || src : "/not-sure-if-loading_o_427193.webp"}
         roundedTop="2xl"
         objectFit="cover"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
