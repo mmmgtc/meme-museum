@@ -281,7 +281,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
           dataLength={7}
           next={fetchPaginatedMemes}
           hasMore
-          loader={<div />}
+          style={{ overflow: "unset" }}
+          loader={<Box />}
         >
           <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
             <Tilt
