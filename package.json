@@ -56,7 +56,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-parallax-tilt": "^1.5.73",
     "react-tsparticles": "^1.37.4",
-    "web3.storage": "^3.3.4",
+    "web3.storage": "^3.5.4",
     "web3modal": "^1.9.4"
   },
   "devDependencies": {
