@@ -13,7 +13,7 @@ function CardMedia(props: any) {
     ? src.toString().substring(21)
     : src.toString().substring(8, src.toString().length - 15);
 
-  const newSrc = `https://salty-depths-06030.herokuapp.com/image/${ipfsId}?height=30&width=400&height=400&quality=100`;
+  const newSrc = `https://ir.mmm.nudge.tech/image/${ipfsId}?height=30&width=400&height=400&quality=100`;
 
   return (
     <VStack
