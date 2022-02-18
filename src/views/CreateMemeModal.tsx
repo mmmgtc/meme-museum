@@ -41,8 +41,9 @@ function CreateMemeModal({
     setIsSumbitting(true);
     const values = methods.getValues();
     const formData = new FormData();
+    console.log({ values });
     if (values.image) {
-      formData.append("image", values.image[0]);
+      formData.append("image", values.image);
     }
     const cidsRes = await fetch("/api/image-storage", {
       method: "POST",
