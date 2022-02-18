@@ -21,11 +21,13 @@ import {
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
+import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
+import handleViewport from "react-in-viewport";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Tilt from "react-parallax-tilt";
 
 import Card from "../components/custom/Card";
@@ -72,6 +74,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   const tags = [
     {
+      label: "ETHDENVER",
+      value: "ethdenver",
+    },
+    {
       label: "MEMEPALOOZA 5",
       value: "memepalooza 5",
     },
@@ -82,6 +88,15 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   ];
 
   const [selectedTag, setSelectedTag] = useState<string[]>([tags[0].value]);
+  const [latestId, setLatestId] = useState<number>(1);
+  const [oldestId, setOldestId] = useState<number>(1);
+
+  useEffect(() => {
+    if (memes.length > 0) {
+      setLatestId(memes[0].id);
+      setOldestId(memes[memes.length - 1].id);
+    }
+  }, [memes]);
 
   // State and setters for ...
   // Search term
@@ -92,6 +107,9 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   // The goal is to only have the API call fire when user stops typing ...
   // ... so that we aren't hitting our API rapidly.
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const PAGINATION_URL =
+    "https://evening-anchorage-43225.herokuapp.com/museum/pagination/";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -237,6 +255,21 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     fetchMemes();
   }, []);
 
+  const fetchPaginatedMemes = async () => {
+    console.log("fetching paginated memes");
+    const paginatedMemesResponse = await fetch(
+      `${PAGINATION_URL}?n=7&latest=${latestId}&oldest=${oldestId}`
+    );
+    const paginatedMemesResult = await paginatedMemesResponse.json();
+    const currentMemes = [
+      ...memes,
+      ...paginatedMemesResult.sort((a: MemeType, b: MemeType) =>
+        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
+      ),
+    ];
+    setMemes(currentMemes);
+  };
+
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes &&
     selectedMemes
@@ -244,21 +277,29 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
       )
       .map((m) => (
-        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
-          <Tilt
-            glareEnable
-            glareMaxOpacity={0.05}
-            scale={1.03}
-            tiltMaxAngleX={7}
-            tiltMaxAngleY={7}
-          >
-            <MemeCard
-              handleDownvote={handleDownvote}
-              handleUpvote={handleUpvote}
-              meme={m}
-            />
-          </Tilt>
-        </Box>
+        <InfiniteScroll
+          dataLength={7}
+          next={fetchPaginatedMemes}
+          hasMore
+          style={{ overflow: "unset" }}
+          loader={<Box />}
+        >
+          <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+            <Tilt
+              glareEnable
+              glareMaxOpacity={0.05}
+              scale={1.03}
+              tiltMaxAngleX={7}
+              tiltMaxAngleY={7}
+            >
+              <MemeCard
+                handleDownvote={handleDownvote}
+                handleUpvote={handleUpvote}
+                meme={m}
+              />
+            </Tilt>
+          </Box>
+        </InfiniteScroll>
       ));
 
   const allMemes = renderMemes(foundMemes || memes).slice(0, 50);
@@ -320,32 +361,20 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   return (
     <Card>
       {memeFromId && (
-        <Head>
-          <meta name="application-name" content="MEMES.PARTY" />
-          <meta
-            name="description"
-            content={`Description: ${memeFromId?.description}`}
-          />
-          {memeFromId.meme_lord && (
-            <meta name="author" content={`ENS : ${memeFromId.meme_lord}`} />
-          )}
-          <meta name="og:title" content={memeFromId?.title} />
-          <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href={memeFromId.image}
-          />
-          <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href={memeFromId.image}
-          />
-        </Head>
+        <NextSeo
+          openGraph={{
+            title: memeFromId?.title,
+            description: memeFromId?.description,
+            images: [
+              {
+                url: memeFromId?.image,
+                width: 800,
+                height: 800,
+                alt: memeFromId?.title.slice(0, 50),
+              },
+            ],
+          }}
+        />
       )}
       <Container>
         <VStack w="full" alignItems="center">
@@ -531,7 +560,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
-  const id = ctx.query.MEME;
+  const id = ctx.query.MEME || ctx.query.meme;
   console.log("id: ", id);
   let memeFromId = null;
 
@@ -548,5 +577,7 @@ export async function getServerSideProps(ctx: NextPageContext) {
     },
   };
 }
+
+// const ViewPortMemes = handleViewport(Memes, {}, { disconnectOnLeave: false });
 
 export default Memes;
