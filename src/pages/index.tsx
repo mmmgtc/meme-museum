@@ -258,7 +258,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const fetchPaginatedMemes = async () => {
     console.log("fetching paginated memes");
     const paginatedMemesResponse = await fetch(
-      `${PAGINATION_URL}?n=7&latest=${latestId}&oldest=${oldestId}`
+      `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
     );
     const paginatedMemesResult = await paginatedMemesResponse.json();
     const currentMemes = [
