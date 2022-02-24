@@ -1,4 +1,5 @@
 const url = "https://d2wwrm96vfy3z4.cloudfront.net/image";
+
 export const connecticles = {
   background: {
     position: "50% 50%",
