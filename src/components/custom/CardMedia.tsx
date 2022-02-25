@@ -7,7 +7,7 @@ import { useInViewport } from "react-in-viewport";
 function CardMedia(props: any) {
   const { children, src, ...others } = props;
   const myRef = useRef();
-  const { inViewport } = useInViewport(myRef, {}, {}, props);
+  const { enterCount } = useInViewport(myRef, {}, {}, props);
 
   const ipfsId = src.toString().includes("ipfs.io")
     ? src.toString().substring(21)
@@ -27,7 +27,9 @@ function CardMedia(props: any) {
       {...others}
     >
       <Image
-        src={inViewport ? newSrc || src : "/not-sure-if-loading_o_427193.webp"}
+        src={
+          enterCount > 0 ? newSrc || src : "/not-sure-if-loading_o_427193.webp"
+        }
         roundedTop="2xl"
         objectFit="cover"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
