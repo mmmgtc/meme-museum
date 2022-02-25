@@ -7,13 +7,13 @@ import { useInViewport } from "react-in-viewport";
 function CardMedia(props: any) {
   const { children, src, ...others } = props;
   const myRef = useRef();
-  const { inViewport } = useInViewport(myRef, {}, {}, props);
+  const { enterCount } = useInViewport(myRef, {}, {}, props);
 
   const ipfsId = src.toString().includes("ipfs.io")
     ? src.toString().substring(21)
     : src.toString().substring(8, src.toString().length - 15);
 
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=400&width=400&url=https://ipfs.io/ipfs/${ipfsId}`;
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=360&width=314&url=https://ipfs.io/ipfs/${ipfsId}`;
 
   return (
     <VStack
@@ -27,9 +27,9 @@ function CardMedia(props: any) {
       {...others}
     >
       <Image
-        h="360px"
-        w="full"
-        src={inViewport ? newSrc || src : "/not-sure-if-loading_o_427193.webp"}
+        src={
+          enterCount > 0 ? newSrc || src : "/not-sure-if-loading_o_427193.webp"
+        }
         roundedTop="2xl"
         objectFit="cover"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
