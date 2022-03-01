@@ -39,6 +39,18 @@ import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
+if (typeof window !== "undefined") {
+  // Redirect the user to an https connection for production.  This should rather be done server side down the line...
+  if (
+    window.location.hostname === "memes.party" &&
+    window.location.protocol === "http:"
+  ) {
+    window.location.replace(
+      `${window.location.protocol}//${window.location.hostname}`
+    );
+  }
+}
+
 interface MemesProps {
   id: number;
   title: string;
