@@ -60,4 +60,14 @@ MyApp.defaultProps = {
   emotionCache: clientSideEmotionCache,
 };
 
+if (typeof window !== "undefined") {
+  // Redirect the user to an https connection for production.  This should rather be done server side down the line...
+  if (
+    window.location.hostname === "memes.party" &&
+    window.location.protocol === "http:"
+  ) {
+    window.location.replace(`https://${window.location.hostname}`);
+  }
+}
+
 export default MyApp;
