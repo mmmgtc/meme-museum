@@ -276,7 +276,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
     isBusyLoading = true;
 
-    console.log("fetching paginated memes");
+    console.log("fetchPaginatedMemes: fetching paginated memes");
     const paginatedMemesResponse = await fetch(
       `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
     );
@@ -297,6 +297,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
     setMemes(currentMemes);
     isBusyLoading = false;
+    console.log("fetchPaginatedMemes: reset");
   };
 
   const renderMemes = (selectedMemes: MemeType[]) =>
