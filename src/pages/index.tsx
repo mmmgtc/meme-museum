@@ -39,18 +39,6 @@ import useDebounce from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
-if (typeof window !== "undefined") {
-  // Redirect the user to an https connection for production.  This should rather be done server side down the line...
-  if (
-    window.location.hostname === "memes.party" &&
-    window.location.protocol === "http:"
-  ) {
-    window.location.replace(
-      `${window.location.protocol}//${window.location.hostname}`
-    );
-  }
-}
-
 interface MemesProps {
   id: number;
   title: string;
@@ -255,19 +243,38 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     return downvotedMeme;
   };
 
+  // const [latestId, setLatestId] = useState<number>(1);
+  // const [oldestId, setOldestId] = useState<number>(1);
+
   useEffect(() => {
     async function fetchMemes() {
       const memesResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
       );
       const memesResult = await memesResponse.json();
-      console.log("memesResult: ", { memesResult });
+      // console.log("memesResult: ", { memesResult });
+
+      if (memesResult[0].id > latestId) {
+        setLatestId(memesResult[0].id);
+      }
+      if (memesResult[memesResult.length - 1].id < oldestId) {
+        setOldestId(memesResult.length - 1);
+      }
+
       setMemes(memesResult);
     }
     fetchMemes();
   }, []);
 
+  let isBusyLoading = false;
+
   const fetchPaginatedMemes = async () => {
+    if (isBusyLoading) {
+      return;
+    }
+
+    isBusyLoading = true;
+
     console.log("fetching paginated memes");
     const paginatedMemesResponse = await fetch(
       `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
@@ -279,7 +286,16 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
       ),
     ];
+
+    if (paginatedMemesResult[0].id > latestId) {
+      setLatestId(paginatedMemesResult[0].id);
+    }
+    if (paginatedMemesResult[paginatedMemesResult.length - 1].id < oldestId) {
+      setOldestId(paginatedMemesResult.length - 1);
+    }
+
     setMemes(currentMemes);
+    isBusyLoading = false;
   };
 
   const renderMemes = (selectedMemes: MemeType[]) =>
@@ -295,6 +311,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
           hasMore
           style={{ overflow: "unset" }}
           loader={<Box />}
+          scrollThreshold="200px"
         >
           <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
             <Tilt
