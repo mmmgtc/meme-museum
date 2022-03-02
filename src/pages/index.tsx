@@ -292,7 +292,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setLatestId(paginatedMemesResult[0].id);
     }
     if (paginatedMemesResult[paginatedMemesResult.length - 1].id < oldestId) {
-      setOldestId(paginatedMemesResult.length - 1);
+      setOldestId(paginatedMemesResult[paginatedMemesResult.length - 1].id - 1);
     }
 
     setMemes(currentMemes);
