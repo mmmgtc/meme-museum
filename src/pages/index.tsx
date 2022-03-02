@@ -264,11 +264,12 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setMemes(memesResult);
     }
     fetchMemes();
-  }, []);
+  }, [latestId, setLatestId, oldestId, setOldestId]);
 
   let isBusyLoading = false;
 
   const fetchPaginatedMemes = async () => {
+    console.log("fetchPaginatedMemes: pre isBusyLoading");
     if (isBusyLoading) {
       return;
     }
