@@ -20,7 +20,6 @@ function CardMedia(props: any) {
       ref={myRef}
       alignItems="center"
       bg="none"
-      h="380"
       w="full"
       rounded="3xl"
       color="purple.200"
