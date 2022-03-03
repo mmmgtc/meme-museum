@@ -44,8 +44,9 @@ function MemeModal({
 }) {
   const { account, staticProvider } = useContext(Web3Context);
   const { hasCopied, onCopy } = useClipboard(
-    `https://memes.party/?meme=${meme.id}`
+    `${window.location.protocol}//${window.location.hostname}/?meme=${meme.id}`
   );
+
   const [ens, setENS] = useState<string | null>(null);
 
   const router = useRouter();
