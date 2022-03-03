@@ -67,6 +67,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   );
   const { account, connectWeb3, headers } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
+  const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
 
@@ -74,12 +75,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   const tags = [
     {
-      label: "ETHDENVER",
-      value: "ethdenver",
-    },
-    {
-      label: "MEMEPALOOZA 5",
-      value: "memepalooza 5",
+      label: "MEMEPALOOZA 6",
+      value: "memepalooza 6",
     },
     {
       label: "MMM",
@@ -264,17 +261,15 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setMemes(memesResult);
     }
     fetchMemes();
-  }, [latestId, setLatestId, oldestId, setOldestId]);
-
-  let isBusyLoading = false;
+  }, []);
 
   const fetchPaginatedMemes = async () => {
     console.log("fetchPaginatedMemes: pre isBusyLoading");
-    if (isBusyLoading) {
+    if (isBusyLoadingMemes) {
       return;
     }
 
-    isBusyLoading = true;
+    setIsBusyLoadingMemes(true);
 
     console.log("fetchPaginatedMemes: fetching paginated memes");
     const paginatedMemesResponse = await fetch(
@@ -296,7 +291,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     }
 
     setMemes(currentMemes);
-    isBusyLoading = false;
+    setIsBusyLoadingMemes(false);
     console.log("fetchPaginatedMemes: reset");
   };
 
@@ -333,7 +328,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         </InfiniteScroll>
       ));
 
-  const allMemes = renderMemes(foundMemes || memes).slice(0, 50);
+  const allMemes = renderMemes(foundMemes || memes);
   const latestMemes = renderMemes(
     memes.sort((a, b) => b.id - a.id).slice(0, 8)
   );
