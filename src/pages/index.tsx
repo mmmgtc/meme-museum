@@ -67,6 +67,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   );
   const { account, connectWeb3, headers } = useContext(Web3Context);
   const [memes, setMemes] = useState<MemeType[]>([]);
+  const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
 
@@ -76,10 +77,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     {
       label: "Memepalooza 6",
       value: "memepalooza 6",
-    },
-    {
-      label: "MEMEPALOOZA 5",
-      value: "memepalooza 5",
     },
     {
       label: "MMM",
@@ -243,20 +240,39 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     return downvotedMeme;
   };
 
+  // const [latestId, setLatestId] = useState<number>(1);
+  // const [oldestId, setOldestId] = useState<number>(1);
+
   useEffect(() => {
     async function fetchMemes() {
       const memesResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/?format=json`
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
       );
       const memesResult = await memesResponse.json();
-      console.log("memesResult: ", { memesResult });
+      // console.log("memesResult: ", { memesResult });
+
+      if (memesResult[0].id > latestId) {
+        setLatestId(memesResult[0].id);
+      }
+      if (memesResult[memesResult.length - 1].id < oldestId) {
+        setOldestId(memesResult.length - 1);
+      }
+
       setMemes(memesResult);
     }
     fetchMemes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchPaginatedMemes = async () => {
-    console.log("fetching paginated memes");
+    console.log("fetchPaginatedMemes: pre isBusyLoading");
+    if (isBusyLoadingMemes) {
+      return;
+    }
+
+    setIsBusyLoadingMemes(true);
+
+    console.log("fetchPaginatedMemes: fetching paginated memes");
     const paginatedMemesResponse = await fetch(
       `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
     );
@@ -267,7 +283,17 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
       ),
     ];
+
+    if (paginatedMemesResult[0].id > latestId) {
+      setLatestId(paginatedMemesResult[0].id);
+    }
+    if (paginatedMemesResult[paginatedMemesResult.length - 1].id < oldestId) {
+      setOldestId(paginatedMemesResult[paginatedMemesResult.length - 1].id - 1);
+    }
+
     setMemes(currentMemes);
+    setIsBusyLoadingMemes(false);
+    console.log("fetchPaginatedMemes: reset");
   };
 
   const renderMemes = (selectedMemes: MemeType[]) =>
@@ -283,6 +309,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
           hasMore
           style={{ overflow: "unset" }}
           loader={<Box />}
+          scrollThreshold="200px"
         >
           <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
             <Tilt
@@ -302,7 +329,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
         </InfiniteScroll>
       ));
 
-  const allMemes = renderMemes(foundMemes || memes).slice(0, 50);
+  const allMemes = renderMemes(foundMemes || memes);
   const latestMemes = renderMemes(
     memes.sort((a, b) => b.id - a.id).slice(0, 8)
   );

@@ -44,8 +44,9 @@ function MemeModal({
 }) {
   const { account, staticProvider } = useContext(Web3Context);
   const { hasCopied, onCopy } = useClipboard(
-    `https://memes.party/?meme=${meme.id}`
+    `${window.location.protocol}//${window.location.hostname}/?meme=${meme.id}`
   );
+
   const [ens, setENS] = useState<string | null>(null);
 
   const router = useRouter();
@@ -54,6 +55,12 @@ function MemeModal({
   const color = useColorModeValue(brandColors.mainPurple, "white");
   const borderColor = useColorModeValue("#8C65F7", "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
+
+  const ipfsId = meme.image.toString().includes("ipfs.io")
+    ? meme.image.toString().substring(21)
+    : meme.image.toString().substring(8, meme.image.toString().length - 15);
+
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=360&width=314&url=https://ipfs.io/ipfs/${ipfsId}`;
 
   useEffect(() => {
     // Address to ENS
@@ -96,7 +103,7 @@ function MemeModal({
           <Image
             w="full"
             maxH="xl"
-            src={meme.image}
+            src={newSrc}
             objectFit="contain"
             fallbackSrc="/404FACE.png"
           />
