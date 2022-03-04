@@ -1,6 +1,6 @@
 # MEMES.PARTY
 
-#### MEMES.PARTY is the de facto meme site in WEB3 to rate, curate, celebrate, and proliferate meme culture and memelords in perpetuity!
+#### MEMES.PARTY is the de facto meme site in web3 to rate, curate, celebrate, and proliferate meme culture and memelords in perpetuity!
 
 ## Tech stack overview
 
