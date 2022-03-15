@@ -1,6 +1,6 @@
 # MEMES.PARTY
 
-#### MEMES.PARTY is the de facto meme site in WEB3 to rate, curate, celebrate, and proliferate meme culture and memelords in perpetuity!
+#### MEMES.PARTY is the de facto meme site in web3 to rate, curate, celebrate, and proliferate meme culture and memelords in perpetuity!
 
 ## Tech stack overview
 
@@ -81,3 +81,13 @@ The dapp is automatically deployed for every change on the `staging` and `main` 
 
 - staging is the default development branch where features are being tested before being merged on main
 - main is the production branch
+
+### Running your development environment using docker
+
+```
+make up
+make in
+yard dev
+```
+
+Access via http://localhost:3000

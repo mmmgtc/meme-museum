@@ -31,27 +31,32 @@ const ImageDropzone = () => {
 
   const onDrop = useCallback(
     (acceptedFiles, rejectedFiles, e) => {
-      if (acceptedFiles) {
-        const { name } = e.target;
-        console.log(e.target.files[0]);
-        console.log("before compressing", e.target.files[0].size);
-        // eslint-disable-next-line no-new
-        new Compressor(e.target.files[0], {
+      if (!acceptedFiles) {
+        return null;
+      }
+      const { name } = e.target;
+      console.log(e.target.files[0]);
+      console.log("before compressing", e.target.files[0].size);
+      // eslint-disable-next-line no-new
+      setFiles(
+        acceptedFiles.map((file: File) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+      setValue("title", e.target.files[0].name);
+      if (e.target.files[0].type !== "image/gif") {
+        return new Compressor(e.target.files[0], {
           quality: 0.5,
           success(result) {
+            console.log({ result });
             console.log("after compressing", result.size);
-            setValue(name, result);
-            setValue("title", e.target.files[0].name);
-            setFiles(
-              acceptedFiles.map((file: File) =>
-                Object.assign(file, {
-                  preview: URL.createObjectURL(file),
-                })
-              )
-            );
+            return setValue(name, result);
           },
         });
       }
+      return setValue(name, e.target.files[0]);
     },
     [setValue]
   );
