@@ -75,8 +75,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   const tags = [
     {
-      label: "Memepalooza 6",
-      value: "memepalooza 6",
+      label: "Memepalooza 7",
+      value: "memepalooza 7",
     },
     {
       label: "MMM",
