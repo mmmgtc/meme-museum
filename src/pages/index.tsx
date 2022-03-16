@@ -330,9 +330,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       ));
 
   const allMemes = renderMemes(foundMemes || memes);
-  const latestMemes = renderMemes(
-    memes.sort((a, b) => b.id - a.id).slice(0, 8)
-  );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
@@ -542,10 +539,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
-              <Heading py="6">LATEST MEMES</Heading>
-              <SimpleGrid pb="6" columns={{ sm: 1, md: 4 }} spacing={10}>
-                {latestMemes}
-              </SimpleGrid>
               <Heading py="6">ALL MEMES</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}
