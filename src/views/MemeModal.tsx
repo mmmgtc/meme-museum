@@ -1,33 +1,38 @@
-import { CheckIcon, EditIcon, LinkIcon } from "@chakra-ui/icons";
+import { CheckIcon, LinkIcon } from "@chakra-ui/icons";
 import {
-  HStack,
-  VStack,
-  Heading,
+  Badge,
   Button,
-  SimpleGrid,
-  Modal,
-  ModalOverlay,
-  ModalBody,
-  ModalContent,
-  ModalCloseButton,
-  ModalHeader,
+  Flex,
+  Heading,
+  HStack,
   Image,
-  useColorModeValue,
-  Text,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  SimpleGrid,
   Tag,
   TagLabel,
-  Badge,
-  Flex,
+  Text,
   useClipboard,
+  useColorModeValue,
+  VStack,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Blockies from "react-blockies";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
-import { brandColors, W_FIT_CONTENT, getSlicedAddress } from "../helpers";
+import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../helpers";
 
 function MemeModal({
   meme,
@@ -35,12 +40,14 @@ function MemeModal({
   onClose,
   handleUpvote,
   handleDownvote,
+  setPreOpenedMemeId,
 }: {
   meme: any;
   isOpen: boolean;
   onClose: any;
   handleUpvote?: any;
   handleDownvote?: any;
+  setPreOpenedMemeId: Dispatch<SetStateAction<number | null>>;
 }) {
   const { account, staticProvider } = useContext(Web3Context);
   const { hasCopied, onCopy } = useClipboard(
@@ -81,7 +88,14 @@ function MemeModal({
   }, [meme?.poaster, staticProvider]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="4xl">
+    <Modal
+      isOpen={isOpen}
+      onClose={() => {
+        setPreOpenedMemeId(null);
+        onClose();
+      }}
+      size="4xl"
+    >
       <ModalOverlay />
       <ModalContent
         rounded="3xl"

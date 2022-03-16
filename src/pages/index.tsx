@@ -62,7 +62,7 @@ const MemeCard = dynamic(() => import("../views/MemeCard"), {
 
 function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   const router = useRouter();
-  const [preOpenedMemeId] = useState(() =>
+  const [preOpenedMemeId, setPreOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
   );
   const { account, connectWeb3, headers } = useContext(Web3Context);
@@ -292,6 +292,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     }
 
     setMemes(currentMemes);
+
     setIsBusyLoadingMemes(false);
     console.log("fetchPaginatedMemes: reset");
   };
@@ -468,6 +469,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
             isOpen={isOpenMeme}
             onClose={onCloseMeme}
             meme={currentMeme}
+            setPreOpenedMemeId={setPreOpenedMemeId}
             handleUpvote={handleUpvote}
             handleDownvote={handleDownvote}
           />
