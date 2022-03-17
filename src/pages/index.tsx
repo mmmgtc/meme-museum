@@ -95,6 +95,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     }
   }, [memes]);
 
+  useEffect(() => {
+    console.log("currentMeme", { currentMeme });
+  }, [currentMeme]);
+
   // State and setters for ...
   // Search term
   const [searchTerm, setSearchTerm] = useState("");
@@ -160,7 +164,9 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
   useEffect(() => {
     // Perform localStorage action
     if (memes && preOpenedMemeId) {
+      console.log("preOpenedMemeId", preOpenedMemeId);
       const foundMeme = memes.find((meme) => meme.id === preOpenedMemeId);
+      console.log("foundMeme", foundMeme);
       if (foundMeme) {
         handleOpenMeme(foundMeme);
       }
