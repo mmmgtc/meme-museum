@@ -267,7 +267,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setMemes(memesResult);
     }
     fetchMemes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const fetchPaginatedMemes = async () => {
