@@ -60,7 +60,7 @@ const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
+function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const router = useRouter();
   const [preOpenedMemeId, setPreOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
@@ -163,15 +163,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   useEffect(() => {
     // Perform localStorage action
-    if (memes && preOpenedMemeId) {
-      console.log("preOpenedMemeId", preOpenedMemeId);
-      const foundMeme = memes.find((meme) => meme.id === preOpenedMemeId);
-      console.log("foundMeme", foundMeme);
-      if (foundMeme) {
-        handleOpenMeme(foundMeme);
-      }
+    if (memes && preOpenedMemeId && memeFromId) {
+      handleOpenMeme(memeFromId);
     }
-  }, [handleOpenMeme, preOpenedMemeId, memes]);
+  }, [handleOpenMeme, preOpenedMemeId, memes, memeFromId]);
 
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {

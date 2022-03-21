@@ -92,6 +92,9 @@ function MemeModal({
       isOpen={isOpen}
       onClose={() => {
         setPreOpenedMemeId(null);
+        if (router.route === "/") {
+          router.replace("/", undefined, { shallow: true });
+        }
         onClose();
       }}
       size="4xl"
