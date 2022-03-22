@@ -404,7 +404,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       )}
       <Container>
         <VStack w="full" alignItems="center">
-          <LogoIcon size="600px" logoPath="/memes-party.png" />
+          <Box cursor="pointer" onClick={() => router.reload()}>
+            <LogoIcon size="600px" logoPath="/memes-party.png" />
+          </Box>
           <SimpleGrid
             columns={{
               sm: 1,
