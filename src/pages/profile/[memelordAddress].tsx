@@ -11,6 +11,7 @@ import {
   Link,
   Button,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React, { useContext, useState, useCallback } from "react";
 import Blockies from "react-blockies";
 import { FaArrowLeft } from "react-icons/fa";
@@ -29,8 +30,13 @@ interface ProfileProps {
 }
 
 function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
+  const router = useRouter();
+
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const [preOpenedMemeId, setPreOpenedMemeId] = useState(() =>
+    router.query?.meme ? parseInt(router.query.meme as string, 10) : null
+  );
 
   const { account, connectWeb3, headers } = useContext(Web3Context);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -221,6 +227,7 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
       </SimpleGrid>
       {currentMeme && (
         <MemeModal
+          setPreOpenedMemeId={setPreOpenedMemeId}
           isOpen={isOpenMeme}
           onClose={onCloseMeme}
           meme={currentMeme}
