@@ -60,9 +60,9 @@ const MemeCard = dynamic(() => import("../views/MemeCard"), {
   ssr: false,
 });
 
-function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
+function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const router = useRouter();
-  const [preOpenedMemeId] = useState(() =>
+  const [preOpenedMemeId, setPreOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
   );
   const { account, connectWeb3, headers } = useContext(Web3Context);
@@ -75,8 +75,8 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   const tags = [
     {
-      label: "Memepalooza 6",
-      value: "memepalooza 6",
+      label: "Memepalooza 7",
+      value: "memepalooza 7",
     },
     {
       label: "MMM",
@@ -94,6 +94,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setOldestId(memes[memes.length - 1].id);
     }
   }, [memes]);
+
+  useEffect(() => {
+    console.log("currentMeme", { currentMeme });
+  }, [currentMeme]);
 
   // State and setters for ...
   // Search term
@@ -159,13 +163,10 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
   useEffect(() => {
     // Perform localStorage action
-    if (memes && preOpenedMemeId) {
-      const foundMeme = memes.find((meme) => meme.id === preOpenedMemeId);
-      if (foundMeme) {
-        handleOpenMeme(foundMeme);
-      }
+    if (memes && preOpenedMemeId && memeFromId) {
+      handleOpenMeme(memeFromId);
     }
-  }, [handleOpenMeme, preOpenedMemeId, memes]);
+  }, [handleOpenMeme, preOpenedMemeId, memes, memeFromId]);
 
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {
@@ -261,7 +262,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       setMemes(memesResult);
     }
     fetchMemes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const fetchPaginatedMemes = async () => {
@@ -292,6 +293,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
     }
 
     setMemes(currentMemes);
+
     setIsBusyLoadingMemes(false);
     console.log("fetchPaginatedMemes: reset");
   };
@@ -330,9 +332,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       ));
 
   const allMemes = renderMemes(foundMemes || memes);
-  const latestMemes = renderMemes(
-    memes.sort((a, b) => b.id - a.id).slice(0, 8)
-  );
   const myMemes = renderMemes(
     memes.filter((meme: MemeType) => meme.poaster?.username === account)
   );
@@ -405,7 +404,9 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
       )}
       <Container>
         <VStack w="full" alignItems="center">
-          <LogoIcon size="600px" logoPath="/memes-party.png" />
+          <Box cursor="pointer" onClick={() => router.reload()}>
+            <LogoIcon size="600px" logoPath="/memes-party.png" />
+          </Box>
           <SimpleGrid
             columns={{
               sm: 1,
@@ -471,6 +472,7 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
             isOpen={isOpenMeme}
             onClose={onCloseMeme}
             meme={currentMeme}
+            setPreOpenedMemeId={setPreOpenedMemeId}
             handleUpvote={handleUpvote}
             handleDownvote={handleDownvote}
           />
@@ -542,10 +544,6 @@ function Memes({ memeFromId }: { memeFromId?: MemesProps }) {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
-              <Heading py="6">LATEST MEMES</Heading>
-              <SimpleGrid pb="6" columns={{ sm: 1, md: 4 }} spacing={10}>
-                {latestMemes}
-              </SimpleGrid>
               <Heading py="6">ALL MEMES</Heading>
               <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                 {allMemes}
