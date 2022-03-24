@@ -90,14 +90,22 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   useEffect(() => {
     if (memes.length > 0) {
-      setLatestId(memes[0].id);
-      setOldestId(memes[memes.length - 1].id);
+      const sortedMemes = [...memes].sort((a: MemeType, b: MemeType) =>
+        a.id < b.id ? -1 : 1
+      );
+      console.log("memes: ", memes);
+
+      setOldestId(sortedMemes[0].id);
+      setLatestId(sortedMemes[sortedMemes.length - 1].id);
+
+      //   setOldestId(memes[0].id);
+      //   setLatestId(memes[memes.length - 1].id);
     }
   }, [memes]);
 
-  useEffect(() => {
-    console.log("currentMeme", { currentMeme });
-  }, [currentMeme]);
+  // useEffect(() => {
+  //   console.log("currentMeme", { currentMeme });
+  // }, [currentMeme]);
 
   // State and setters for ...
   // Search term
@@ -241,8 +249,29 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     return downvotedMeme;
   };
 
-  // const [latestId, setLatestId] = useState<number>(1);
-  // const [oldestId, setOldestId] = useState<number>(1);
+  const fetchPaginatedMemes = async () => {
+    console.log("fetchPaginatedMemes: pre isBusyLoading");
+    if (isBusyLoadingMemes) {
+      return;
+    }
+
+    setIsBusyLoadingMemes(true);
+    console.log("latestId", latestId);
+    console.log("oldestId", oldestId);
+
+    console.log("fetchPaginatedMemes: fetching paginated memes");
+    const paginatedMemesResponse = await fetch(
+      `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
+    );
+    const paginatedMemesResult = await paginatedMemesResponse.json();
+
+    const currentMemes = [...memes, ...paginatedMemesResult];
+
+    setMemes([...currentMemes]);
+
+    setIsBusyLoadingMemes(false);
+    console.log("fetchPaginatedMemes: reset");
+  };
 
   useEffect(() => {
     async function fetchMemes() {
@@ -252,12 +281,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       const memesResult = await memesResponse.json();
       // console.log("memesResult: ", { memesResult });
 
-      if (memesResult[0].id > latestId) {
-        setLatestId(memesResult[0].id);
-      }
-      if (memesResult[memesResult.length - 1].id < oldestId) {
-        setOldestId(memesResult.length - 1);
-      }
+      // const sortedMemesResult = memesResult.sort((a: MemeType, b: MemeType) =>
+      //   (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
+      // );
 
       setMemes(memesResult);
     }
@@ -265,71 +291,33 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     // eslint-disable-next-line
   }, []);
 
-  const fetchPaginatedMemes = async () => {
-    console.log("fetchPaginatedMemes: pre isBusyLoading");
-    if (isBusyLoadingMemes) {
-      return;
-    }
-
-    setIsBusyLoadingMemes(true);
-
-    console.log("fetchPaginatedMemes: fetching paginated memes");
-    const paginatedMemesResponse = await fetch(
-      `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
-    );
-    const paginatedMemesResult = await paginatedMemesResponse.json();
-    const currentMemes = [
-      ...memes,
-      ...paginatedMemesResult.sort((a: MemeType, b: MemeType) =>
-        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      ),
-    ];
-
-    if (paginatedMemesResult[0].id > latestId) {
-      setLatestId(paginatedMemesResult[0].id);
-    }
-    if (paginatedMemesResult[paginatedMemesResult.length - 1].id < oldestId) {
-      setOldestId(paginatedMemesResult[paginatedMemesResult.length - 1].id - 1);
-    }
-
-    setMemes(currentMemes);
-
-    setIsBusyLoadingMemes(false);
-    console.log("fetchPaginatedMemes: reset");
-  };
-
   const renderMemes = (selectedMemes: MemeType[]) =>
-    selectedMemes &&
-    selectedMemes
-      .sort((a: MemeType, b: MemeType) =>
-        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      )
-      .map((m) => (
-        <InfiniteScroll
-          dataLength={7}
-          next={fetchPaginatedMemes}
-          hasMore
-          style={{ overflow: "unset" }}
-          loader={<Box />}
-          scrollThreshold="200px"
-        >
-          <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
-            <Tilt
-              glareEnable
-              glareMaxOpacity={0.05}
-              scale={1.03}
-              tiltMaxAngleX={7}
-              tiltMaxAngleY={7}
-            >
-              <MemeCard
-                handleDownvote={handleDownvote}
-                handleUpvote={handleUpvote}
-                meme={m}
-              />
-            </Tilt>
-          </Box>
-        </InfiniteScroll>
-      ));
+    selectedMemes.map((m) => (
+      <InfiniteScroll
+        dataLength={7}
+        next={fetchPaginatedMemes}
+        hasMore
+        style={{ overflow: "unset" }}
+        loader={<Box />}
+        scrollThreshold="200px"
+      >
+        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+          <Tilt
+            glareEnable
+            glareMaxOpacity={0.05}
+            scale={1.03}
+            tiltMaxAngleX={7}
+            tiltMaxAngleY={7}
+          >
+            <MemeCard
+              handleDownvote={handleDownvote}
+              handleUpvote={handleUpvote}
+              meme={m}
+            />
+          </Tilt>
+        </Box>
+      </InfiniteScroll>
+    ));
 
   const allMemes = renderMemes(foundMemes || memes);
   const myMemes = renderMemes(
@@ -410,7 +398,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           <SimpleGrid
             columns={{
               sm: 1,
-              md: 2,
+              md: 3,
             }}
             spacing={4}
           >
@@ -456,6 +444,19 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               onClick={onOpen}
             >
               UPLOAD MEME
+            </Button>
+            <Button
+              width="14"
+              height="14"
+              background={brandColors.mainPurple}
+              onClick={() => router.push("/leaderboard")}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/leaderboard.png"
+                style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                alt=""
+              />
             </Button>
           </SimpleGrid>
         </VStack>
