@@ -89,10 +89,10 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [oldestId, setOldestId] = useState<number>(1);
 
   useEffect(() => {
-    if (memes.length > 0) {
-      setOldestId(memes[0].id);
-      setLatestId(memes[memes.length - 1].id);
-    }
+    // if (memes.length > 0) {
+    //   setOldestId(memes[0].id);
+    //   setLatestId(memes[memes.length - 1].id);
+    // }
   }, [memes]);
 
   useEffect(() => {
@@ -257,26 +257,24 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     );
     const paginatedMemesResult = await paginatedMemesResponse.json();
 
+    console.log("memes: ", memes);
     const currentMemes = [
       ...memes,
       ...paginatedMemesResult.sort((a: MemeType, b: MemeType) =>
         (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
       ),
     ];
+    console.log("currentMemes: ", currentMemes);
 
-    const sortedMemes = currentMemes.sort((a: MemeType, b: MemeType) =>
+    const sortedMemes = [...currentMemes].sort((a: MemeType, b: MemeType) =>
       a.id < b.id ? -1 : 1
     );
-    console.log("paginatedMemesResult: ", paginatedMemesResult);
+    console.log("sortedMemes: ", sortedMemes);
 
-    // if (paginatedMemesResult[0].id > latestId) {
     setOldestId(sortedMemes[0].id);
-    // }
-    // if (paginatedMemesResult[paginatedMemesResult.length - 1].id < oldestId) {
     setLatestId(sortedMemes[sortedMemes.length - 1].id);
-    // }
 
-    setMemes(currentMemes);
+    setMemes([...currentMemes]);
 
     setIsBusyLoadingMemes(false);
     console.log("fetchPaginatedMemes: reset");
