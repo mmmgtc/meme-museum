@@ -89,15 +89,23 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [oldestId, setOldestId] = useState<number>(1);
 
   useEffect(() => {
-    // if (memes.length > 0) {
-    //   setOldestId(memes[0].id);
-    //   setLatestId(memes[memes.length - 1].id);
-    // }
+    if (memes.length > 0) {
+      const sortedMemes = [...memes].sort((a: MemeType, b: MemeType) =>
+        a.id < b.id ? -1 : 1
+      );
+      console.log("memes: ", memes);
+
+      setOldestId(sortedMemes[0].id);
+      setLatestId(sortedMemes[sortedMemes.length - 1].id);
+
+      //   setOldestId(memes[0].id);
+      //   setLatestId(memes[memes.length - 1].id);
+    }
   }, [memes]);
 
-  useEffect(() => {
-    console.log("currentMeme", { currentMeme });
-  }, [currentMeme]);
+  // useEffect(() => {
+  //   console.log("currentMeme", { currentMeme });
+  // }, [currentMeme]);
 
   // State and setters for ...
   // Search term
@@ -257,22 +265,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     );
     const paginatedMemesResult = await paginatedMemesResponse.json();
 
-    console.log("memes: ", memes);
-    const currentMemes = [
-      ...memes,
-      ...paginatedMemesResult.sort((a: MemeType, b: MemeType) =>
-        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      ),
-    ];
-    console.log("currentMemes: ", currentMemes);
-
-    const sortedMemes = [...currentMemes].sort((a: MemeType, b: MemeType) =>
-      a.id < b.id ? -1 : 1
-    );
-    console.log("sortedMemes: ", sortedMemes);
-
-    setOldestId(sortedMemes[0].id);
-    setLatestId(sortedMemes[sortedMemes.length - 1].id);
+    const currentMemes = [...memes, ...paginatedMemesResult];
 
     setMemes([...currentMemes]);
 
@@ -287,55 +280,44 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       );
       const memesResult = await memesResponse.json();
       // console.log("memesResult: ", { memesResult });
-      const sortedMemes = memesResult.sort((a: MemeType, b: MemeType) =>
-        a.id < b.id ? -1 : 1
-      );
-      setOldestId(sortedMemes[0].id);
 
-      setLatestId(sortedMemes[sortedMemes.length - 1].id);
+      // const sortedMemesResult = memesResult.sort((a: MemeType, b: MemeType) =>
+      //   (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
+      // );
 
-      const sortedMemesResult = memesResult.sort((a: MemeType, b: MemeType) =>
-        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      );
-
-      setMemes(sortedMemesResult);
+      setMemes(memesResult);
     }
     fetchMemes();
     // eslint-disable-next-line
   }, []);
 
   const renderMemes = (selectedMemes: MemeType[]) =>
-    selectedMemes &&
-    selectedMemes
-      .sort((a: MemeType, b: MemeType) =>
-        (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      )
-      .map((m) => (
-        <InfiniteScroll
-          dataLength={7}
-          next={fetchPaginatedMemes}
-          hasMore
-          style={{ overflow: "unset" }}
-          loader={<Box />}
-          scrollThreshold="200px"
-        >
-          <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
-            <Tilt
-              glareEnable
-              glareMaxOpacity={0.05}
-              scale={1.03}
-              tiltMaxAngleX={7}
-              tiltMaxAngleY={7}
-            >
-              <MemeCard
-                handleDownvote={handleDownvote}
-                handleUpvote={handleUpvote}
-                meme={m}
-              />
-            </Tilt>
-          </Box>
-        </InfiniteScroll>
-      ));
+    selectedMemes.map((m) => (
+      <InfiniteScroll
+        dataLength={7}
+        next={fetchPaginatedMemes}
+        hasMore
+        style={{ overflow: "unset" }}
+        loader={<Box />}
+        scrollThreshold="200px"
+      >
+        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+          <Tilt
+            glareEnable
+            glareMaxOpacity={0.05}
+            scale={1.03}
+            tiltMaxAngleX={7}
+            tiltMaxAngleY={7}
+          >
+            <MemeCard
+              handleDownvote={handleDownvote}
+              handleUpvote={handleUpvote}
+              meme={m}
+            />
+          </Tilt>
+        </Box>
+      </InfiniteScroll>
+    ));
 
   const allMemes = renderMemes(foundMemes || memes);
   const myMemes = renderMemes(
