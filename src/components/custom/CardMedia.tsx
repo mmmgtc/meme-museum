@@ -9,9 +9,9 @@ function CardMedia(props: any) {
   const myRef = useRef();
   const { enterCount } = useInViewport(myRef, {}, {}, props);
 
-  const ipfsId = src.toString().includes("ipfs.io")
-    ? src.toString().substring(21)
-    : src.toString().substring(8, src.toString().length - 15);
+  const ipfsId = src?.toString().includes("ipfs.io")
+    ? src?.toString().substring(21)
+    : src?.toString().substring(8, src.toString().length - 15);
 
   const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=360&width=314&url=https://ipfs.io/ipfs/${ipfsId}`;
 
