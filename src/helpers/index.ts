@@ -33,3 +33,8 @@ export type MemeLordType = {
   label: string;
   value: string;
 };
+
+export type LeaderType = {
+  display_name: string;
+  karma: number;
+};
