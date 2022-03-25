@@ -17,7 +17,11 @@ import "react-datepicker/dist/react-datepicker.css";
 
 function Leaderboard() {
   const [leaders, setLeaders] = useState<LeaderType[]>([]);
-  const [selectDate, setSelectDate] = useState<Date>(new Date());
+  const [selectDate, setSelectDate] = useState<Date>(
+    new Date() < new Date("April 1, 2022 01:30:00")
+      ? new Date("March 4, 2022")
+      : new Date("April 1, 2022")
+  );
   const [formatDate, setFormatedDate] = useState<number>(0);
   const [fetchingTime, setFetchingTime] = useState<number>();
 
@@ -88,6 +92,7 @@ function Leaderboard() {
         rounded="md"
       >
         <DatePicker
+          color="black"
           onChange={(date) => setSelectDate(date)}
           selected={selectDate}
           maxDate={new Date()}
@@ -100,7 +105,7 @@ function Leaderboard() {
             return (
               <Box key={leader.display_name}>
                 <LeaderCard
-                  id={index}
+                  id={index + 1}
                   name={leader.display_name}
                   karma={leader.karma}
                 />

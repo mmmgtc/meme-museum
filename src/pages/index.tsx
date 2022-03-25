@@ -18,6 +18,7 @@ import {
   Heading,
   Stack,
   HStack,
+  Spinner,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
@@ -87,6 +88,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [selectedTag, setSelectedTag] = useState<string[]>([tags[0].value]);
   const [latestId, setLatestId] = useState<number>(1);
   const [oldestId, setOldestId] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (memes.length > 0) {
@@ -97,15 +99,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
       setOldestId(sortedMemes[0].id);
       setLatestId(sortedMemes[sortedMemes.length - 1].id);
-
-      //   setOldestId(memes[0].id);
-      //   setLatestId(memes[memes.length - 1].id);
     }
   }, [memes]);
-
-  // useEffect(() => {
-  //   console.log("currentMeme", { currentMeme });
-  // }, [currentMeme]);
 
   // State and setters for ...
   // Search term
@@ -275,6 +270,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   useEffect(() => {
     async function fetchMemes() {
+      setLoading(true);
       const memesResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
       );
@@ -286,6 +282,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       // );
 
       setMemes(memesResult);
+      setLoading(false);
     }
     fetchMemes();
     // eslint-disable-next-line
@@ -546,9 +543,32 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           <TabPanels w="full">
             <TabPanel w="full" px="0">
               <Heading py="6">ALL MEMES</Heading>
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {allMemes}
-              </SimpleGrid>
+              {!loading ? (
+                <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                  {allMemes}
+                </SimpleGrid>
+              ) : (
+                <Box my={8} w="full">
+                  <Spinner
+                    thickness="6px"
+                    speed="0.65s"
+                    ml="70px"
+                    color="purple.200"
+                    size="xl"
+                  />
+                </Box>
+              )}
+              {isBusyLoadingMemes && (
+                <Box my={8} w="full">
+                  <Spinner
+                    thickness="6px"
+                    speed="0.65s"
+                    ml="70px"
+                    color="purple.200"
+                    size="xl"
+                  />
+                </Box>
+              )}
             </TabPanel>
             <TabPanel w="full" px="0">
               <Heading py="6">{selectedTag} Memes</Heading>
