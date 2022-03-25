@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Heading, Link, useColorModeValue } from "@chakra-ui/react";
 import React, { useState, useEffect, useContext } from "react";
 
 import { Web3Context } from "../../contexts/Web3Provider";
@@ -43,7 +43,12 @@ function LeaderCard({ name, karma, id }: LeaderCardProps) {
     >
       <Heading paddingRight="12">{id}</Heading>
       <Flex direction="column">
-        <Heading size="lg">Name: {ens || name}</Heading>
+        <Heading size="lg">
+          Name:{" "}
+          <Link href={`/profile/${name}`} target="_blank">
+            {ens || name}
+          </Link>
+        </Heading>
         <Heading size="lg">Karma: {karma}</Heading>
       </Flex>
     </Flex>

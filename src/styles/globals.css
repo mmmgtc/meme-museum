@@ -3,3 +3,7 @@
 .blockies {
   border-radius: 50%;
 }
+
+.react-datepicker__input-container {
+  color: black;
+}
