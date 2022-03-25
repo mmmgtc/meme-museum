@@ -276,7 +276,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   useEffect(() => {
     async function fetchMemes() {
-      setIsBusyLoadingMemes(true);
       const memesResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
       );
@@ -288,7 +287,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       // );
 
       setMemes(memesResult);
-      setIsBusyLoadingMemes(false);
     }
     fetchMemes();
     // eslint-disable-next-line
@@ -549,18 +547,19 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           <TabPanels w="full">
             <TabPanel w="full" px="0">
               <Heading py="6">ALL MEMES</Heading>
-              {isBusyLoadingMemes ? (
-                <Spinner
-                  thickness="6px"
-                  speed="0.65s"
-                  ml="70px"
-                  color="purple.200"
-                  size="xl"
-                />
-              ) : (
-                <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                  {allMemes}
-                </SimpleGrid>
+              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                {allMemes}
+              </SimpleGrid>
+              {!isBusyLoadingMemes && (
+                <Box my={8} w="full">
+                  <Spinner
+                    thickness="6px"
+                    speed="0.65s"
+                    ml="70px"
+                    color="purple.200"
+                    size="xl"
+                  />
+                </Box>
               )}
             </TabPanel>
             <TabPanel w="full" px="0">

@@ -7,3 +7,7 @@
 .react-datepicker__input-container {
   color: black;
 }
+
+.chakra-emotion-css-1cjdlnb {
+  --spinner-size: 5.5rem !important;
+}
