@@ -438,7 +438,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               }}
               fontSize="lg"
               leftIcon={<AddIcon />}
-              onClick={onOpen}
+              onClick={() => {
+                if (!account) {
+                  handleNotConnected();
+                  return;
+                }
+                onOpen();
+              }}
             >
               UPLOAD MEME
             </Button>
