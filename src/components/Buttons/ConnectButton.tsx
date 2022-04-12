@@ -1,10 +1,10 @@
 import {
-  Button,
-  HStack,
-  Flex,
   Badge,
-  Text,
+  Button,
+  Flex,
+  HStack,
   IconButton,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useContext } from "react";
