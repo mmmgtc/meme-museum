@@ -95,9 +95,13 @@ export const Web3Provider = ({ children }: { children: any }) => {
 
   useEffect(() => {
     const knowAccount = localStorage.getItem("knownAccount");
+    const knownEns = localStorage.getItem("knownEns");
     console.log({ knowAccount });
     if (knowAccount) {
       setAccount(knowAccount);
+    }
+    if (knownEns) {
+      setENS(knownEns);
     }
   }, []);
 
@@ -107,6 +111,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
     localStorage.setItem("defaultWallet", "");
     localStorage.setItem("knownAccount", "");
     localStorage.setItem("Authorization", "");
+    localStorage.setItem("knownEns", "");
   };
 
   const connectWeb3 = useCallback(async () => {
@@ -122,6 +127,9 @@ export const Web3Provider = ({ children }: { children: any }) => {
     try {
       const ens = await ethersProvider.lookupAddress(account);
       setENS(ens);
+      if (ens) {
+        localStorage.setItem("knownEns", ens);
+      }
     } catch (error) {
       console.log({ error });
       setENS(null);
