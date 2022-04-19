@@ -67,7 +67,7 @@ function MemeModal({
     ? meme.image.toString().substring(21)
     : meme.image.toString().substring(8, meme.image.toString().length - 15);
 
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=360&width=314&url=https://ipfs.io/ipfs/${ipfsId}`;
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=800&width=800&url=https://ipfs.io/ipfs/${ipfsId}`;
 
   useEffect(() => {
     // Address to ENS
