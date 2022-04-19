@@ -210,10 +210,10 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
 
         <Stack>
           <Heading color="purple.200" size="lg">
-            name: {profileName}
+            Name: {profileName}
           </Heading>
           <Heading color="purple.200" size="md">
-            karma: {userKarma}
+            Total Karma: {userKarma}
           </Heading>
         </Stack>
       </HStack>

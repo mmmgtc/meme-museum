@@ -10,7 +10,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import Particles from "react-tsparticles";
 
-import "styles/globals.css";
+// import "styles/globals.css";
 import defaultSEOConfig from "../../next-seo.config";
 import Fonts from "../components/fonts";
 import { Web3Provider } from "../contexts/Web3Provider";

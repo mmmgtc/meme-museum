@@ -19,6 +19,7 @@ import {
   Stack,
   HStack,
   Spinner,
+  Text,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
@@ -31,6 +32,7 @@ import handleViewport from "react-in-viewport";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Tilt from "react-parallax-tilt";
 
+import { ignores } from "../../commitlint.config";
 import Card from "../components/custom/Card";
 import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
@@ -67,6 +69,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
   );
   const { account, connectWeb3, headers } = useContext(Web3Context);
+  const [leaderboardImage, setLeaderboardImage] =
+    useState<string>("/leaderboard.png");
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
@@ -105,6 +109,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   // State and setters for ...
   // Search term
   const [searchTerm, setSearchTerm] = useState("");
+  const [totalSearchResult, setTotalSearchResult] = useState<number | null>(
+    null
+  );
 
   // Debounce search term so that it only gives us latest value ...
   // ... if searchTerm has not been updated within last 500ms.
@@ -148,6 +155,11 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       if (debouncedSearchTerm) {
         handleSearch(debouncedSearchTerm).then((memesResult) => {
           setFoundMemes(memesResult);
+          if (memesResult !== null) {
+            setTotalSearchResult(memesResult.length);
+          } else {
+            setTotalSearchResult(null);
+          }
         });
       } else {
         setFoundMemes(undefined);
@@ -449,17 +461,30 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               UPLOAD MEME
             </Button>
             <Button
-              width="14"
-              height="14"
+              size="lg"
+              rounded="full"
+              variant="solid"
+              bg="purple.200"
+              color="white"
+              border={`solid 5px ${borderColor}`}
+              _hover={{
+                bg: altColor,
+                color,
+              }}
+              fontSize="lg"
+              gridGap={4}
               background={brandColors.mainPurple}
               onClick={() => router.push("/leaderboard")}
+              onMouseEnter={() => setLeaderboardImage("/leaderboard-hover.png")}
+              onMouseLeave={() => setLeaderboardImage("/leaderboard.png")}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/leaderboard.png"
-                style={{ height: "100%", width: "100%", objectFit: "contain" }}
+                src={leaderboardImage}
+                style={{ height: "60%", objectFit: "contain" }}
                 alt=""
               />
+              LEADERBOARD
             </Button>
           </SimpleGrid>
         </VStack>
@@ -548,7 +573,15 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
           <TabPanels w="full">
             <TabPanel w="full" px="0">
-              <Heading py="6">ALL MEMES</Heading>
+              <HStack w="full" justifyContent="space-between">
+                <Heading py="6">ALL MEMES</Heading>
+                <Text fontSize="2xl">
+                  {totalSearchResult !== null &&
+                    searchTerm.length > 0 &&
+                    `${totalSearchResult} SEARCH RESULTS`}
+                </Text>
+              </HStack>
+
               {!loading ? (
                 <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
                   {allMemes}
