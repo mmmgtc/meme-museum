@@ -194,6 +194,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     handleOpenMeme(meme);
   };
 
+  const handleDeleteMeme = (meme: MemeType) => {
+    setMemes((previousMemes) => [
+      ...previousMemes.filter((m) => m.id !== meme.id),
+    ]);
+  };
+
   const handleUpvote = async (memeId: number) => {
     if (!account) {
       return handleNotConnected();
@@ -473,6 +479,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         />
         {currentMeme && (
           <MemeModal
+            handleDelete={handleDeleteMeme}
             isOpen={isOpenMeme}
             onClose={onCloseMeme}
             meme={currentMeme}
