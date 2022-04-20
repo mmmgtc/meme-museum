@@ -1,4 +1,5 @@
 import { Box, Flex, Heading, Link, useColorModeValue } from "@chakra-ui/react";
+import Image from "next/image";
 import React, { useState, useEffect, useContext } from "react";
 
 import { Web3Context } from "../../contexts/Web3Provider";
@@ -8,9 +9,11 @@ interface LeaderCardProps {
   id: number;
   name: string;
   karma: number;
+  src?: string | null;
+  index: number;
 }
 
-function LeaderCard({ name, karma, id }: LeaderCardProps) {
+function LeaderCard({ name, karma, id, src, index }: LeaderCardProps) {
   const borderColor = useColorModeValue("#8C65F7", "white");
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const { staticProvider } = useContext(Web3Context);
@@ -33,20 +36,25 @@ function LeaderCard({ name, karma, id }: LeaderCardProps) {
   }, [staticProvider, name]);
   return (
     <Flex
-      paddingX="16"
+      paddingX="10"
       paddingY="9"
       borderColor={borderColor}
       borderWidth="medium"
       backgroundColor={bg}
       justifyContent="flex-start"
       rounded="lg"
+      maxWidth="2xl"
     >
+      {src && index <= 2 && (
+        <Image src={src} alt="Medal" height="30px" width="50px" />
+      )}
       <Heading paddingRight="12">{id}</Heading>
       <Flex direction="column">
         <Heading size="lg">
           Name:{" "}
           <Link href={`/profile/${name}`} target="_blank">
-            {ens || name}
+            {ens ||
+              `${name.substring(0, 4)}...${name.substring(name.length - 4)}`}
           </Link>
         </Heading>
         <Heading size="lg">Karma: {karma}</Heading>
