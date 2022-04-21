@@ -7,6 +7,7 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { ChakraStylesConfig, Select } from "chakra-react-select";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import { FaArrowLeft } from "react-icons/fa";
@@ -24,11 +25,45 @@ function Leaderboard() {
   );
   const [formatDate, setFormatedDate] = useState<number>(0);
   const [fetchingTime, setFetchingTime] = useState<number>();
-
   const borderColor = useColorModeValue("#8c65f7", "white");
+
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
 
+  const options = [
+    {
+      label: "MEMEPALOOZA 1",
+      value: new Date("August 31, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 2",
+      value: new Date("October 1, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 3",
+      value: new Date("November 5, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 4",
+      value: new Date("December 2, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 5",
+      value: new Date("January 14, 2022"),
+    },
+    {
+      label: "MEMEPALOOZA 6",
+      value: new Date("March 4, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 7",
+      value: new Date("April 1, 2021"),
+    },
+    {
+      label: "MEMEPALOOZA 8",
+      value: new Date("May 5, 2021"),
+    },
+  ];
   useEffect(() => {
     function getFormatedDate() {
       const date = selectDate.getTime();
@@ -55,12 +90,15 @@ function Leaderboard() {
     }
   }, [formatDate]);
 
-  useEffect(() => {
-    console.log("leaders: ", leaders);
-  }, [leaders]);
+  const chakraStyles: ChakraStylesConfig = {
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+      w: "40px",
+    }),
+  };
 
   return (
-    <Stack gridGap="12">
+    <Stack gridGap="12" px={5}>
       <Flex gridGap="14">
         <Box textAlign="left">
           <Link href="/" passHref>
@@ -85,19 +123,27 @@ function Leaderboard() {
         <Heading>leader Board page</Heading>
       </Flex>
 
-      <Box
-        borderColor={brandColors.mainPurple}
-        maxWidth="fit-content"
-        borderWidth="thick"
-        rounded="md"
-      >
-        <DatePicker
-          color="black"
-          onChange={(date) => setSelectDate(date)}
-          selected={selectDate}
-          maxDate={new Date()}
+      <Flex justify="space-around" w="full">
+        <Box
+          borderColor={brandColors.mainPurple}
+          maxWidth="fit-content"
+          borderWidth="thick"
+          rounded="md"
+        >
+          <DatePicker
+            color="black"
+            onChange={(date) => setSelectDate(date)}
+            selected={selectDate}
+            maxDate={new Date()}
+          />
+        </Box>
+        <Select
+          chakraStyles={chakraStyles}
+          options={options}
+          onChange={(option) => setSelectDate(option.value)}
+          hasStickyGroupHeaders
         />
-      </Box>
+      </Flex>
 
       <Stack>
         {leaders.length > 0 ? (
