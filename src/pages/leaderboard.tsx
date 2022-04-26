@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import {
   Box,
   Button,
@@ -5,6 +6,7 @@ import {
   Heading,
   Link,
   Stack,
+  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
@@ -26,6 +28,7 @@ function Leaderboard() {
   const [formatDate, setFormatedDate] = useState<number>(0);
   const [fetchingTime, setFetchingTime] = useState<number>();
   const borderColor = useColorModeValue("#8c65f7", "white");
+  const [loading, setLoading] = useState(false);
 
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
@@ -78,14 +81,16 @@ function Leaderboard() {
 
   useEffect(() => {
     async function fetchLeaders() {
+      setLoading(true);
       const response = await fetch(
         `https://evening-anchorage-43225.herokuapp.com/museum/leaderboard/${fetchingTime}/`
       );
       const data = await response.json();
       setLeaders(data);
+      setLoading(false);
     }
     fetchLeaders();
-  }, [fetchingTime]);
+  }, [selectDate, fetchingTime]);
 
   useEffect(() => {
     const currentTime = Math.floor(new Date().getTime() / 60000);
@@ -128,29 +133,35 @@ function Leaderboard() {
       </Flex>
 
       <Flex justify="space-around" w="full">
-      <Box
-        borderColor={brandColors.mainPurple}
-        maxWidth="fit-content"
-        borderWidth="thick"
-        rounded="md"
-      >
-        <DatePicker
-          color="black"
-          onChange={(date) => setSelectDate(date)}
-          showTimeSelect
-          selected={selectDate}
-          maxDate={new Date()}
-          dateFormat="MMMM d, yyyy h:mm aa"
-        />
+        <Box
+          borderColor={brandColors.mainPurple}
+          maxWidth="fit-content"
+          borderWidth="thick"
+          rounded="md"
+        >
+          <DatePicker
+            color="black"
+            onChange={(date) => setSelectDate(date)}
+            showTimeSelect
+            selected={selectDate}
+            maxDate={new Date()}
+            dateFormat="MMMM d, yyyy h:mm aa"
+          />
+        </Box>
         <Select
           chakraStyles={chakraStyles}
           options={options}
           onChange={(option) => setSelectDate(option.value)}
-          hasStickyGroupHeaders />
+          hasStickyGroupHeaders
+        />
       </Flex>
 
       <Stack>
-        {leaders.length > 0 ? (
+        {loading ? (
+          <Text fontSize="2xl" fontWeight="medium" textAlign="center">
+            Loading ...
+          </Text>
+        ) : leaders.length > 0 ? (
           leaders.map((leader, index) => {
             return (
               <Box key={leader.display_name}>
