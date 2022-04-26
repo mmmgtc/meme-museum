@@ -73,6 +73,10 @@ function Leaderboard() {
   }, [selectDate]);
 
   useEffect(() => {
+    console.log("formated Date", formatDate);
+  }, [selectDate, formatDate]);
+
+  useEffect(() => {
     async function fetchLeaders() {
       const response = await fetch(
         `https://evening-anchorage-43225.herokuapp.com/museum/leaderboard/${fetchingTime}/`
@@ -120,29 +124,29 @@ function Leaderboard() {
             </Button>
           </Link>
         </Box>
-        <Heading>leader Board page</Heading>
+        <Heading>Leaderboard</Heading>
       </Flex>
 
       <Flex justify="space-around" w="full">
-        <Box
-          borderColor={brandColors.mainPurple}
-          maxWidth="fit-content"
-          borderWidth="thick"
-          rounded="md"
-        >
-          <DatePicker
-            color="black"
-            onChange={(date) => setSelectDate(date)}
-            selected={selectDate}
-            maxDate={new Date()}
-          />
-        </Box>
+      <Box
+        borderColor={brandColors.mainPurple}
+        maxWidth="fit-content"
+        borderWidth="thick"
+        rounded="md"
+      >
+        <DatePicker
+          color="black"
+          onChange={(date) => setSelectDate(date)}
+          showTimeSelect
+          selected={selectDate}
+          maxDate={new Date()}
+          dateFormat="MMMM d, yyyy h:mm aa"
+        />
         <Select
           chakraStyles={chakraStyles}
           options={options}
           onChange={(option) => setSelectDate(option.value)}
-          hasStickyGroupHeaders
-        />
+          hasStickyGroupHeaders />
       </Flex>
 
       <Stack>
@@ -151,9 +155,11 @@ function Leaderboard() {
             return (
               <Box key={leader.display_name}>
                 <LeaderCard
+                  index={index}
                   id={index + 1}
                   name={leader.display_name}
                   karma={leader.karma}
+                  src={`/medal${index}.png`}
                 />
               </Box>
             );
