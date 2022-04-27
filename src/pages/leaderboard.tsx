@@ -158,7 +158,7 @@ function Leaderboard() {
 
       <Stack>
         {loading ? (
-          <Text fontSize="2xl" fontWeight="medium" textAlign="center">
+          <Text fontSize="4xl" fontWeight="bold" textAlign="center">
             Loading ...
           </Text>
         ) : leaders.length > 0 ? (
