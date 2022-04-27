@@ -78,6 +78,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   const [userProfile, setUserProfile] = useState<any>();
 
+  const { dverify } = router.query;
+
   const tags = [
     {
       label: "Memepalooza 7",
@@ -93,6 +95,14 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [latestId, setLatestId] = useState<number>(1);
   const [oldestId, setOldestId] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (dverify) {
+      console.log("dverify", dverify);
+      localStorage.setItem("dverify", dverify as string);
+      router.replace("/", undefined, { shallow: true });
+    }
+  }, [dverify, router]);
 
   useEffect(() => {
     if (memes.length > 0) {
