@@ -31,6 +31,18 @@ const Layout = ({ children }: LayoutProps) => {
     // console.log(container);
   };
 
+  const TopHeading = () => (
+    <Box ml={10} fontWeight="semibold">
+      Next Palooza is on the 6th of May 2022,{" "}
+      <Link
+        target="_blank"
+        textDecoration="underline"
+        href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
+      >
+        Add it to your calendar
+      </Link>
+    </Box>
+  );
   const {
     isOpen: isVisible,
     onClose,
@@ -53,56 +65,9 @@ const Layout = ({ children }: LayoutProps) => {
             loop={0}
             speed={60}
           >
-            <Box ml={10} fontWeight="semibold">
-              Next Palooza is on the 6th of May 2022,{" "}
-              <Link
-                target="_blank"
-                textDecoration="underline"
-                href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
-              >
-                Add it to your calendar
-              </Link>
-            </Box>
-            <Box ml={10} fontWeight="semibold">
-              Next Palooza is on the 6th of May 2022,{" "}
-              <Link
-                target="_blank"
-                textDecoration="underline"
-                href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
-              >
-                Add it to your calendar
-              </Link>
-            </Box>
-            <Box ml={10} fontWeight="semibold">
-              Next Palooza is on the 6th of May 2022,{" "}
-              <Link
-                target="_blank"
-                textDecoration="underline"
-                href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
-              >
-                Add it to your calendar
-              </Link>
-            </Box>
-            <Box ml={10} fontWeight="semibold">
-              Next Palooza is on the 6th of May 2022,{" "}
-              <Link
-                target="_blank"
-                textDecoration="underline"
-                href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
-              >
-                Add it to your calendar
-              </Link>
-            </Box>
-            <Box ml={10} fontWeight="semibold">
-              Next Palooza is on the 6th of May 2022,{" "}
-              <Link
-                target="_blank"
-                textDecoration="underline"
-                href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
-              >
-                Add it to your calendar
-              </Link>
-            </Box>
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <TopHeading key={i} />
+            ))}
           </Marquee>
           <CloseButton
             alignSelf="flex-start"
