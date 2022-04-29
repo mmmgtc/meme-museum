@@ -1,4 +1,5 @@
-import { CheckIcon, LinkIcon } from "@chakra-ui/icons";
+/* eslint-disable complexity */
+import { CheckIcon, DeleteIcon, LinkIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Button,
@@ -32,27 +33,36 @@ import Blockies from "react-blockies";
 import { FaArrowCircleDown, FaArrowCircleUp } from "react-icons/fa";
 
 import { Web3Context } from "../contexts/Web3Provider";
-import { brandColors, getSlicedAddress, W_FIT_CONTENT } from "../helpers";
+import {
+  brandColors,
+  getSlicedAddress,
+  MemeType,
+  W_FIT_CONTENT,
+} from "../helpers";
 
 function MemeModal({
   meme,
   isOpen,
   onClose,
   handleUpvote,
+  handleDelete,
   handleDownvote,
   setPreOpenedMemeId,
 }: {
   meme: any;
   isOpen: boolean;
   onClose: any;
+  handleDelete: (meme: MemeType) => void;
   handleUpvote?: any;
   handleDownvote?: any;
   setPreOpenedMemeId: Dispatch<SetStateAction<number | null>>;
 }) {
-  const { account, staticProvider } = useContext(Web3Context);
+  const { account, staticProvider, headers } = useContext(Web3Context);
   const { hasCopied, onCopy } = useClipboard(
     `${window.location.protocol}//${window.location.hostname}/?meme=${meme.id}`
   );
+
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const [ens, setENS] = useState<string | null>(null);
 
@@ -86,6 +96,24 @@ function MemeModal({
     }
     getENS();
   }, [meme?.poaster, staticProvider]);
+
+  const onDelete = async () => {
+    setIsDeleting(true);
+    try {
+      const memesResponse = await fetch(
+        `https://evening-anchorage-43225.herokuapp.com/museum/memes/${meme.id}`,
+        {
+          method: "DELETE",
+          headers,
+        }
+      );
+      console.log({ memesResponse });
+      handleDelete(meme);
+    } catch (error) {
+      setIsDeleting(false);
+      console.log("ERROR while deleting meme", { error });
+    }
+  };
 
   return (
     <Modal
@@ -158,6 +186,25 @@ function MemeModal({
               >
                 {meme.downvotes}
               </Button>
+              {account && meme.poaster && meme.poaster?.username === account && (
+                <Button
+                  rounded="full"
+                  size="md"
+                  variant="solid"
+                  bg="purple.200"
+                  border={`solid 5px ${borderColor}`}
+                  color="white"
+                  _hover={{
+                    bg: altColor,
+                    color,
+                  }}
+                  isLoading={isDeleting}
+                  onClick={onDelete}
+                  leftIcon={<DeleteIcon />}
+                >
+                  DELETE MEME
+                </Button>
+              )}
             </Flex>
             <Button
               onClick={onCopy}

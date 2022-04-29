@@ -138,21 +138,37 @@ export const Web3Provider = ({ children }: { children: any }) => {
     localStorage.setItem("knownAccount", account);
 
     const token = localStorage.getItem("Authorization");
+    const dverifyToken = localStorage.getItem("dverify");
     if (!token || token === "") {
       const signature = await signer.signMessage("meme party");
+      let body:
+        | {
+            signed: string;
+            address: string;
+          }
+        | {
+            signed: string;
+            address: string;
+            dverify: string;
+          } = {
+        signed: signature,
+        address: account,
+      };
+      if (dverifyToken) {
+        body = { ...body, dverify: dverifyToken.toString() };
+      }
       const authResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
         {
           method: "POST",
-          body: JSON.stringify({
-            signed: signature,
-            address: account,
-          }),
+          body: JSON.stringify(body),
           headers: {
             ...contentTypeHeadrs,
           },
         }
       );
+
+      console.log("body from connectweb3", body);
       const authTokenResult = await authResponse.json();
       console.log(authTokenResult);
       localStorage.setItem("Authorization", `Token ${authTokenResult.token}`);

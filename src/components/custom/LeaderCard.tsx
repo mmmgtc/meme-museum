@@ -52,7 +52,11 @@ function LeaderCard({ name, karma, id, src, index }: LeaderCardProps) {
       <Flex direction="column">
         <Heading size="lg">
           Name:{" "}
-          <Link href={`/profile/${name}`} target="_blank">
+          <Link
+            textDecoration="underline"
+            href={`/profile/${name}`}
+            target="_blank"
+          >
             {ens ||
               `${name.substring(0, 4)}...${name.substring(name.length - 4)}`}
           </Link>
