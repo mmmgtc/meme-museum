@@ -123,6 +123,13 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
   };
   console.log("userMemes", userMemes);
 
+  const handleDeleteMeme = (meme: MemeType) => {
+    // TODO: this function needs to be optimized. Currently just putting a dummy function to fix build.
+    setMemes((previousMemes) => [
+      ...previousMemes.filter((m) => m.id !== meme.id),
+    ]);
+  };
+
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes &&
     selectedMemes.map((m) => (
@@ -227,6 +234,7 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
       </SimpleGrid>
       {currentMeme && (
         <MemeModal
+          handleDelete={handleDeleteMeme}
           setPreOpenedMemeId={setPreOpenedMemeId}
           isOpen={isOpenMeme}
           onClose={onCloseMeme}
