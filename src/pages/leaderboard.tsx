@@ -151,6 +151,7 @@ function Leaderboard() {
         <Select
           chakraStyles={chakraStyles}
           options={options}
+          defaultValue={options[7]}
           onChange={(option) => setSelectDate(option.value)}
           hasStickyGroupHeaders
         />
