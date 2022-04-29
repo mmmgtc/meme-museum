@@ -186,7 +186,7 @@ function MemeModal({
               >
                 {meme.downvotes}
               </Button>
-              {account && meme.poaster && meme.poaster?.username === account && (
+              {/* {account && meme.poaster && meme.poaster?.username === account && (
                 <Button
                   rounded="full"
                   size="md"
@@ -204,7 +204,7 @@ function MemeModal({
                 >
                   DELETE MEME
                 </Button>
-              )}
+              )} */}
             </Flex>
             <Button
               onClick={onCopy}
