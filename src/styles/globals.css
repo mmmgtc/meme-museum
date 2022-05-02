@@ -11,3 +11,11 @@
 .chakra-emotion-css-1cjdlnb {
   --spinner-size: 5.5rem !important;
 }
+
+.chakra-emotion-css-o38mw0 {
+  width: 15rem !important;
+  border-color: var(--chakra-colors-purple-200);
+  border-width: thick;
+  /* background: white;
+  color: black; */
+}
