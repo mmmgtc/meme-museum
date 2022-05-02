@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
 import { CheckIcon, DeleteIcon, LinkIcon } from "@chakra-ui/icons";
+import { Spacer } from "@chakra-ui/layout";
 import {
   Badge,
   Button,
@@ -125,7 +126,6 @@ function MemeModal({
         }
         onClose();
       }}
-      size="4xl"
     >
       <ModalOverlay />
       <ModalContent
@@ -250,7 +250,7 @@ function MemeModal({
             <SimpleGrid
               columns={{
                 sm: 1,
-                md: 2,
+                md: 3,
               }}
               w="full"
               alignItems="center"
@@ -314,7 +314,13 @@ function MemeModal({
                           isTruncated
                           display={["none", "none", "flex", "flex"]}
                         >
-                          {ens || meme.poaster.username}
+                          {ens ||
+                            `${meme.poaster.username.substring(
+                              0,
+                              4
+                            )}...${meme.poaster.username.substring(
+                              meme.poaster.username.length - 4
+                            )}`}
                         </Text>
                         <Text
                           fontWeight="bold"
@@ -328,6 +334,7 @@ function MemeModal({
                   </HStack>
                 </Badge>
               )}
+              <Spacer />
               {meme.meme_lord && (
                 <VStack w="full" ml="2">
                   <Text fontSize="lg" alignSelf="flex-start">
