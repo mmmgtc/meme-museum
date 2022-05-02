@@ -627,7 +627,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               )}
             </TabPanel>
             <TabPanel w="full" px="0">
-              <Heading py="6">{selectedTag} Memes</Heading>
+              <Heading py="6" textTransform="uppercase">
+                {selectedTag} Memes
+              </Heading>
               <Select
                 isMulti
                 options={tags}

@@ -1,5 +1,12 @@
-import { Box, Flex, Heading, Link, useColorModeValue } from "@chakra-ui/react";
-import Image from "next/image";
+import {
+  Image,
+  Box,
+  Flex,
+  Spacer,
+  Heading,
+  Link,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import React, { useState, useEffect, useContext } from "react";
 
 import { Web3Context } from "../../contexts/Web3Provider";
@@ -45,9 +52,6 @@ function LeaderCard({ name, karma, id, src, index }: LeaderCardProps) {
       rounded="lg"
       maxWidth="2xl"
     >
-      {src && index <= 2 && (
-        <Image src={src} alt="Medal" height="30px" width="50px" />
-      )}
       <Heading paddingRight="12">{id}</Heading>
       <Flex direction="column">
         <Heading size="lg">
@@ -63,6 +67,8 @@ function LeaderCard({ name, karma, id, src, index }: LeaderCardProps) {
         </Heading>
         <Heading size="lg">Karma: {karma}</Heading>
       </Flex>
+      <Spacer />
+      {src && index <= 2 && <Image src={src} alt="Medal" boxSize="75px" />}
     </Flex>
   );
 }
