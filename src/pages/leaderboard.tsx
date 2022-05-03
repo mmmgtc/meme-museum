@@ -35,6 +35,7 @@ function Leaderboard() {
   const [topMemes, setTopMemes] = useState<any>([]);
   const [fromDate, setFromDate] = useState<string | null>(null);
   const [toDate, setToDate] = useState<string | null>(null);
+  const [topMemesLoading, setTopMemesLoading] = useState<boolean>(false);
 
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
@@ -107,10 +108,12 @@ function Leaderboard() {
 
   useEffect(() => {
     async function getTopMemes() {
+      setTopMemesLoading(true);
       const response = await fetch(
         `https://evening-anchorage-43225.herokuapp.com/museum/memes/?created_at__gte=&created_at__lte=${toDate}&created_at=&created_at__gt=${fromDate}&created_at__lt=`
       );
       const data = await response.json();
+      setTopMemesLoading(false);
       setTopMemes(data);
     }
     if (fromDate && toDate) {
@@ -214,7 +217,9 @@ function Leaderboard() {
         </Stack>
         <Stack gridGap="3">
           <Heading>Top Memes</Heading>
-          {topMemes.length > 0 ? (
+          {topMemesLoading ? (
+            <Heading>Loading...</Heading>
+          ) : topMemes.length > 0 ? (
             topMemes
               .slice(0, 20)
               .map((meme) => (
