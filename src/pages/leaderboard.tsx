@@ -11,6 +11,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
@@ -74,6 +75,7 @@ function Leaderboard() {
       value: new Date("May 5, 2022"),
     },
   ];
+
   useEffect(() => {
     function getFormatedDate() {
       const date = selectDate.getTime();
@@ -166,7 +168,11 @@ function Leaderboard() {
         <Heading>Leader Board</Heading>
       </Flex>
 
-      <Flex justify="space-around" w="full">
+      <Flex
+        justify="space-around"
+        w="full"
+        flexDirection={{ base: "column", sm: "row" }}
+      >
         <Box
           borderColor={brandColors.mainPurple}
           maxWidth="fit-content"
@@ -190,7 +196,11 @@ function Leaderboard() {
           hasStickyGroupHeaders
         />
       </Flex>
-      <HStack justifyContent="space-around" alignItems="flex-start">
+      <HStack
+        justifyContent="space-around"
+        alignItems="flex-start"
+        flexDirection={{ base: "column", sm: "row" }}
+      >
         <Stack gridGap="3">
           <Heading>Top Contributors</Heading>
           {loading ? (

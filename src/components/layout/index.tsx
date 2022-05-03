@@ -61,6 +61,7 @@ const Layout = ({ children }: LayoutProps) => {
             style={{
               width: "100%",
             }}
+            pauseOnHover
             gradient={false}
             loop={0}
             speed={60}

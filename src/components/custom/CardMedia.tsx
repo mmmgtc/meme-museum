@@ -20,7 +20,7 @@ function CardMedia(props: any) {
       ref={myRef}
       alignItems="center"
       bg="none"
-      w="full"
+      w="fit-content"
       rounded="3xl"
       color="purple.200"
       {...others}
@@ -30,7 +30,7 @@ function CardMedia(props: any) {
           enterCount > 0 ? newSrc || src : "/not-sure-if-loading_o_427193.webp"
         }
         roundedTop="2xl"
-        objectFit="cover"
+        objectFit="fill"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
       />
       {children}
