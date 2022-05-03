@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Link
         target="_blank"
         textDecoration="underline"
-        href="http://www.google.com/calendar/event?action=TEMPLATE&text=Memepalooza%206&dates=20220506T010000Z/20220506T020000Z&details=Event%20Details%20Here&location=https://memes.party"
+        href="https://calendar.google.com/event?action=TEMPLATE&tmeid=MmI0MWQ2aWljazlmMTRtcXJiN3Nrb3FnNmkgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
       >
         Add it to your calendar
       </Link>
@@ -53,8 +53,8 @@ const Layout = ({ children }: LayoutProps) => {
       {isVisible && (
         <Alert
           bg="transparent"
-          background={`${colorMode === "dark" ? "purple.200" : "white"}`}
-          color={colorMode === "dark" ? "white" : "purple.200"}
+          background="purple.200"
+          color="white"
           status="info"
         >
           <Marquee
