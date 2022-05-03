@@ -123,18 +123,6 @@ function Leaderboard() {
     }
   }, [toDate, fromDate]);
 
-  useEffect(() => {
-    console.log("top memes changed", topMemes);
-  }, [topMemes]);
-
-  useEffect(() => {
-    console.log("toDate changed", { toDate });
-  }, [toDate]);
-
-  useEffect(() => {
-    console.log("fromDate changed", { fromDate });
-  }, [fromDate]);
-
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (provided, state) => ({
       ...provided,
