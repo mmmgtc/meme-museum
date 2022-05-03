@@ -13,7 +13,7 @@ function CardMedia(props: any) {
     ? src?.toString().substring(21)
     : src?.toString().substring(8, src.toString().length - 15);
 
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=360&width=314&url=https://ipfs.io/ipfs/${ipfsId}`;
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=500&width=400&url=https://ipfs.io/ipfs/${ipfsId}`;
 
   return (
     <VStack
