@@ -53,6 +53,7 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
       overflow="hidden"
       borderColor={borderColor}
       borderWidth="medium"
+      alignItems="center"
     >
       <Image src={src} boxSize="250px" />
       <VStack padding="2.5" alignItems="flex-start">
