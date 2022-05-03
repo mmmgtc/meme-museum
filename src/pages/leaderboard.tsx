@@ -188,7 +188,8 @@ function Leaderboard() {
         />
       </Flex>
       <HStack justifyContent="space-around" alignItems="flex-start">
-        <Stack>
+        <Stack gridGap="3">
+          <Heading>Top Contributors</Heading>
           {loading ? (
             <Text fontSize="4xl" fontWeight="bold" textAlign="center">
               Loading ...
@@ -211,7 +212,8 @@ function Leaderboard() {
             <Heading>No results, please select a different date</Heading>
           )}
         </Stack>
-        <Stack>
+        <Stack gridGap="3">
+          <Heading>Top Memes</Heading>
           {topMemes.length > 0 ? (
             topMemes
               .slice(0, 20)
@@ -220,6 +222,7 @@ function Leaderboard() {
                   key={meme.id}
                   src={meme.image}
                   address={meme.poaster.username}
+                  tags={meme.tags}
                 />
               ))
           ) : (
