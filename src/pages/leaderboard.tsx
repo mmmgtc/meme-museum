@@ -33,8 +33,8 @@ function Leaderboard() {
   const borderColor = useColorModeValue("#8c65f7", "white");
   const [loading, setLoading] = useState(false);
   const [topMemes, setTopMemes] = useState<any>([]);
-  const [fromDate, setFromDate] = useState<string>("");
-  const [toDate, setToDate] = useState<string>("");
+  const [fromDate, setFromDate] = useState<string | null>(null);
+  const [toDate, setToDate] = useState<string | null>(null);
 
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const color = useColorModeValue(brandColors.mainPurple, "white");
@@ -113,14 +113,22 @@ function Leaderboard() {
       const data = await response.json();
       setTopMemes(data);
     }
-    getTopMemes();
+    if (fromDate && toDate) {
+      getTopMemes();
+    }
   }, [toDate, fromDate]);
 
   useEffect(() => {
-    console.log("from date", fromDate);
-    console.log("top memes", topMemes);
-    console.log("to date", toDate);
-  }, [selectDate, topMemes, fromDate, toDate]);
+    console.log("top memes changed", topMemes);
+  }, [topMemes]);
+
+  useEffect(() => {
+    console.log("toDate changed", { toDate });
+  }, [toDate]);
+
+  useEffect(() => {
+    console.log("fromDate changed", { fromDate });
+  }, [fromDate]);
 
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (provided, state) => ({
