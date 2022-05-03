@@ -100,7 +100,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     if (dverify) {
       console.log("dverify", dverify);
       localStorage.setItem("dverify", dverify as string);
-      router.replace("/", undefined, { shallow: true });
+      // router.replace("/", undefined, { shallow: true });
+    } else {
+      localStorage.removeItem("dverify");
     }
   }, [dverify, router]);
 
