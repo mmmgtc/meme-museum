@@ -167,6 +167,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
           },
         }
       );
+      localStorage.removeItem("dverify");
 
       console.log("body from connectweb3", body);
       const authTokenResult = await authResponse.json();
