@@ -30,6 +30,12 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
   const borderColor = useColorModeValue("#8C65F7", "white");
   const bg = useColorModeValue("white", brandColors.mainPurple);
 
+  const ipfsId = src?.toString().includes("ipfs.io")
+    ? src?.toString().substring(21)
+    : src?.toString().substring(8, src.toString().length - 15);
+
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=250&width=250&url=https://ipfs.io/ipfs/${ipfsId}`;
+
   useEffect(() => {
     async function getEns() {
       if (staticProvider && address) {
@@ -55,7 +61,7 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
       borderWidth="medium"
       alignItems="center"
     >
-      <Image src={src} boxSize="250px" />
+      <Image src={newSrc} boxSize="250px" />
       <VStack padding="2.5" alignItems="flex-start">
         <Heading color={borderColor} fontSize="2xl">
           Name:
