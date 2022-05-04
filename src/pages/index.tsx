@@ -100,7 +100,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     if (dverify) {
       console.log("dverify", dverify);
       localStorage.setItem("dverify", dverify as string);
-      router.replace("/", undefined, { shallow: true });
+      // router.replace("/", undefined, { shallow: true });
+    } else {
+      localStorage.removeItem("dverify");
     }
   }, [dverify, router]);
 
@@ -523,7 +525,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             handleDownvote={handleDownvote}
           />
         )}
-        <Tabs isFitted variant="soft-rounded" py="4">
+        <Tabs
+          isFitted
+          variant="soft-rounded"
+          py="4"
+          px={{ xl: "0", "2xl": "52" }}
+        >
           <TabList
             border={`solid 5px ${brandColors.mainPurpleHex}`}
             rounded="full"
