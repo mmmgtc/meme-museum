@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Link
         target="_blank"
         textDecoration="underline"
-        href="discord.gg/gitcoin"
+        href="https://discord.gg/gitcoin"
       >
         Join now!
       </Link>
