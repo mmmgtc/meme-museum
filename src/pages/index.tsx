@@ -20,6 +20,7 @@ import {
   HStack,
   Spinner,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
@@ -75,12 +76,17 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const { colorMode } = useColorMode();
 
   const [userProfile, setUserProfile] = useState<any>();
 
   const { dverify } = router.query;
 
   const tags = [
+    {
+      label: "Memepalooza 8",
+      value: "memepalooza 8",
+    },
     {
       label: "Memepalooza 7",
       value: "memepalooza 7",
@@ -365,7 +371,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     return (
       <HStack
         padding={4}
-        backgroundColor={bg}
+        backgroundColor={colorMode === "dark" ? "#8c65f7" : "white"}
         border={`5px solid ${borderColor}`}
         borderRadius={5}
         spacing={5}

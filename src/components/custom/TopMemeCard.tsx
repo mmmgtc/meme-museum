@@ -62,35 +62,6 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
       alignItems="center"
     >
       <Image src={newSrc} boxSize="250px" />
-      <VStack padding="2.5" alignItems="flex-start">
-        <Heading color={borderColor} fontSize="2xl">
-          Name:
-          {ens ||
-            `${address.substring(0, 4)}...${address.substring(
-              address.length - 4
-            )}`}
-        </Heading>
-        <HStack justifyContent="center" alignItems="flex-start">
-          <Heading color={borderColor} fontSize="2xl">
-            Tags:
-          </Heading>
-          <VStack>
-            {tags &&
-              tags?.length > 0 &&
-              tags?.map((tag, index) => (
-                <Box
-                  key={tag.name}
-                  borderColor={borderColor}
-                  borderWidth="1px"
-                  paddingX="2"
-                  rounded="full"
-                >
-                  {tag.name}
-                </Box>
-              ))}
-          </VStack>
-        </HStack>
-      </VStack>
     </Flex>
   );
 }
