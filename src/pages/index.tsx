@@ -84,6 +84,10 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   const tags = [
     {
+      label: "Memepalooza 8",
+      value: "memepalooza 8",
+    },
+    {
       label: "Memepalooza 7",
       value: "memepalooza 7",
     },
