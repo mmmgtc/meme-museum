@@ -30,11 +30,12 @@ import { Web3Context } from "contexts/Web3Provider";
 import MemeModal from "views/MemeModal";
 
 function Leaderboard() {
+  const MEMEPALOOZA_8_DATE = new Date("2022-05-06T18:00:00.000Z");
   const [leaders, setLeaders] = useState<LeaderType[]>([]);
   const [selectDate, setSelectDate] = useState<Date>(
-    new Date() < new Date("April 1, 2022 01:30:00")
-      ? new Date("March 4, 2022")
-      : new Date("April 1, 2022")
+    new Date() < MEMEPALOOZA_8_DATE
+      ? new Date("2022-03-31T18:30:00.000Z")
+      : MEMEPALOOZA_8_DATE
   );
   const [formatDate, setFormatedDate] = useState<number>(0);
   const [fetchingTime, setFetchingTime] = useState<number>();
@@ -91,7 +92,7 @@ function Leaderboard() {
     },
     {
       label: "MEMEPALOOZA 8",
-      value: new Date("May 5, 2022"),
+      value: MEMEPALOOZA_8_DATE,
     },
   ];
 
@@ -288,8 +289,8 @@ function Leaderboard() {
         </Box>
         <Select
           chakraStyles={chakraStyles}
-          options={options}
-          defaultValue={options[6]}
+          options={options.reverse()}
+          defaultValue={options.reverse()[6]}
           onChange={(option) => setSelectDate(option.value)}
           hasStickyGroupHeaders
         />
