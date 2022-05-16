@@ -29,6 +29,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
+import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Tilt from "react-parallax-tilt";
@@ -39,7 +40,7 @@ import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors, MemeType, MemeLordType } from "../helpers";
-import useDebounce from "../helpers/hooks";
+import useDebounce, { useWidowSize } from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
@@ -79,6 +80,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const { colorMode } = useColorMode();
 
   const [userProfile, setUserProfile] = useState<any>();
+
+  const { height, width } = useWidowSize();
 
   const { dverify } = router.query;
 
@@ -424,6 +427,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         />
       )}
       <Container>
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={1000}
+        />
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
             <LogoIcon size="600px" logoPath="/memes-party.png" />
