@@ -32,6 +32,7 @@ import Blockies from "react-blockies";
 import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Masonry from "react-masonry-css";
 import Tilt from "react-parallax-tilt";
 
 import { ignores } from "../../commitlint.config";
@@ -327,6 +328,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     // eslint-disable-next-line
   }, []);
 
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes.map((m) => (
       <InfiniteScroll
@@ -337,21 +345,27 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         loader={<Box />}
         scrollThreshold="200px"
       >
-        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
-          <Tilt
-            glareEnable
-            glareMaxOpacity={0.05}
-            scale={1.03}
-            tiltMaxAngleX={7}
-            tiltMaxAngleY={7}
-          >
-            <MemeCard
-              handleDownvote={handleDownvote}
-              handleUpvote={handleUpvote}
-              meme={m}
-            />
-          </Tilt>
-        </Box>
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+            <Tilt
+              glareEnable
+              glareMaxOpacity={0.05}
+              scale={1.03}
+              tiltMaxAngleX={7}
+              tiltMaxAngleY={7}
+            >
+              <MemeCard
+                handleDownvote={handleDownvote}
+                handleUpvote={handleUpvote}
+                meme={m}
+              />
+            </Tilt>
+          </Box>
+        </Masonry>
       </InfiniteScroll>
     ));
 
