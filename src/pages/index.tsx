@@ -345,27 +345,21 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         loader={<Box />}
         scrollThreshold="200px"
       >
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column"
-        >
-          <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
-            <Tilt
-              glareEnable
-              glareMaxOpacity={0.05}
-              scale={1.03}
-              tiltMaxAngleX={7}
-              tiltMaxAngleY={7}
-            >
-              <MemeCard
-                handleDownvote={handleDownvote}
-                handleUpvote={handleUpvote}
-                meme={m}
-              />
-            </Tilt>
-          </Box>
-        </Masonry>
+        <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+          <Tilt
+            glareEnable
+            glareMaxOpacity={0.05}
+            scale={1.03}
+            tiltMaxAngleX={7}
+            tiltMaxAngleY={7}
+          >
+            <MemeCard
+              handleDownvote={handleDownvote}
+              handleUpvote={handleUpvote}
+              meme={m}
+            />
+          </Tilt>
+        </Box>
       </InfiniteScroll>
     ));
 
@@ -636,9 +630,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               </HStack>
 
               {!loading ? (
-                <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                <Masonry
+                  breakpointCols={breakpointColumnsObj}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
                   {allMemes}
-                </SimpleGrid>
+                </Masonry>
               ) : (
                 <Box my={8} w="full">
                   <Spinner
@@ -681,16 +679,24 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 closeMenuOnSelect={false}
                 hasStickyGroupHeaders
               />
-              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
                 {filteredMemes}
-              </SimpleGrid>
+              </Masonry>
             </TabPanel>
             <TabPanel w="full" px="0">
               {renderUserProfile()}
               <Heading paddingY="2rem">My Memes</Heading>
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
                 {myMemes}
-              </SimpleGrid>
+              </Masonry>
             </TabPanel>
           </TabPanels>
         </Tabs>
