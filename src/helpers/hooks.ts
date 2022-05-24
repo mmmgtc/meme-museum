@@ -25,7 +25,7 @@ export function useImageResizer(src: string, height: number, width: number) {
       : src?.toString().substring(8, src.toString().length - 15);
 
     setResizedSrc(
-      `https://d2wwrm96vfy3z4.cloudfront.net/image?height=${height}&width=${width}&url=https://ipfs.io/ipfs/${ipfsId}`
+      `https://d2wwrm96vfy3z4.cloudfront.net/image?&width=${width}&url=https://ipfs.io/ipfs/${ipfsId}`
     );
   }, [src, height, width]);
 

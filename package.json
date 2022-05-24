@@ -60,6 +60,7 @@
     "react-icons": "^4.3.1",
     "react-in-viewport": "^1.0.0-alpha.20",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-masonry-css": "^1.0.16",
     "react-parallax-tilt": "^1.5.73",
     "react-tsparticles": "^1.37.4",
     "web3.storage": "^3.5.4",

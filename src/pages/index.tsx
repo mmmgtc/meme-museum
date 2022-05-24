@@ -32,6 +32,7 @@ import Blockies from "react-blockies";
 import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Masonry from "react-masonry-css";
 import Tilt from "react-parallax-tilt";
 
 import { ignores } from "../../commitlint.config";
@@ -326,6 +327,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     fetchMemes();
     // eslint-disable-next-line
   }, []);
+
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
 
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes.map((m) => (
@@ -622,9 +630,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               </HStack>
 
               {!loading ? (
-                <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                <Masonry
+                  breakpointCols={breakpointColumnsObj}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
                   {allMemes}
-                </SimpleGrid>
+                </Masonry>
               ) : (
                 <Box my={8} w="full">
                   <Spinner
@@ -667,16 +679,24 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 closeMenuOnSelect={false}
                 hasStickyGroupHeaders
               />
-              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
                 {filteredMemes}
-              </SimpleGrid>
+              </Masonry>
             </TabPanel>
             <TabPanel w="full" px="0">
               {renderUserProfile()}
               <Heading paddingY="2rem">My Memes</Heading>
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
                 {myMemes}
-              </SimpleGrid>
+              </Masonry>
             </TabPanel>
           </TabPanels>
         </Tabs>
