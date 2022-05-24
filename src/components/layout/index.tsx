@@ -33,13 +33,13 @@ const Layout = ({ children }: LayoutProps) => {
 
   const TopHeading = () => (
     <Box ml={10} fontWeight="semibold">
-      🎉 MEMEPALOOZA DAY 🎉{" "}
+      Next Palooza on the 3rd of June 2022{" "}
       <Link
         target="_blank"
         textDecoration="underline"
-        href="https://discord.gg/gitcoin"
+        href="https://memes.party"
       >
-        Join now!
+        Add to calendar
       </Link>
     </Box>
   );
