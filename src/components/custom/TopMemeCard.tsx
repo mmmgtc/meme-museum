@@ -13,6 +13,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Web3Context } from "../../contexts/Web3Provider";
 import { brandColors } from "helpers";
+import { useImageResizer } from "helpers/hooks";
 
 type Tags = {
   name: string;
@@ -30,12 +31,7 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
   const borderColor = useColorModeValue("#8C65F7", "white");
   const bg = useColorModeValue("white", brandColors.mainPurple);
 
-  const ipfsId = src?.toString().includes("ipfs.io")
-    ? src?.toString().substring(21)
-    : src?.toString().substring(8, src.toString().length - 15);
-
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=250&width=250&url=https://ipfs.io/ipfs/${ipfsId}`;
-
+  const imageSrc = useImageResizer(src, 250, 250);
   useEffect(() => {
     async function getEns() {
       if (staticProvider && address) {
@@ -61,36 +57,7 @@ function TopMemeCard({ src, address, tags }: TopMemeCardProps) {
       borderWidth="medium"
       alignItems="center"
     >
-      <Image src={newSrc} boxSize="250px" />
-      <VStack padding="2.5" alignItems="flex-start">
-        <Heading color={borderColor} fontSize="2xl">
-          Name:
-          {ens ||
-            `${address.substring(0, 4)}...${address.substring(
-              address.length - 4
-            )}`}
-        </Heading>
-        <HStack justifyContent="center" alignItems="flex-start">
-          <Heading color={borderColor} fontSize="2xl">
-            Tags:
-          </Heading>
-          <VStack>
-            {tags &&
-              tags?.length > 0 &&
-              tags?.map((tag, index) => (
-                <Box
-                  key={tag.name}
-                  borderColor={borderColor}
-                  borderWidth="1px"
-                  paddingX="2"
-                  rounded="full"
-                >
-                  {tag.name}
-                </Box>
-              ))}
-          </VStack>
-        </HStack>
-      </VStack>
+      <Image src={imageSrc} boxSize="250px" />
     </Flex>
   );
 }

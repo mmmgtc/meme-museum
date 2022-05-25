@@ -20,6 +20,7 @@ import {
   HStack,
   Spinner,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
@@ -28,8 +29,10 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useCallback, useContext, useEffect, useState } from "react";
 import Blockies from "react-blockies";
+import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Masonry from "react-masonry-css";
 import Tilt from "react-parallax-tilt";
 
 import { ignores } from "../../commitlint.config";
@@ -38,9 +41,11 @@ import LogoIcon from "../components/Icons/LogoIcon";
 import Container from "../components/layout/Container";
 import { Web3Context } from "../contexts/Web3Provider";
 import { brandColors, MemeType, MemeLordType } from "../helpers";
-import useDebounce from "../helpers/hooks";
+import useDebounce, { useWidowSize } from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
+
+import { getMemes } from "./api/profile-data";
 
 interface MemesProps {
   id: number;
@@ -74,13 +79,21 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
+  const [myMemes, setMyMemes] = useState<MemeType[]>([]);
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const { colorMode } = useColorMode();
 
   const [userProfile, setUserProfile] = useState<any>();
+
+  const { height, width } = useWidowSize();
 
   const { dverify } = router.query;
 
   const tags = [
+    {
+      label: "Memepalooza 8",
+      value: "memepalooza 8",
+    },
     {
       label: "Memepalooza 7",
       value: "memepalooza 7",
@@ -117,6 +130,17 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       setLatestId(sortedMemes[sortedMemes.length - 1].id);
     }
   }, [memes]);
+
+  useEffect(() => {
+    const fetchMyMemes = async () => {
+      if (account) {
+        const data: any = await getMemes(account);
+        // console.log("myMemes", data.memes);
+        setMyMemes(data.memes);
+      }
+    };
+    fetchMyMemes();
+  }, [account]);
 
   // State and setters for ...
   // Search term
@@ -318,6 +342,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     // eslint-disable-next-line
   }, []);
 
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
+
   const renderMemes = (selectedMemes: MemeType[]) =>
     selectedMemes.map((m) => (
       <InfiniteScroll
@@ -347,9 +378,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     ));
 
   const allMemes = renderMemes(foundMemes || memes);
-  const myMemes = renderMemes(
-    memes.filter((meme: MemeType) => meme.poaster?.username === account)
-  );
+  const userMemes = renderMemes(myMemes);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -365,7 +394,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     return (
       <HStack
         padding={4}
-        backgroundColor={bg}
+        backgroundColor={colorMode === "dark" ? "#8c65f7" : "white"}
         border={`5px solid ${borderColor}`}
         borderRadius={5}
         spacing={5}
@@ -418,6 +447,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         />
       )}
       <Container>
+        {/* <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={1000}
+        /> */}
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
             <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -551,7 +586,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             >
               ALL MEMES
             </Tab>
-            <Tab
+            {/* <Tab
               key="memepalooza"
               color="white"
               backgroundColor="purple.200"
@@ -569,7 +604,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               {selectedTag.length === 0
                 ? "ALL MEMES"
                 : `${selectedTag.join(", ").toUpperCase()} MEMES`}
-            </Tab>
+            </Tab> */}
             <Tab
               key="my-memes"
               color="white"
@@ -607,9 +642,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               </HStack>
 
               {!loading ? (
-                <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
+                <Masonry
+                  breakpointCols={breakpointColumnsObj}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
                   {allMemes}
-                </SimpleGrid>
+                </Masonry>
               ) : (
                 <Box my={8} w="full">
                   <Spinner
@@ -633,7 +672,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 </Box>
               )}
             </TabPanel>
-            <TabPanel w="full" px="0">
+            {/* <TabPanel w="full" px="0">
               <Heading py="6" textTransform="uppercase">
                 {selectedTag} Memes
               </Heading>
@@ -652,16 +691,24 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 closeMenuOnSelect={false}
                 hasStickyGroupHeaders
               />
-              <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
                 {filteredMemes}
-              </SimpleGrid>
-            </TabPanel>
+              </Masonry>
+            </TabPanel> */}
             <TabPanel w="full" px="0">
               {renderUserProfile()}
               <Heading paddingY="2rem">My Memes</Heading>
-              <SimpleGrid columns={{ sm: 1, md: 4 }} spacing={10}>
-                {myMemes}
-              </SimpleGrid>
+              <Masonry
+                breakpointCols={breakpointColumnsObj}
+                className="my-masonry-grid"
+                columnClassName="my-masonry-grid_column"
+              >
+                {userMemes}
+              </Masonry>
             </TabPanel>
           </TabPanels>
         </Tabs>
