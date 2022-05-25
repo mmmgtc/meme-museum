@@ -25,7 +25,7 @@ function MemeCard({
       src={meme.image}
       overflow="hidden"
     >
-      <Flex w="full" h="full" style={{ marginTop: 0 }}>
+      <Flex zIndex={10} w="full" h="full" style={{ marginTop: 0 }}>
         <Button
           leftIcon={<FaArrowCircleUp color="#ffffff" fontSize="1.7rem" />}
           rounded="none"

@@ -45,6 +45,8 @@ import useDebounce, { useWidowSize } from "../helpers/hooks";
 import CreateMemeModal from "../views/CreateMemeModal";
 import MemeModal from "../views/MemeModal";
 
+import { getMemes } from "./api/profile-data";
+
 interface MemesProps {
   id: number;
   title: string;
@@ -77,6 +79,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [memes, setMemes] = useState<MemeType[]>([]);
   const [isBusyLoadingMemes, setIsBusyLoadingMemes] = useState<boolean>(false);
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
+  const [myMemes, setMyMemes] = useState<MemeType[]>([]);
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
   const { colorMode } = useColorMode();
 
@@ -127,6 +130,17 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       setLatestId(sortedMemes[sortedMemes.length - 1].id);
     }
   }, [memes]);
+
+  useEffect(() => {
+    const fetchMyMemes = async () => {
+      if (account) {
+        const data: any = await getMemes(account);
+        // console.log("myMemes", data.memes);
+        setMyMemes(data.memes);
+      }
+    };
+    fetchMyMemes();
+  }, [account]);
 
   // State and setters for ...
   // Search term
@@ -364,9 +378,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     ));
 
   const allMemes = renderMemes(foundMemes || memes);
-  const myMemes = renderMemes(
-    memes.filter((meme: MemeType) => meme.poaster?.username === account)
-  );
+  const userMemes = renderMemes(myMemes);
 
   useEffect(() => {
     const getUserProfile = async () => {
@@ -435,12 +447,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         />
       )}
       <Container>
-        <Confetti
+        {/* <Confetti
           width={width}
           height={height}
           recycle={false}
           numberOfPieces={1000}
-        />
+        /> */}
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
             <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -574,7 +586,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             >
               ALL MEMES
             </Tab>
-            <Tab
+            {/* <Tab
               key="memepalooza"
               color="white"
               backgroundColor="purple.200"
@@ -592,7 +604,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               {selectedTag.length === 0
                 ? "ALL MEMES"
                 : `${selectedTag.join(", ").toUpperCase()} MEMES`}
-            </Tab>
+            </Tab> */}
             <Tab
               key="my-memes"
               color="white"
@@ -660,7 +672,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 </Box>
               )}
             </TabPanel>
-            <TabPanel w="full" px="0">
+            {/* <TabPanel w="full" px="0">
               <Heading py="6" textTransform="uppercase">
                 {selectedTag} Memes
               </Heading>
@@ -686,7 +698,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
               >
                 {filteredMemes}
               </Masonry>
-            </TabPanel>
+            </TabPanel> */}
             <TabPanel w="full" px="0">
               {renderUserProfile()}
               <Heading paddingY="2rem">My Memes</Heading>
@@ -695,7 +707,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 className="my-masonry-grid"
                 columnClassName="my-masonry-grid_column"
               >
-                {myMemes}
+                {userMemes}
               </Masonry>
             </TabPanel>
           </TabPanels>
