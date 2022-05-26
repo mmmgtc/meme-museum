@@ -15,7 +15,7 @@ function MemeCard({
   handleDownvote: any;
 }) {
   const bg = useColorModeValue("white", brandColors.mainPurple);
-  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const color = useColorModeValue("white", "white");
   const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
     <CardMedia
