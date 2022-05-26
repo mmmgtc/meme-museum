@@ -73,7 +73,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [preOpenedMemeId, setPreOpenedMemeId] = useState(() =>
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
   );
-  const { account, connectWeb3, headers } = useContext(Web3Context);
+  const { account, connectWeb3, headers, logout } = useContext(Web3Context);
   const [leaderboardImage, setLeaderboardImage] =
     useState<string>("/leaderboard.png");
   const [memes, setMemes] = useState<MemeType[]>([]);
@@ -111,13 +111,16 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   useEffect(() => {
     if (dverify) {
-      console.log("dverify", dverify);
-      localStorage.setItem("dverify", dverify as string);
-      // router.replace("/", undefined, { shallow: true });
+      // console.log("dverify", dverify);
+      logout().then(() => {
+        connectWeb3(dverify as string);
+        router.replace("/", undefined, { shallow: true });
+      });
+      // localStorage.setItem("dverify", dverify as string);
     } else {
       localStorage.removeItem("dverify");
     }
-  }, [dverify, router]);
+  }, [dverify, router, connectWeb3, logout]);
 
   useEffect(() => {
     if (memes.length > 0) {
