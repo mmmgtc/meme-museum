@@ -114,7 +114,8 @@ export const Web3Provider = ({ children }: { children: any }) => {
     localStorage.setItem("knownEns", "");
   };
 
-  const connectWeb3 = useCallback(async () => {
+  const connectWeb3 = useCallback(async (dverifyToken?: string) => {
+    // console.log({ dverifyToken });
     const web3Modal = new Web3Modal({
       providerOptions,
       cacheProvider: false,
@@ -138,7 +139,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
     localStorage.setItem("knownAccount", account);
 
     const token = localStorage.getItem("Authorization");
-    const dverifyToken = localStorage.getItem("dverify");
+    // const dverifyToken = localStorage.getItem("dverify");
     if (!token || token === "") {
       const signature = await signer.signMessage("meme party");
       let body:
@@ -154,7 +155,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
         signed: signature,
         address: account,
       };
-      if (dverifyToken) {
+      if (dverifyToken && typeof dverifyToken === "string") {
         body = { ...body, dverify: dverifyToken.toString() };
       }
       const authResponse = await fetch(
@@ -167,7 +168,7 @@ export const Web3Provider = ({ children }: { children: any }) => {
           },
         }
       );
-      localStorage.removeItem("dverify");
+      // localStorage.removeItem("dverify");
 
       console.log("body from connectweb3", body);
       const authTokenResult = await authResponse.json();
