@@ -23,14 +23,16 @@ function MemeCard({
       color={color}
       border={`solid 5px ${badgeBorderColor}`}
       src={meme.image}
+      overflow="hidden"
     >
-      <Flex pt="3" pb="4" w="full" justify="space-around">
+      <Flex zIndex={10} w="full" h="full" style={{ marginTop: 0 }}>
         <Button
-          leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
-          rounded="full"
-          size="md"
-          variant="solid"
-          border="solid 5px #9AE6B4"
+          leftIcon={<FaArrowCircleUp color="#ffffff" fontSize="1.7rem" />}
+          rounded="none"
+          p="2"
+          h="full"
+          w="full"
+          backgroundColor="#21d15f"
           color={color}
           _hover={{
             background: "purple.500",
@@ -44,12 +46,13 @@ function MemeCard({
           {meme.upvotes}
         </Button>
         <Button
-          leftIcon={<FaArrowCircleDown color="#FEB2B2" fontSize="1.7rem" />}
-          rounded="full"
-          size="md"
-          variant="solid"
-          border="solid 5px #FEB2B2"
+          leftIcon={<FaArrowCircleDown color="#ffffff" fontSize="1.7rem" />}
+          rounded="none"
+          p="2"
+          h="full"
+          w="full"
           color={color}
+          backgroundColor="#e97373"
           _hover={{
             background: "purple.500",
             color,

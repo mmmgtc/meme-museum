@@ -33,13 +33,13 @@ const Layout = ({ children }: LayoutProps) => {
 
   const TopHeading = () => (
     <Box ml={10} fontWeight="semibold">
-      Next Palooza is on the 6th of May 2022,{" "}
+      Next Palooza on the 3rd of June 2022{" "}
       <Link
         target="_blank"
         textDecoration="underline"
-        href="https://calendar.google.com/event?action=TEMPLATE&tmeid=MmI0MWQ2aWljazlmMTRtcXJiN3Nrb3FnNmkgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
+        href="https://memes.party"
       >
-        Add it to your calendar
+        Add to calendar
       </Link>
     </Box>
   );
@@ -61,6 +61,7 @@ const Layout = ({ children }: LayoutProps) => {
             style={{
               width: "100%",
             }}
+            pauseOnHover
             gradient={false}
             loop={0}
             speed={60}

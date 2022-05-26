@@ -34,7 +34,7 @@ const TagsField = () => {
   const borderColor = useColorModeValue("#8C65F7", "white");
 
   useEffect(() => {
-    append({ name: "memepalooza 7" });
+    append({ name: "memepalooza 8" });
     return () => {
       remove();
     };

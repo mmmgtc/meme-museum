@@ -4,33 +4,32 @@ import { VStack, Image, Box, Text } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useInViewport } from "react-in-viewport";
 
+import { useImageResizer } from "helpers/hooks";
+
 function CardMedia(props: any) {
   const { children, src, ...others } = props;
   const myRef = useRef();
   const { enterCount } = useInViewport(myRef, {}, {}, props);
 
-  const ipfsId = src?.toString().includes("ipfs.io")
-    ? src?.toString().substring(21)
-    : src?.toString().substring(8, src.toString().length - 15);
-
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=500&width=400&url=https://ipfs.io/ipfs/${ipfsId}`;
-
+  const imageSrc = useImageResizer(src, 360, 314);
   return (
     <VStack
       ref={myRef}
       alignItems="center"
       bg="none"
-      w="full"
+      w="fit-content"
       rounded="3xl"
       color="purple.200"
       {...others}
     >
       <Image
         src={
-          enterCount > 0 ? newSrc || src : "/not-sure-if-loading_o_427193.webp"
+          enterCount > 0
+            ? imageSrc || src
+            : "/not-sure-if-loading_o_427193.webp"
         }
         roundedTop="2xl"
-        objectFit="cover"
+        objectFit="fill"
         fallbackSrc="/not-sure-if-loading_o_427193.webp"
       />
       {children}
