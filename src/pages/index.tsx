@@ -266,9 +266,15 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       }
     );
     const upvotedMeme = await upvoteMemeResponse.json();
+    console.log("upvotedMeme", upvotedMeme);
     setMemes((previousMemes) => [
-      ...previousMemes.filter((m) => m.id !== memeId),
-      upvotedMeme,
+      ...previousMemes.map((m) => {
+        if (m.id !== memeId) {
+          return m;
+        }
+        return upvotedMeme;
+      }),
+      // upvotedMeme,
     ]);
     if (isOpenMeme) {
       setCurrentMeme(upvotedMeme);
@@ -292,8 +298,13 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     );
     const downvotedMeme = await downvoteMemeResponse.json();
     setMemes((previousMemes) => [
-      ...previousMemes.filter((m) => m.id !== memeId),
-      downvotedMeme,
+      ...previousMemes.map((m) => {
+        if (m.id !== memeId) {
+          return m;
+        }
+        return downvotedMeme;
+      }),
+      // downvotedMeme,
     ]);
     if (isOpenMeme) {
       setCurrentMeme(downvotedMeme);
