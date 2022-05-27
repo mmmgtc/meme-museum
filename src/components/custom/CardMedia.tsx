@@ -18,7 +18,7 @@ function CardMedia(props: any) {
       alignItems="center"
       bg="none"
       w="fit-content"
-      rounded="3xl"
+      rounded="2xl"
       color="purple.200"
       {...others}
     >
