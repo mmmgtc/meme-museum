@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { useColorModeValue } from "@chakra-ui/color-mode";
-import { VStack, Image, Box, Text } from "@chakra-ui/react";
+import { VStack, Image, Box, Divider } from "@chakra-ui/react";
 import { useEffect, useRef } from "react";
 import { useInViewport } from "react-in-viewport";
 
@@ -13,27 +13,28 @@ function CardMedia(props: any) {
 
   const imageSrc = useImageResizer(src, 360, 314);
   return (
-    <VStack
-      ref={myRef}
-      alignItems="center"
-      bg="none"
-      w="fit-content"
-      rounded="2xl"
-      color="purple.200"
-      {...others}
-    >
-      <Image
-        src={
-          enterCount > 0
-            ? imageSrc || src
-            : "/not-sure-if-loading_o_427193.webp"
-        }
-        roundedTop="2xl"
-        objectFit="fill"
-        fallbackSrc="/not-sure-if-loading_o_427193.webp"
-      />
-      {children}
-    </VStack>
+    <Box boxShadow="dark-lg" rounded="2xl" bg="white">
+      <VStack
+        ref={myRef}
+        alignItems="center"
+        bg="none"
+        w="fit-content"
+        rounded="2xl"
+        color="purple.200"
+        {...others}
+      >
+        <Image
+          src={
+            enterCount > 0
+              ? imageSrc || src
+              : "/not-sure-if-loading_o_427193.webp"
+          }
+          objectFit="fill"
+          fallbackSrc="/not-sure-if-loading_o_427193.webp"
+        />
+        {children}
+      </VStack>
+    </Box>
   );
 }
 

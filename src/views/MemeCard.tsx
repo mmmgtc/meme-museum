@@ -18,56 +18,54 @@ function MemeCard({
   const color = useColorModeValue("white", "white");
   const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
-    <Box boxShadow="xl" rounded="3xl" bg="white">
-      <CardMedia
-        bg={bg}
-        color={color}
-        border={`solid 0px ${badgeBorderColor}`}
-        src={meme.image}
-        overflow="hidden"
-      >
-        <Flex zIndex={10} w="full" h="full" style={{ marginTop: 0 }}>
-          <Button
-            leftIcon={<FaArrowCircleUp color="#ffffff" fontSize="1.7rem" />}
-            rounded="none"
-            p="2"
-            h="full"
-            w="full"
-            backgroundColor="#0bae44"
-            color={color}
-            _hover={{
-              background: "purple.500",
-              color,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleUpvote(meme.id);
-            }}
-          >
-            {meme.upvotes}
-          </Button>
-          <Button
-            leftIcon={<FaArrowCircleDown color="#ffffff" fontSize="1.7rem" />}
-            rounded="none"
-            p="2"
-            h="full"
-            w="full"
-            color={color}
-            backgroundColor="#ef5959"
-            _hover={{
-              background: "purple.500",
-              color,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDownvote(meme.id);
-            }}
-          >
-            {meme.downvotes}
-          </Button>
-        </Flex>
-      </CardMedia>
-    </Box>
+    <CardMedia
+      bg={bg}
+      color={color}
+      border={`solid 0px ${badgeBorderColor}`}
+      src={meme.image}
+      overflow="hidden"
+    >
+      <Flex zIndex={10} w="full" h="full" style={{ marginTop: 0 }}>
+        <Button
+          leftIcon={<FaArrowCircleUp color="#ffffff" fontSize="1.7rem" />}
+          rounded="none"
+          p="2"
+          h="full"
+          w="full"
+          backgroundColor="#0bae44"
+          color={color}
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleUpvote(meme.id);
+          }}
+        >
+          {meme.upvotes}
+        </Button>
+        <Button
+          leftIcon={<FaArrowCircleDown color="#ffffff" fontSize="1.7rem" />}
+          rounded="none"
+          p="2"
+          h="full"
+          w="full"
+          color={color}
+          backgroundColor="#ef5959"
+          _hover={{
+            background: "purple.500",
+            color,
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDownvote(meme.id);
+          }}
+        >
+          {meme.downvotes}
+        </Button>
+      </Flex>
+    </CardMedia>
   );
 }
 
