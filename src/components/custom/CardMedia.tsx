@@ -13,7 +13,7 @@ function CardMedia(props: any) {
 
   const imageSrc = useImageResizer(src, 360, 314);
   return (
-    <Box boxShadow="dark-lg" rounded="2xl" bg="white">
+    <Box boxShadow="purple" rounded="2xl" bg="white">
       <VStack
         ref={myRef}
         alignItems="center"
