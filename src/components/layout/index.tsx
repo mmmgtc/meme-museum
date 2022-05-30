@@ -84,6 +84,7 @@ const Layout = ({ children }: LayoutProps) => {
         key="bg"
         style={{
           zIndex: -1,
+          opacity: 0.2,
         }}
         init={particlesInit}
         loaded={particlesLoaded}

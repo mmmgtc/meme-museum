@@ -74,11 +74,11 @@ function MemeModal({
   const borderColor = useColorModeValue("#8C65F7", "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
 
-  const ipfsId = meme.image.toString().includes("ipfs.io")
-    ? meme.image.toString().substring(21)
-    : meme.image.toString().substring(8, meme.image.toString().length - 15);
+  // const ipfsId = meme.image.toString().includes("ipfs.io")
+  //   ? meme.image.toString().substring(21)
+  //   : meme.image.toString().substring(8, meme.image.toString().length - 15);
 
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=800&width=800&url=https://ipfs.io/ipfs/${ipfsId}`;
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?width=800&url=${meme.image}`;
 
   useEffect(() => {
     // Address to ENS
