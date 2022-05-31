@@ -21,12 +21,15 @@ import { useRouter } from "next/router";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import DatePicker from "react-datepicker";
 import { FaArrowLeft } from "react-icons/fa";
+import Masonry from "react-masonry-css";
+import Tilt from "react-parallax-tilt";
 
 import { LeaderType, brandColors, MemeType } from "../helpers";
 import LeaderCard from "components/custom/LeaderCard";
 import TopMemeCard from "components/custom/TopMemeCard";
 import "react-datepicker/dist/react-datepicker.css";
 import { Web3Context } from "contexts/Web3Provider";
+import MemeCard from "views/MemeCard";
 import MemeModal from "views/MemeModal";
 
 function Leaderboard() {
@@ -95,6 +98,13 @@ function Leaderboard() {
       value: MEMEPALOOZA_8_DATE,
     },
   ];
+
+  const breakpointColumnsObj = {
+    default: 3,
+    1100: 1,
+    700: 2,
+    500: 1,
+  };
 
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {
@@ -229,6 +239,26 @@ function Leaderboard() {
     }),
   };
 
+  const renderMemes = (selectedMemes: MemeType[]) =>
+    selectedMemes &&
+    selectedMemes.map((m) => (
+      <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
+        <Tilt
+          glareEnable
+          glareMaxOpacity={0.05}
+          scale={1.03}
+          tiltMaxAngleX={7}
+          tiltMaxAngleY={7}
+        >
+          <MemeCard
+            handleDownvote={handleDownvote}
+            handleUpvote={handleUpvote}
+            meme={m}
+          />
+        </Tilt>
+      </Box>
+    ));
+
   return (
     <Stack gridGap="12" px={5}>
       <Flex gridGap="14">
@@ -329,21 +359,33 @@ function Leaderboard() {
           {topMemesLoading ? (
             <Heading>Loading...</Heading>
           ) : topMemes.length > 0 ? (
-            <Grid
-              gap={6}
-              templateColumns={{ md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" }}
+            <Masonry
+              breakpointCols={breakpointColumnsObj}
+              className="my-masonry-grid"
+              columnClassName="my-masonry-grid_column"
             >
               {topMemes.slice(0, 20).map((meme) => (
-                <GridItem cursor="pointer" onClick={() => handleOpenMeme(meme)}>
-                  <TopMemeCard
-                    key={meme.id}
-                    src={meme.image}
-                    address={meme.poaster.username}
-                    tags={meme.tags}
-                  />
-                </GridItem>
+                <Box
+                  key={meme.id}
+                  onClick={() => handleOpenMeme(meme)}
+                  cursor="pointer"
+                >
+                  <Tilt
+                    glareEnable
+                    glareMaxOpacity={0.05}
+                    scale={1.03}
+                    tiltMaxAngleX={7}
+                    tiltMaxAngleY={7}
+                  >
+                    <MemeCard
+                      handleDownvote={handleDownvote}
+                      handleUpvote={handleUpvote}
+                      meme={meme}
+                    />
+                  </Tilt>
+                </Box>
               ))}
-            </Grid>
+            </Masonry>
           ) : (
             <Heading>No Memes</Heading>
           )}
