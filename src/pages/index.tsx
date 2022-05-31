@@ -210,15 +210,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     }
   }, [search, handleSearch]);
 
-  useEffect(() => {
-    if (
-      !search &&
-      (searchTerm.length === 0 || searchTerm === "" || !searchTerm)
-    ) {
-      router.push("/");
-    }
-  }, [searchTerm, router, search]);
-
   const handleOpenMeme = useCallback(
     (meme: MemeType) => {
       setCurrentMeme(meme);
@@ -516,7 +507,12 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 }}
                 type="search"
                 placeholder="SEARCH.."
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  if (e.target.value === "" && router.query.search) {
+                    router.push("/");
+                  }
+                }}
               />
 
               <InputRightElement>
