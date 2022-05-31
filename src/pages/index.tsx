@@ -598,7 +598,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             setPreOpenedMemeId={setPreOpenedMemeId}
             handleUpvote={handleUpvote}
             handleDownvote={handleDownvote}
-            setSearchTerm={setSearchTerm}
           />
         )}
         <Tabs
