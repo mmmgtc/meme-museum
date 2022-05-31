@@ -1,15 +1,12 @@
-import { Search2Icon } from "@chakra-ui/icons";
 import {
   Box,
+  Container,
   Flex,
   HStack,
-  Stack,
-  Button,
-  Container,
   Link,
+  Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import NextLink from "next/link";
 import React from "react";
 
 import { brandColors } from "../../helpers";
@@ -19,7 +16,6 @@ import LogoIcon from "../Icons/LogoIcon";
 // import DiscordButton from "../Buttons/DiscordButton";
 // import TwitterButton from "../Buttons/TwitterButton";
 // import LogoDarkIcon from "../Icons/LogoDarkIcon";
-
 import ThemeToggle from "./ThemeToggle";
 
 function Navbar() {

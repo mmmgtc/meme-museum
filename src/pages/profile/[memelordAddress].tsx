@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import React, { useContext, useState, useCallback } from "react";
 import Blockies from "react-blockies";
 import { FaArrowLeft } from "react-icons/fa";
+import Masonry from "react-masonry-css";
 import Tilt from "react-parallax-tilt";
 
 import { Web3Context } from "../../contexts/Web3Provider";
@@ -51,6 +52,13 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
   const altColor = useColorModeValue("white", brandColors.darkPurple);
   const bg = useColorModeValue("white", brandColors.mainPurple);
   const borderColor = useColorModeValue("#8c65f7", "white");
+
+  const breakpointColumnsObj = {
+    default: 4,
+    1100: 3,
+    700: 2,
+    500: 1,
+  };
 
   const handleNotConnected = useCallback(() => {
     if (!toast.isActive("not-connected-toast")) {
@@ -225,13 +233,19 @@ function Profile({ profileName, userKarma, userMemes }: ProfileProps) {
         </Stack>
       </HStack>
       <Heading>Memes</Heading>
-      <SimpleGrid mt={6} columns={{ sm: 1, md: 4 }} spacing={10}>
-        {userMemes !== null ? (
-          allMemes
-        ) : (
-          <Heading size="sm">No memes found</Heading>
-        )}
-      </SimpleGrid>
+
+      {userMemes !== null ? (
+        <Masonry
+          breakpointCols={breakpointColumnsObj}
+          className="my-masonry-grid"
+          columnClassName="my-masonry-grid_column"
+        >
+          {allMemes}
+        </Masonry>
+      ) : (
+        <Heading size="sm">No memes found</Heading>
+      )}
+
       {currentMeme && (
         <MemeModal
           handleDelete={handleDeleteMeme}
