@@ -193,9 +193,11 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   useEffect(() => {
     console.log("searchTerm", { search });
     if (search) {
+      setPreOpenedMemeId(null);
       setSearchTerm(search as string);
       handleSearch(search as string).then((memesResult) => {
         setFoundMemes(memesResult);
+        console.log("memesResult", memesResult);
         if (memesResult !== null) {
           setTotalSearchResult(memesResult.length);
         } else {
@@ -207,6 +209,15 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       setSearchTerm("");
     }
   }, [search, handleSearch]);
+
+  useEffect(() => {
+    if (
+      !search &&
+      (searchTerm.length === 0 || searchTerm === "" || !searchTerm)
+    ) {
+      router.push("/");
+    }
+  }, [searchTerm, router, search]);
 
   const handleOpenMeme = useCallback(
     (meme: MemeType) => {
@@ -405,15 +416,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     getUserProfile();
   }, [account]);
 
-  useEffect(() => {
-    if (
-      search &&
-      (searchTerm.length === 0 || searchTerm === "" || !searchTerm)
-    ) {
-      router.push("/");
-    }
-  }, [searchTerm, router, search]);
-
   const renderUserProfile = () => {
     return (
       <HStack
@@ -596,6 +598,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             setPreOpenedMemeId={setPreOpenedMemeId}
             handleUpvote={handleUpvote}
             handleDownvote={handleDownvote}
+            setSearchTerm={setSearchTerm}
           />
         )}
         <Tabs

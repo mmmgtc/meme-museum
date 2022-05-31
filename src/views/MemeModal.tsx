@@ -51,6 +51,7 @@ function MemeModal({
   handleDelete,
   handleDownvote,
   setPreOpenedMemeId,
+  setSearchTerm,
 }: {
   meme: any;
   isOpen: boolean;
@@ -59,6 +60,7 @@ function MemeModal({
   handleUpvote?: any;
   handleDownvote?: any;
   setPreOpenedMemeId: Dispatch<SetStateAction<number | null>>;
+  setSearchTerm: Dispatch<SetStateAction<string>>;
 }) {
   const { account, staticProvider, headers } = useContext(Web3Context);
   const { hasCopied, onCopy } = useClipboard(
@@ -339,7 +341,18 @@ function MemeModal({
               <Flex wrap="wrap" w={W_FIT_CONTENT} pt="2" gridGap="2">
                 {meme.tags.map(({ name }) => (
                   <Tag flexGrow={1} rounded="full" size="md" key={name}>
-                    <TagLabel fontWeight="bold" color={color} alt={name}>
+                    <TagLabel
+                      cursor="pointer"
+                      fontWeight="bold"
+                      onClick={() => {
+                        setSearchTerm(name);
+                        setPreOpenedMemeId(null);
+                        router.push(`/?search=${name.toUpperCase()}`);
+                        onClose();
+                      }}
+                      color={color}
+                      alt={name}
+                    >
                       #{name.toUpperCase()}
                     </TagLabel>
                   </Tag>
