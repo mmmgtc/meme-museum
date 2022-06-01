@@ -162,6 +162,19 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const PAGINATION_URL =
     "https://evening-anchorage-43225.herokuapp.com/museum/pagination/";
 
+  const isMemePaloozaDay = () => {
+    const currentDate = new Date();
+    if (
+      new Date("Fri Jun 03 2022 23:30:00 GMT+0530 (India Standard Time)") <=
+        currentDate &&
+      currentDate <=
+        new Date("Sat Jun 04 2022 01:30:00 GMT+0530 (India Standard Time)")
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenMeme,
@@ -346,11 +359,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
       );
       const memesResult = await memesResponse.json();
-      // console.log("memesResult: ", { memesResult });
-
-      // const sortedMemesResult = memesResult.sort((a: MemeType, b: MemeType) =>
-      //   (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      // );
 
       setMemes(memesResult);
       setLoading(false);
@@ -463,13 +471,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           }}
         />
       )}
+      {isMemePaloozaDay() && <Confetti width={width} height={height} />}
       <Container>
-        {/* <Confetti
-          width={width}
-          height={height}
-          recycle={false}
-          numberOfPieces={1000}
-        /> */}
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
             <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -773,5 +776,4 @@ export async function getServerSideProps(ctx: NextPageContext) {
 }
 
 // const ViewPortMemes = handleViewport(Memes, {}, { disconnectOnLeave: false });
-
 export default Memes;
