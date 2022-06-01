@@ -16,9 +16,12 @@ import { brandColors } from "../../helpers";
 
 function ConnectButton() {
   const { account, ens, connectWeb3, logout } = useContext(Web3Context);
-  const bg = useColorModeValue("white", brandColors.mainPurple);
-  const color = useColorModeValue(brandColors.mainPurple, "white");
-  const borderColor = useColorModeValue("#8C65F7", "white");
+  const bg = useColorModeValue("white", "white");
+  const color = useColorModeValue(
+    brandColors.mainPurple,
+    brandColors.mainPurple
+  );
+  const borderColor = useColorModeValue("#8C65F7", "#8C65F7");
 
   return (
     <Flex gridGap="4" w="full" justifyContent="flex-end">

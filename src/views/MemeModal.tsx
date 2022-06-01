@@ -21,6 +21,8 @@ import {
   useClipboard,
   useColorModeValue,
   VStack,
+  Link,
+  Box,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import React, {
@@ -74,11 +76,11 @@ function MemeModal({
   const borderColor = useColorModeValue("#8C65F7", "white");
   const altColor = useColorModeValue("white", brandColors.darkPurple);
 
-  const ipfsId = meme.image.toString().includes("ipfs.io")
-    ? meme.image.toString().substring(21)
-    : meme.image.toString().substring(8, meme.image.toString().length - 15);
+  // const ipfsId = meme.image.toString().includes("ipfs.io")
+  //   ? meme.image.toString().substring(21)
+  //   : meme.image.toString().substring(8, meme.image.toString().length - 15);
 
-  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?height=800&width=800&url=https://ipfs.io/ipfs/${ipfsId}`;
+  const newSrc = `https://d2wwrm96vfy3z4.cloudfront.net/image?width=800&url=${meme.image}`;
 
   useEffect(() => {
     // Address to ENS
@@ -116,6 +118,29 @@ function MemeModal({
     }
   };
 
+  const MemeDescription = ({
+    title,
+    result,
+    onClick,
+  }: {
+    title: string;
+    result: string;
+    onClick?: () => void;
+  }) => {
+    return (
+      <HStack w="full" justifyContent="space-between" alignItems="flex-start">
+        <Text>{title}</Text>
+        <Text
+          textDecorationLine={onClick ? "underline" : "none"}
+          cursor={onClick ? "pointer" : "default"}
+          onClick={onClick}
+        >
+          {result}
+        </Text>
+      </HStack>
+    );
+  };
+
   return (
     <Modal
       isOpen={isOpen}
@@ -133,13 +158,45 @@ function MemeModal({
         color={color}
         bg={bg}
         border={`solid 5px ${borderColor}`}
+        position="relative"
+        overflow="hidden"
       >
-        <ModalHeader display="flex">
-          <Heading color={color}>{meme.title}</Heading>
+        <ModalHeader
+          display="flex"
+          justifyContent="space-between"
+          marginRight="10"
+        >
+          <Heading
+            flexWrap="wrap"
+            color={color}
+            fontSize={meme.title.length > 20 ? "20px" : "26px"}
+          >
+            {meme.title.length > 20
+              ? `${meme.title.substring(0, 20)}...`
+              : meme.title}
+          </Heading>
+
+          <Button
+            onClick={onCopy}
+            w="max-content"
+            rounded="full"
+            size="md"
+            variant="solid"
+            bg="purple.200"
+            border={`solid 5px ${borderColor}`}
+            color="white"
+            _hover={{
+              bg: altColor,
+              color,
+            }}
+            leftIcon={hasCopied ? <CheckIcon /> : <LinkIcon />}
+          >
+            {hasCopied ? "COPIED" : "COPY"}
+          </Button>
           <ModalCloseButton
             border={`solid 5px ${borderColor}`}
             color={color}
-            mt="4"
+            mt="3"
             mr="2"
             cursor="pointer"
           />
@@ -152,9 +209,9 @@ function MemeModal({
             objectFit="contain"
             fallbackSrc="/404FACE.png"
           />
-          <Flex w="full" pt="6">
-            <Flex w="full" justify="space-around" alignItems="center">
-              <Button
+          {/* <Flex w="full" pt="6"> */}
+          {/* <Flex w="full" justify="space-around" alignItems="center"> */}
+          {/* <Button
                 leftIcon={<FaArrowCircleUp color="#9AE6B4" fontSize="1.7rem" />}
                 rounded="full"
                 size="md"
@@ -185,8 +242,8 @@ function MemeModal({
                 onClick={() => handleDownvote(meme.id)}
               >
                 {meme.downvotes}
-              </Button>
-              {/* {account && meme.poaster && meme.poaster?.username === account && (
+              </Button> */}
+          {/* {account && meme.poaster && meme.poaster?.username === account && (
                 <Button
                   rounded="full"
                   size="md"
@@ -205,8 +262,8 @@ function MemeModal({
                   DELETE MEME
                 </Button>
               )} */}
-            </Flex>
-            <Button
+          {/* </Flex> */}
+          {/* <Button
               onClick={onCopy}
               w="140px"
               rounded="full"
@@ -222,9 +279,9 @@ function MemeModal({
               leftIcon={hasCopied ? <CheckIcon /> : <LinkIcon />}
             >
               {hasCopied ? "COPIED" : "COPY"}
-            </Button>
+            </Button> */}
 
-            {/* {account && meme.poaster && meme.poaster?.username === account && (
+          {/* {account && meme.poaster && meme.poaster?.username === account && (
               <NextLink href="/edit-meme" passHref>
                 <Button
                   rounded="full"
@@ -244,115 +301,56 @@ function MemeModal({
                 </Button>
               </NextLink>
             )} */}
-          </Flex>
+          {/* </Flex> */}
 
-          <Flex w="full" direction="column" pt="4" fontWeight="bold">
-            <SimpleGrid
-              columns={{
-                sm: 1,
-                md: 3,
-              }}
-              w="full"
-              alignItems="center"
-            >
-              {meme.poaster && (
-                <Badge
-                  w="fit-content"
-                  rounded="full"
-                  color={color}
-                  bg={bg}
-                  border={`solid 5px ${borderColor}`}
-                  pr={4}
-                  py={2}
-                  fontWeight="400"
-                  onClick={() =>
-                    router.push(`/profile/${meme.poaster.username}`)
-                  }
-                  cursor="pointer"
-                >
-                  <HStack
-                    w={{
-                      sm: "full",
-                      md: W_FIT_CONTENT,
-                    }}
-                  >
-                    <Blockies
-                      size={10}
-                      seed={meme.poaster.username.toLowerCase()}
-                      className="blockies"
-                      scale={4}
-                    />
-                    <Flex
-                      flexDirection="column"
-                      justifyContent="center"
-                      alignItems="center"
-                      w="full"
-                    >
-                      <HStack w="full">
-                        <Text
-                          fontSize="xs"
-                          isTruncated
-                          display={["none", "none", "flex", "flex"]}
-                        >
-                          CREATED ON
-                        </Text>
-                        <Text fontWeight="bold" isTruncated pr="2">
-                          {new Date(meme.created_at)
-                            .toLocaleDateString()
-                            .toUpperCase()}
-                        </Text>
-                      </HStack>
-                      <HStack w="full">
-                        <Text
-                          fontSize="xs"
-                          display={["none", "none", "flex", "flex"]}
-                        >
-                          BY
-                        </Text>
-                        <Text
-                          fontWeight="bold"
-                          isTruncated
-                          display={["none", "none", "flex", "flex"]}
-                        >
-                          {ens ||
-                            `${meme.poaster.username.substring(
-                              0,
-                              4
-                            )}...${meme.poaster.username.substring(
-                              meme.poaster.username.length - 4
-                            )}`}
-                        </Text>
-                        <Text
-                          fontWeight="bold"
-                          isTruncated
-                          display={["flex", "flex", "none", "none"]}
-                        >
-                          {ens || getSlicedAddress(meme.poaster.username)}
-                        </Text>
-                      </HStack>
-                    </Flex>
-                  </HStack>
-                </Badge>
-              )}
-              <Spacer />
-              {meme.meme_lord && (
-                <VStack w="full" ml="2">
-                  <Text fontSize="lg" alignSelf="flex-start">
-                    CREDITS:
-                  </Text>
-                  <Text fontSize="xl" w="full">
-                    {meme.meme_lord}
-                  </Text>
-                </VStack>
-              )}
-            </SimpleGrid>
+          <Flex
+            w="full"
+            direction="column"
+            pt="4"
+            fontWeight="bold"
+            gridGap="1"
+            fontSize="lg"
+          >
+            <MemeDescription
+              title="Created on: "
+              result={new Date(meme.created_at)
+                .toLocaleDateString()
+                .toUpperCase()}
+            />
+            <MemeDescription
+              title="Created by:"
+              result={
+                ens ||
+                `${meme.poaster.username.substring(
+                  0,
+                  4
+                )}...${meme.poaster.username.substring(
+                  meme.poaster.username.length - 4
+                )}`
+              }
+              onClick={() => router.push(`profile/${meme.poaster.username}`)}
+            />
+            <MemeDescription
+              title="Credits:"
+              result={meme.meme_lord.replace("Posted on Discord by", "")}
+            />
 
             {meme.tags && meme.tags.length > 0 && (
               <Flex wrap="wrap" w={W_FIT_CONTENT} pt="2" gridGap="2">
                 {meme.tags.map(({ name }) => (
                   <Tag flexGrow={1} rounded="full" size="md" key={name}>
-                    <TagLabel fontWeight="bold" color={color} alt={name}>
-                      {name.toUpperCase()}
+                    <TagLabel
+                      cursor="pointer"
+                      fontWeight="bold"
+                      onClick={() => {
+                        setPreOpenedMemeId(null);
+                        router.push(`/?search=${name.toUpperCase()}`);
+                        onClose();
+                      }}
+                      color={color}
+                      alt={name}
+                    >
+                      #{name.toUpperCase()}
                     </TagLabel>
                   </Tag>
                 ))}
@@ -368,6 +366,51 @@ function MemeModal({
             </Text>
           </Flex>
         </ModalBody>
+        <Flex
+          zIndex={10}
+          w="full"
+          h="max-content"
+          style={{ marginTop: 0 }}
+          bottom="0"
+          left="0"
+        >
+          <Button
+            leftIcon={<FaArrowCircleUp color="#ffffff" fontSize="1.7rem" />}
+            rounded="none"
+            p="2"
+            h="full"
+            w="full"
+            backgroundColor="#0bae44"
+            color={color}
+            _hover={{
+              background: "purple.500",
+              color,
+            }}
+            onClick={(e) => {
+              handleUpvote(meme.id);
+            }}
+          >
+            {meme.upvotes}
+          </Button>
+          <Button
+            leftIcon={<FaArrowCircleDown color="#ffffff" fontSize="1.7rem" />}
+            rounded="none"
+            p="2"
+            h="full"
+            w="full"
+            color={color}
+            backgroundColor="#ef5959"
+            _hover={{
+              background: "purple.500",
+              color,
+            }}
+            onClick={(e) => {
+              handleDownvote(meme.id);
+            }}
+          >
+            {meme.downvotes}
+          </Button>
+        </Flex>
       </ModalContent>
     </Modal>
   );

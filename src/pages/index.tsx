@@ -21,6 +21,7 @@ import {
   Spinner,
   Text,
   useColorMode,
+  InputRightElement,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
@@ -87,7 +88,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   const { height, width } = useWidowSize();
 
-  const { dverify } = router.query;
+  const { dverify, search } = router.query;
 
   const tags = [
     {
@@ -189,23 +190,25 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     [headers]
   );
 
-  useEffect(
-    () => {
-      if (debouncedSearchTerm) {
-        handleSearch(debouncedSearchTerm).then((memesResult) => {
-          setFoundMemes(memesResult);
-          if (memesResult !== null) {
-            setTotalSearchResult(memesResult.length);
-          } else {
-            setTotalSearchResult(null);
-          }
-        });
-      } else {
-        setFoundMemes(undefined);
-      }
-    },
-    [debouncedSearchTerm, handleSearch] // Only call effect if debounced search term changes
-  );
+  useEffect(() => {
+    console.log("searchTerm", { search });
+    if (search) {
+      setPreOpenedMemeId(null);
+      setSearchTerm(search as string);
+      handleSearch(search as string).then((memesResult) => {
+        setFoundMemes(memesResult);
+        console.log("memesResult", memesResult);
+        if (memesResult !== null) {
+          setTotalSearchResult(memesResult.length);
+        } else {
+          setTotalSearchResult(null);
+        }
+      });
+    } else {
+      setFoundMemes(undefined);
+      setSearchTerm("");
+    }
+  }, [search, handleSearch]);
 
   const handleOpenMeme = useCallback(
     (meme: MemeType) => {
@@ -371,7 +374,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         hasMore
         style={{ overflow: "unset" }}
         loader={<Box />}
-        scrollThreshold="200px"
+        scrollThreshold="800px"
       >
         <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
           <Tilt
@@ -479,9 +482,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
             spacing={4}
           >
             <InputGroup size="lg">
-              <InputLeftElement pointerEvents="none">
-                <Search2Icon color={color} />
-              </InputLeftElement>
               <Input
                 _placeholder={{
                   color,
@@ -489,6 +489,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 variant="solid"
                 rounded="full"
                 bg={bg}
+                value={searchTerm}
                 border={`solid 5px ${borderColor}`}
                 color={color}
                 _hover={{
@@ -496,13 +497,34 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                   color: "white",
                 }}
                 fontWeight="bold"
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    router.push(`/?search=${searchTerm}`);
+                  }
+                }}
                 style={{
                   textTransform: "uppercase",
                 }}
                 type="search"
                 placeholder="SEARCH.."
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  if (e.target.value === "" && router.query.search) {
+                    router.push("/");
+                  }
+                }}
               />
+
+              <InputRightElement>
+                <Button
+                  onClick={() => {
+                    router.push(`/?search=${searchTerm}`);
+                  }}
+                  cursor="pointer"
+                >
+                  <Search2Icon color={color} />
+                </Button>
+              </InputRightElement>
             </InputGroup>
             <Button
               size="lg"

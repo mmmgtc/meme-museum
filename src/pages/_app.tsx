@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { ChakraProvider, CSSReset } from "@chakra-ui/react";
+import { ChakraProvider, CSSReset, extendTheme } from "@chakra-ui/react";
 import { EmotionCache } from "@emotion/cache";
 import { CacheProvider } from "@emotion/react";
 import "@fontsource/poppins";
@@ -23,6 +23,10 @@ const clientSideEmotionCache = createEmotionCache();
 interface MyAppProps extends AppProps {
   emotionCache?: EmotionCache;
 }
+
+// Extend the drop shadows to include a custom purple variant
+theme.shadows.purple =
+  "rgba(159, 122, 234, 0.1) 0px 0px 0px 1px, rgba(159, 122, 234, 0.2) 0px 5px 10px, rgba(159, 122, 234, 0.4) 0px 15px 25px";
 
 const AppContainer = styled.div`
   font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue",

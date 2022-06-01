@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Button, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Button, Flex, useColorModeValue, Box } from "@chakra-ui/react";
 import { FaArrowCircleUp, FaArrowCircleDown } from "react-icons/fa";
 
 import CardMedia from "../components/custom/CardMedia";
@@ -15,13 +15,13 @@ function MemeCard({
   handleDownvote: any;
 }) {
   const bg = useColorModeValue("white", brandColors.mainPurple);
-  const color = useColorModeValue(brandColors.mainPurple, "white");
+  const color = useColorModeValue("white", "white");
   const badgeBorderColor = useColorModeValue("#8C65F7", "white");
   return (
     <CardMedia
       bg={bg}
       color={color}
-      border={`solid 5px ${badgeBorderColor}`}
+      border={`solid 0px ${badgeBorderColor}`}
       src={meme.image}
       overflow="hidden"
     >
@@ -32,7 +32,7 @@ function MemeCard({
           p="2"
           h="full"
           w="full"
-          backgroundColor="#21d15f"
+          backgroundColor="#0bae44"
           color={color}
           _hover={{
             background: "purple.500",
@@ -52,7 +52,7 @@ function MemeCard({
           h="full"
           w="full"
           color={color}
-          backgroundColor="#e97373"
+          backgroundColor="#ef5959"
           _hover={{
             background: "purple.500",
             color,
