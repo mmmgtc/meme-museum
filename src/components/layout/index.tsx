@@ -37,7 +37,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Link
         target="_blank"
         textDecoration="underline"
-        href="https://memes.party"
+        href="https://calendar.google.com/event?action=TEMPLATE&tmeid=NWFmOWVpMWVkOTFkNGI1M2NxMHNlN21wYnIgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
       >
         Add to calendar
       </Link>
