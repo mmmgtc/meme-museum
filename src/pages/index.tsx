@@ -471,7 +471,14 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           }}
         />
       )}
-      {isMemePaloozaDay() && <Confetti width={width} height={height} />}
+      {isMemePaloozaDay() && (
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          numberOfPieces={1000}
+        />
+      )}
       <Container>
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
@@ -516,14 +523,16 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                     router.push("/");
                   }
                 }}
+                overflow="hidden"
               />
 
-              <InputRightElement>
+              <InputRightElement w="max-content" right="1">
                 <Button
                   onClick={() => {
                     router.push(`/?search=${searchTerm}`);
                   }}
                   cursor="pointer"
+                  background="none"
                 >
                   <Search2Icon color={color} />
                 </Button>
