@@ -146,7 +146,11 @@ function MemeModal({
       isOpen={isOpen}
       onClose={() => {
         setPreOpenedMemeId(null);
-        if (router.route === "/") {
+        if (router.query.search !== undefined && router.query.search !== null) {
+          router.replace(`/?search=${router.query.search}`, undefined, {
+            shallow: true,
+          });
+        } else if (router.route === "/") {
           router.replace("/", undefined, { shallow: true });
         }
         onClose();
