@@ -382,7 +382,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         hasMore
         style={{ overflow: "unset" }}
         loader={<Box />}
-        scrollThreshold="800px"
+        scrollThreshold="2000px"
       >
         <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
           <Tilt
