@@ -146,7 +146,11 @@ function MemeModal({
       isOpen={isOpen}
       onClose={() => {
         setPreOpenedMemeId(null);
-        if (router.route === "/") {
+        if (router.query.search !== undefined && router.query.search !== null) {
+          router.replace(`/?search=${router.query.search}`, undefined, {
+            shallow: true,
+          });
+        } else if (router.route === "/") {
           router.replace("/", undefined, { shallow: true });
         }
         onClose();
@@ -186,8 +190,8 @@ function MemeModal({
             border={`solid 5px ${borderColor}`}
             color="white"
             _hover={{
-              bg: altColor,
-              color,
+              color: "white",
+              bg: "purple.400",
             }}
             leftIcon={hasCopied ? <CheckIcon /> : <LinkIcon />}
           >
@@ -196,9 +200,10 @@ function MemeModal({
           <ModalCloseButton
             border={`solid 5px ${borderColor}`}
             color={color}
-            mt="3"
+            mt="2"
             mr="2"
             cursor="pointer"
+            p="15px"
           />
         </ModalHeader>
         <ModalBody>
@@ -356,12 +361,7 @@ function MemeModal({
                 ))}
               </Flex>
             )}
-            <Text
-              fontSize="2xl"
-              py="2"
-              textTransform="none"
-              whiteSpace="break-spaces"
-            >
+            <Text py="2" textTransform="none" whiteSpace="break-spaces">
               {meme.description}
             </Text>
           </Flex>
@@ -381,10 +381,10 @@ function MemeModal({
             h="full"
             w="full"
             backgroundColor="#0bae44"
-            color={color}
+            color="white"
             _hover={{
-              background: "purple.500",
-              color,
+              background: "#3dd573",
+              color: "white",
             }}
             onClick={(e) => {
               handleUpvote(meme.id);
@@ -398,11 +398,11 @@ function MemeModal({
             p="2"
             h="full"
             w="full"
-            color={color}
+            color="white"
             backgroundColor="#ef5959"
             _hover={{
-              background: "purple.500",
-              color,
+              background: "#f27c7c",
+              color: "white",
             }}
             onClick={(e) => {
               handleDownvote(meme.id);

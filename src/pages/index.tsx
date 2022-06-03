@@ -28,7 +28,14 @@ import { NextPageContext } from "next";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Blockies from "react-blockies";
 import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
@@ -82,6 +89,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [myMemes, setMyMemes] = useState<MemeType[]>([]);
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const [HeaderMemeTitle, setHeaderMemeTitle] = useState<string>("ALL");
+  const [searched, setSearched] = useState<boolean>(false);
   const { colorMode } = useColorMode();
 
   const [userProfile, setUserProfile] = useState<any>();
@@ -161,6 +170,19 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
 
   const PAGINATION_URL =
     "https://evening-anchorage-43225.herokuapp.com/museum/pagination/";
+
+  const isMemePaloozaDay = () => {
+    const currentDate = new Date();
+    if (
+      new Date("Fri Jun 03 2022 23:30:00 GMT+0530 (India Standard Time)") <=
+        currentDate &&
+      currentDate <=
+        new Date("Sat Jun 04 2022 01:30:00 GMT+0530 (India Standard Time)")
+    ) {
+      return true;
+    }
+    return false;
+  };
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -254,6 +276,28 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     ]);
   };
 
+  const handlePostVote = (
+    setData:
+      | ((value: SetStateAction<MemeType[] | undefined>) => void)
+      | Dispatch<SetStateAction<MemeType[]>>,
+    memeId: number,
+    votedMeme: any
+  ) => {
+    setData((prevData) => {
+      if (prevData) {
+        return [
+          ...prevData?.map((m) => {
+            if (m.id !== memeId) {
+              return m;
+            }
+            return votedMeme;
+          }),
+        ];
+      }
+      return prevData;
+    });
+  };
+
   const handleUpvote = async (memeId: number) => {
     if (!account) {
       return handleNotConnected();
@@ -268,17 +312,23 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
+    console.log("upvoteMemeResponse", upvoteMemeResponse);
     const upvotedMeme = await upvoteMemeResponse.json();
     console.log("upvotedMeme", upvotedMeme);
-    setMemes((previousMemes) => [
-      ...previousMemes.map((m) => {
-        if (m.id !== memeId) {
-          return m;
-        }
-        return upvotedMeme;
-      }),
-      // upvotedMeme,
-    ]);
+    handlePostVote(setMemes, memeId, upvotedMeme);
+    // setMemes((previousMemes) => [
+    //   ...previousMemes.map((m) => {
+    //     if (m.id !== memeId) {
+    //       return m;
+    //     }
+    //     return upvotedMeme;
+    //   }),
+    //   // upvotedMeme,
+    // ]);
+
+    if (searchTerm && foundMemes !== undefined) {
+      handlePostVote(setFoundMemes, memeId, upvotedMeme);
+    }
     if (isOpenMeme) {
       setCurrentMeme(upvotedMeme);
     }
@@ -299,16 +349,21 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
+    console.log("downvoteMemeResponse", downvoteMemeResponse);
     const downvotedMeme = await downvoteMemeResponse.json();
-    setMemes((previousMemes) => [
-      ...previousMemes.map((m) => {
-        if (m.id !== memeId) {
-          return m;
-        }
-        return downvotedMeme;
-      }),
-      // downvotedMeme,
-    ]);
+    handlePostVote(setMemes, memeId, downvotedMeme);
+    // setMemes((previousMemes) => [
+    //   ...previousMemes.map((m) => {
+    //     if (m.id !== memeId) {
+    //       return m;
+    //     }
+    //     return downvotedMeme;
+    //   }),
+    //   // downvotedMeme,
+    // ]);
+    if (searchTerm && foundMemes !== undefined) {
+      handlePostVote(setFoundMemes, memeId, downvotedMeme);
+    }
     if (isOpenMeme) {
       setCurrentMeme(downvotedMeme);
     }
@@ -343,14 +398,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     async function fetchMemes() {
       setLoading(true);
       const memesResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=16`
       );
       const memesResult = await memesResponse.json();
-      // console.log("memesResult: ", { memesResult });
-
-      // const sortedMemesResult = memesResult.sort((a: MemeType, b: MemeType) =>
-      //   (a.meme_score || 0) > (b.meme_score || 0) ? -1 : 1
-      // );
 
       setMemes(memesResult);
       setLoading(false);
@@ -374,7 +424,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         hasMore
         style={{ overflow: "unset" }}
         loader={<Box />}
-        scrollThreshold="800px"
+        scrollThreshold="2000px"
       >
         <Box key={m.id} cursor="pointer" onClick={() => handleOpenMeme(m)}>
           <Tilt
@@ -406,6 +456,19 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     };
     getUserProfile();
   }, [account]);
+
+  useEffect(() => {
+    if (
+      totalSearchResult &&
+      totalSearchResult > 0 &&
+      searchTerm.length > 0 &&
+      searched
+    ) {
+      setHeaderMemeTitle(searchTerm);
+    } else {
+      setHeaderMemeTitle("ALL");
+    }
+  }, [searchTerm, setHeaderMemeTitle, searched, totalSearchResult]);
 
   const renderUserProfile = () => {
     return (
@@ -463,13 +526,15 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           }}
         />
       )}
-      <Container>
-        {/* <Confetti
+      {isMemePaloozaDay() && (
+        <Confetti
           width={width}
           height={height}
           recycle={false}
           numberOfPieces={1000}
-        /> */}
+        />
+      )}
+      <Container>
         <VStack w="full" alignItems="center">
           <Box cursor="pointer" onClick={() => router.reload()}>
             <LogoIcon size="600px" logoPath="/memes-party.png" />
@@ -500,6 +565,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
                     router.push(`/?search=${searchTerm}`);
+                    setSearched(true);
+                    setHeaderMemeTitle(searchTerm);
                   }
                 }}
                 style={{
@@ -511,16 +578,21 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                   setSearchTerm(e.target.value);
                   if (e.target.value === "" && router.query.search) {
                     router.push("/");
+                    setSearched(false);
+                    setHeaderMemeTitle("ALL");
                   }
                 }}
+                overflow="hidden"
               />
 
-              <InputRightElement>
+              <InputRightElement w="max-content" right="1">
                 <Button
                   onClick={() => {
                     router.push(`/?search=${searchTerm}`);
+                    setHeaderMemeTitle(searchTerm);
                   }}
                   cursor="pointer"
+                  background="none"
                 >
                   <Search2Icon color={color} />
                 </Button>
@@ -669,7 +741,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           <TabPanels w="full">
             <TabPanel w="full" px="0">
               <HStack w="full" justifyContent="space-between">
-                <Heading py="6">ALL MEMES</Heading>
+                <Heading py="6">{HeaderMemeTitle.toUpperCase()} MEMES</Heading>
                 <Text fontSize="2xl">
                   {totalSearchResult !== null &&
                     searchTerm.length > 0 &&
@@ -773,5 +845,4 @@ export async function getServerSideProps(ctx: NextPageContext) {
 }
 
 // const ViewPortMemes = handleViewport(Memes, {}, { disconnectOnLeave: false });
-
 export default Memes;

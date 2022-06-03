@@ -31,18 +31,39 @@ const Layout = ({ children }: LayoutProps) => {
     // console.log(container);
   };
 
-  const TopHeading = () => (
-    <Box ml={10} fontWeight="semibold">
-      Next Palooza on the 3rd of June 2022{" "}
-      <Link
-        target="_blank"
-        textDecoration="underline"
-        href="https://calendar.google.com/event?action=TEMPLATE&tmeid=NWFmOWVpMWVkOTFkNGI1M2NxMHNlN21wYnIgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
-      >
-        Add to calendar
-      </Link>
-    </Box>
-  );
+  const TopHeading = () => {
+    const isMemePaloozaDay = () => {
+      const currentDate = new Date();
+      if (
+        new Date("Fri Jun 03 2022 23:30:00 GMT+0530 (India Standard Time)") <=
+          currentDate &&
+        currentDate <=
+          new Date("Sat Jun 04 2022 01:30:00 GMT+0530 (India Standard Time)")
+      ) {
+        return true;
+      }
+      return false;
+    };
+
+    return (
+      <Box ml={10} fontWeight="semibold">
+        {isMemePaloozaDay()
+          ? "🎉  MEMEPALOOZA DAY 🎉 "
+          : "Next Palooza on the 3rd of June 2022"}{" "}
+        <Link
+          target="_blank"
+          textDecoration="underline"
+          href={`${
+            isMemePaloozaDay()
+              ? "discord.gg/gitcoin "
+              : "https://calendar.google.com/event?action=TEMPLATE&tmeid=NWFmOWVpMWVkOTFkNGI1M2NxMHNlN21wYnIgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
+          }`}
+        >
+          {isMemePaloozaDay() ? "Join Now!" : "Add to calendar"}
+        </Link>
+      </Box>
+    );
+  };
   const {
     isOpen: isVisible,
     onClose,

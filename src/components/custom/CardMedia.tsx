@@ -27,10 +27,10 @@ function CardMedia(props: any) {
           src={
             enterCount > 0
               ? imageSrc || src
-              : "/not-sure-if-loading_o_427193.webp"
+              : "/not-sure-if-loading_o_427193.png"
           }
           objectFit="fill"
-          fallbackSrc="/not-sure-if-loading_o_427193.webp"
+          fallbackSrc="/not-sure-if-loading_o_427193.png"
         />
         {children}
       </VStack>
