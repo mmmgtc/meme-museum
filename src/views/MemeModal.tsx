@@ -191,6 +191,7 @@ function MemeModal({
             color="white"
             _hover={{
               color: "white",
+              bg: "purple.400",
             }}
             leftIcon={hasCopied ? <CheckIcon /> : <LinkIcon />}
           >
