@@ -28,7 +28,14 @@ import { NextPageContext } from "next";
 import { NextSeo } from "next-seo";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useCallback, useContext, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Blockies from "react-blockies";
 import Confetti from "react-confetti";
 import handleViewport from "react-in-viewport";
@@ -267,6 +274,28 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     ]);
   };
 
+  const handlePostVote = (
+    setData:
+      | ((value: SetStateAction<MemeType[] | undefined>) => void)
+      | Dispatch<SetStateAction<MemeType[]>>,
+    memeId: number,
+    votedMeme: any
+  ) => {
+    setData((prevData) => {
+      if (prevData) {
+        return [
+          ...prevData?.map((m) => {
+            if (m.id !== memeId) {
+              return m;
+            }
+            return votedMeme;
+          }),
+        ];
+      }
+      return prevData;
+    });
+  };
+
   const handleUpvote = async (memeId: number) => {
     if (!account) {
       return handleNotConnected();
@@ -281,17 +310,23 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
+    console.log("upvoteMemeResponse", upvoteMemeResponse);
     const upvotedMeme = await upvoteMemeResponse.json();
     console.log("upvotedMeme", upvotedMeme);
-    setMemes((previousMemes) => [
-      ...previousMemes.map((m) => {
-        if (m.id !== memeId) {
-          return m;
-        }
-        return upvotedMeme;
-      }),
-      // upvotedMeme,
-    ]);
+    handlePostVote(setMemes, memeId, upvotedMeme);
+    // setMemes((previousMemes) => [
+    //   ...previousMemes.map((m) => {
+    //     if (m.id !== memeId) {
+    //       return m;
+    //     }
+    //     return upvotedMeme;
+    //   }),
+    //   // upvotedMeme,
+    // ]);
+
+    if (searchTerm && foundMemes !== undefined) {
+      handlePostVote(setFoundMemes, memeId, upvotedMeme);
+    }
     if (isOpenMeme) {
       setCurrentMeme(upvotedMeme);
     }
@@ -312,16 +347,21 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
+    console.log("downvoteMemeResponse", downvoteMemeResponse);
     const downvotedMeme = await downvoteMemeResponse.json();
-    setMemes((previousMemes) => [
-      ...previousMemes.map((m) => {
-        if (m.id !== memeId) {
-          return m;
-        }
-        return downvotedMeme;
-      }),
-      // downvotedMeme,
-    ]);
+    handlePostVote(setMemes, memeId, downvotedMeme);
+    // setMemes((previousMemes) => [
+    //   ...previousMemes.map((m) => {
+    //     if (m.id !== memeId) {
+    //       return m;
+    //     }
+    //     return downvotedMeme;
+    //   }),
+    //   // downvotedMeme,
+    // ]);
+    if (searchTerm && foundMemes !== undefined) {
+      handlePostVote(setFoundMemes, memeId, downvotedMeme);
+    }
     if (isOpenMeme) {
       setCurrentMeme(downvotedMeme);
     }
