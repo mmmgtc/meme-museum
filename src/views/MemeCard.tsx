@@ -35,7 +35,7 @@ function MemeCard({
           backgroundColor="#0bae44"
           color={color}
           _hover={{
-            background: "purple.500",
+            background: "#3dd573",
             color,
           }}
           onClick={(e) => {
@@ -54,7 +54,7 @@ function MemeCard({
           color={color}
           backgroundColor="#ef5959"
           _hover={{
-            background: "purple.500",
+            background: "#f27c7c",
             color,
           }}
           onClick={(e) => {
