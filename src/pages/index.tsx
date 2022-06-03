@@ -398,7 +398,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     async function fetchMemes() {
       setLoading(true);
       const memesResponse = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=8`
+        `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=16`
       );
       const memesResult = await memesResponse.json();
 
