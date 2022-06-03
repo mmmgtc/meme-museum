@@ -33,7 +33,7 @@ import MemeCard from "views/MemeCard";
 import MemeModal from "views/MemeModal";
 
 function Leaderboard() {
-  const MEMEPALOOZA_8_DATE = new Date("2022-05-06T18:00:00.000Z");
+  const MEMEPALOOZA_8_DATE = new Date("Fri, 6 May 2022 23:00:00 UTC");
   const [leaders, setLeaders] = useState<LeaderType[]>([]);
   const [selectDate, setSelectDate] = useState<Date>(
     new Date() < MEMEPALOOZA_8_DATE
@@ -67,31 +67,31 @@ function Leaderboard() {
   const options = [
     {
       label: "MEMEPALOOZA 1",
-      value: new Date("August 31, 2021"),
+      value: new Date("Sat, 1 September 2021 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 2",
-      value: new Date("October 1, 2021"),
+      value: new Date("Fri, 1 October 2021 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 3",
-      value: new Date("November 5, 2021"),
+      value: new Date("Fri, 5 November 2021 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 4",
-      value: new Date("December 2, 2021"),
+      value: new Date("Fri, 3 December 2021 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 5",
-      value: new Date("January 14, 2022"),
+      value: new Date("Fri, 14 January 2022 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 6",
-      value: new Date("March 4, 2022"),
+      value: new Date("Fri, 4 March 2022 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 7",
-      value: new Date("April 1, 2022"),
+      value: new Date("Fri, 1 April 2022 23:00:00 UTC"),
     },
     {
       label: "MEMEPALOOZA 8",
@@ -196,6 +196,11 @@ function Leaderboard() {
     }
     getFormatedDate();
   }, [selectDate]);
+
+  useEffect(() => {
+    console.log("from date", fromDate);
+    console.log("to date", toDate);
+  }, [fromDate, toDate]);
 
   useEffect(() => {
     async function fetchLeaders() {

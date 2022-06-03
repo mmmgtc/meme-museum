@@ -48,7 +48,10 @@ function ConnectButton() {
               color={color}
               isTruncated
             >
-              {ens || account}
+              {ens ||
+                `${account.substring(0, 5)}...${account.substring(
+                  account.length - 4
+                )}`}
             </Text>
           </HStack>
         </Badge>
