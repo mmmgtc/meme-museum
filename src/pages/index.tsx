@@ -89,6 +89,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [foundMemes, setFoundMemes] = useState<MemeType[]>();
   const [myMemes, setMyMemes] = useState<MemeType[]>([]);
   const [currentMeme, setCurrentMeme] = useState<MemeType>();
+  const [HeaderMemeTitle, setHeaderMemeTitle] = useState<string>("ALL");
+  const [searched, setSearched] = useState<boolean>(false);
   const { colorMode } = useColorMode();
 
   const [userProfile, setUserProfile] = useState<any>();
@@ -455,6 +457,14 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     getUserProfile();
   }, [account]);
 
+  useEffect(() => {
+    if (searchTerm.length > 0 && searched) {
+      setHeaderMemeTitle(searchTerm);
+    } else {
+      setHeaderMemeTitle("ALL");
+    }
+  }, [searchTerm, setHeaderMemeTitle, searched]);
+
   const renderUserProfile = () => {
     return (
       <HStack
@@ -550,6 +560,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 onKeyPress={(e) => {
                   if (e.key === "Enter") {
                     router.push(`/?search=${searchTerm}`);
+                    setSearched(true);
+                    setHeaderMemeTitle(searchTerm);
                   }
                 }}
                 style={{
@@ -561,6 +573,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                   setSearchTerm(e.target.value);
                   if (e.target.value === "" && router.query.search) {
                     router.push("/");
+                    setSearched(false);
+                    setHeaderMemeTitle("ALL");
                   }
                 }}
                 overflow="hidden"
@@ -570,6 +584,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 <Button
                   onClick={() => {
                     router.push(`/?search=${searchTerm}`);
+                    setHeaderMemeTitle(searchTerm);
                   }}
                   cursor="pointer"
                   background="none"
@@ -721,7 +736,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
           <TabPanels w="full">
             <TabPanel w="full" px="0">
               <HStack w="full" justifyContent="space-between">
-                <Heading py="6">ALL MEMES</Heading>
+                <Heading py="6">{HeaderMemeTitle.toUpperCase()} MEMES</Heading>
                 <Text fontSize="2xl">
                   {totalSearchResult !== null &&
                     searchTerm.length > 0 &&
