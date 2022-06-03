@@ -55,7 +55,7 @@ const Layout = ({ children }: LayoutProps) => {
           textDecoration="underline"
           href={`${
             isMemePaloozaDay()
-              ? "discord.gg/gitcoin "
+              ? "https://discord.gg/gitcoin "
               : "https://calendar.google.com/event?action=TEMPLATE&tmeid=NWFmOWVpMWVkOTFkNGI1M2NxMHNlN21wYnIgY184YWJuZ2thY292cjZ0NGpncXZrZWRiaW5vMEBn&tmsrc=c_8abngkacovr6t4jgqvkedbino0%40group.calendar.google.com"
           }`}
         >
