@@ -458,12 +458,17 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   }, [account]);
 
   useEffect(() => {
-    if (searchTerm.length > 0 && searched) {
+    if (
+      totalSearchResult &&
+      totalSearchResult > 0 &&
+      searchTerm.length > 0 &&
+      searched
+    ) {
       setHeaderMemeTitle(searchTerm);
     } else {
       setHeaderMemeTitle("ALL");
     }
-  }, [searchTerm, setHeaderMemeTitle, searched]);
+  }, [searchTerm, setHeaderMemeTitle, searched, totalSearchResult]);
 
   const renderUserProfile = () => {
     return (
