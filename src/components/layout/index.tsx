@@ -49,8 +49,8 @@ const Layout = ({ children }: LayoutProps) => {
       <Box ml={10} fontWeight="semibold">
         {isMemePaloozaDay()
           ? "🎉  MEMEPALOOZA DAY 🎉 "
-          : "Next Palooza on the 3rd of June 2022"}{" "}
-        <Link
+          : "Next Palooza is in July"}{" "}
+        {/* <Link
           target="_blank"
           textDecoration="underline"
           href={`${
@@ -60,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
           }`}
         >
           {isMemePaloozaDay() ? "Join Now!" : "Add to calendar"}
-        </Link>
+        </Link> */}
       </Box>
     );
   };
