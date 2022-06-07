@@ -49,7 +49,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Box ml={10} fontWeight="semibold">
         {isMemePaloozaDay()
           ? "🎉  MEMEPALOOZA DAY 🎉 "
-          : "Next Palooza on the 3rd of June 2022"}{" "}
+          : "Next Palooza is in July"}{" "}
         <Link
           target="_blank"
           textDecoration="underline"
@@ -78,7 +78,7 @@ const Layout = ({ children }: LayoutProps) => {
           color="white"
           status="info"
         >
-          <Marquee
+          {/* <Marquee
             style={{
               width: "100%",
             }}
@@ -90,7 +90,7 @@ const Layout = ({ children }: LayoutProps) => {
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <TopHeading key={i} />
             ))}
-          </Marquee>
+          </Marquee> */}
           <CloseButton
             alignSelf="flex-start"
             position="relative"
