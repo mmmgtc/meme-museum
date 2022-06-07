@@ -50,7 +50,7 @@ const Layout = ({ children }: LayoutProps) => {
         {isMemePaloozaDay()
           ? "🎉  MEMEPALOOZA DAY 🎉 "
           : "Next Palooza is in July"}{" "}
-        {/* <Link
+        <Link
           target="_blank"
           textDecoration="underline"
           href={`${
@@ -60,7 +60,7 @@ const Layout = ({ children }: LayoutProps) => {
           }`}
         >
           {isMemePaloozaDay() ? "Join Now!" : "Add to calendar"}
-        </Link> */}
+        </Link>
       </Box>
     );
   };
@@ -78,7 +78,7 @@ const Layout = ({ children }: LayoutProps) => {
           color="white"
           status="info"
         >
-          <Marquee
+          {/* <Marquee
             style={{
               width: "100%",
             }}
@@ -90,7 +90,7 @@ const Layout = ({ children }: LayoutProps) => {
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <TopHeading key={i} />
             ))}
-          </Marquee>
+          </Marquee> */}
           <CloseButton
             alignSelf="flex-start"
             position="relative"
