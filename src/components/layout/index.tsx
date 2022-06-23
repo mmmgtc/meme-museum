@@ -64,11 +64,9 @@ const Layout = ({ children }: LayoutProps) => {
       </Box>
     );
   };
-  const {
-    isOpen: isVisible,
-    onClose,
-    onOpen,
-  } = useDisclosure({ defaultIsOpen: true });
+  const { isOpen: isVisible, onClose } = useDisclosure({
+    defaultIsOpen: false,
+  });
   return (
     <>
       {isVisible && (
@@ -78,7 +76,7 @@ const Layout = ({ children }: LayoutProps) => {
           color="white"
           status="info"
         >
-          {/* <Marquee
+          <Marquee
             style={{
               width: "100%",
             }}
@@ -90,7 +88,7 @@ const Layout = ({ children }: LayoutProps) => {
             {[0, 1, 2, 3, 4, 5].map((i) => (
               <TopHeading key={i} />
             ))}
-          </Marquee> */}
+          </Marquee>
           <CloseButton
             alignSelf="flex-start"
             position="relative"
