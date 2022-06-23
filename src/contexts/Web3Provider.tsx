@@ -157,6 +157,8 @@ export const Web3Provider = ({ children }: { children: any }) => {
       };
       if (dverifyToken && typeof dverifyToken === "string") {
         body = { ...body, dverify: dverifyToken.toString() };
+      } else {
+        body = { ...body, dverify: "dfhjkxfdhkjduihj" };
       }
       const authResponse = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/museum/signup/`,
