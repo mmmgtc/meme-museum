@@ -49,7 +49,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Box ml={10} fontWeight="semibold">
         {isMemePaloozaDay()
           ? "🎉  MEMEPALOOZA DAY 🎉 "
-          : "Next Palooza on the 3rd of June 2022"}{" "}
+          : "Next Palooza is in July"}{" "}
         <Link
           target="_blank"
           textDecoration="underline"
@@ -64,11 +64,9 @@ const Layout = ({ children }: LayoutProps) => {
       </Box>
     );
   };
-  const {
-    isOpen: isVisible,
-    onClose,
-    onOpen,
-  } = useDisclosure({ defaultIsOpen: true });
+  const { isOpen: isVisible, onClose } = useDisclosure({
+    defaultIsOpen: false,
+  });
   return (
     <>
       {isVisible && (
