@@ -18,7 +18,14 @@ import {
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { ChakraStylesConfig, Select } from "chakra-react-select";
 import { useRouter } from "next/router";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  SetStateAction,
+  Dispatch,
+} from "react";
 import DatePicker from "react-datepicker";
 import { FaArrowLeft } from "react-icons/fa";
 import Masonry from "react-masonry-css";
@@ -121,6 +128,28 @@ function Leaderboard() {
     }
   }, [toast, connectWeb3]);
 
+  const handlePostVote = (
+    setData:
+      | ((value: SetStateAction<MemeType[] | undefined>) => void)
+      | Dispatch<SetStateAction<MemeType[]>>,
+    memeId: number,
+    votedMeme: any
+  ) => {
+    setData((prevData) => {
+      if (prevData) {
+        return [
+          ...prevData?.map((m) => {
+            if (m.id !== memeId) {
+              return m;
+            }
+            return votedMeme;
+          }),
+        ];
+      }
+      return prevData;
+    });
+  };
+
   const handleUpvote = async (memeId: number) => {
     if (!account) {
       return handleNotConnected();
@@ -136,10 +165,8 @@ function Leaderboard() {
       }
     );
     const upvotedMeme = await upvoteMemeResponse.json();
-    setTopMemes((previousMemes) => [
-      ...previousMemes.filter((m) => m.id !== memeId),
-      upvotedMeme,
-    ]);
+    handlePostVote(setTopMemes, memeId, upvotedMeme);
+
     if (isOpenMeme) {
       setCurrentMeme(upvotedMeme);
     }
@@ -161,10 +188,7 @@ function Leaderboard() {
       }
     );
     const downvotedMeme = await downvoteMemeResponse.json();
-    setTopMemes((previousMemes) => [
-      ...previousMemes.filter((m) => m.id !== memeId),
-      downvotedMeme,
-    ]);
+    handlePostVote(setTopMemes, memeId, downvotedMeme);
     if (isOpenMeme) {
       setCurrentMeme(downvotedMeme);
     }
