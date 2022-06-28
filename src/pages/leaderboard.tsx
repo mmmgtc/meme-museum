@@ -71,40 +71,40 @@ function Leaderboard() {
     router.query?.meme ? parseInt(router.query.meme as string, 10) : null
   );
 
-  const options = [
-    {
-      label: "MEMEPALOOZA 1",
-      value: new Date("Sat, 1 September 2021 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 2",
-      value: new Date("Fri, 1 October 2021 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 3",
-      value: new Date("Fri, 5 November 2021 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 4",
-      value: new Date("Fri, 3 December 2021 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 5",
-      value: new Date("Fri, 14 January 2022 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 6",
-      value: new Date("Fri, 4 March 2022 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 7",
-      value: new Date("Fri, 1 April 2022 23:00:00 UTC"),
-    },
-    {
-      label: "MEMEPALOOZA 8",
-      value: MEMEPALOOZA_8_DATE,
-    },
-  ];
+  // const options = [
+  //   {
+  //     label: "MEMEPALOOZA 1",
+  //     value: new Date("Sat, 1 September 2021 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 2",
+  //     value: new Date("Fri, 1 October 2021 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 3",
+  //     value: new Date("Fri, 5 November 2021 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 4",
+  //     value: new Date("Fri, 3 December 2021 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 5",
+  //     value: new Date("Fri, 14 January 2022 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 6",
+  //     value: new Date("Fri, 4 March 2022 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 7",
+  //     value: new Date("Fri, 1 April 2022 23:00:00 UTC"),
+  //   },
+  //   {
+  //     label: "MEMEPALOOZA 8",
+  //     value: MEMEPALOOZA_8_DATE,
+  //   },
+  // ];
 
   const breakpointColumnsObj = {
     default: 3,
@@ -209,57 +209,57 @@ function Leaderboard() {
     [onOpenMeme]
   );
 
-  useEffect(() => {
-    function getFormatedDate() {
-      const date = selectDate.getTime();
-      setFormatedDate(Math.floor(date / 60000));
-      const yesterday = new Date(selectDate);
-      yesterday.setDate(yesterday.getDate() - 1);
-      setFromDate(yesterday.toISOString());
-      setToDate(selectDate.toISOString());
-    }
-    getFormatedDate();
-  }, [selectDate]);
+  // useEffect(() => {
+  //   function getFormatedDate() {
+  //     const date = selectDate.getTime();
+  //     setFormatedDate(Math.floor(date / 60000));
+  //     const yesterday = new Date(selectDate);
+  //     yesterday.setDate(yesterday.getDate() - 1);
+  //     setFromDate(yesterday.toISOString());
+  //     setToDate(selectDate.toISOString());
+  //   }
+  //   getFormatedDate();
+  // }, [selectDate]);
 
-  useEffect(() => {
-    console.log("from date", fromDate);
-    console.log("to date", toDate);
-  }, [fromDate, toDate]);
+  // useEffect(() => {
+  //   console.log("from date", fromDate);
+  //   console.log("to date", toDate);
+  // }, [fromDate, toDate]);
 
   useEffect(() => {
     async function fetchLeaders() {
       setLoading(true);
       const response = await fetch(
-        `https://evening-anchorage-43225.herokuapp.com/museum/leaderboard/${fetchingTime}/`
+        `https://evening-anchorage-43225.herokuapp.com/museum/leaderboard/433078/`
       );
       const data = await response.json();
       setLeaders(data);
       setLoading(false);
     }
     fetchLeaders();
-  }, [selectDate, fetchingTime]);
+  }, []);
 
-  useEffect(() => {
-    const currentTime = Math.floor(new Date().getTime() / 60000);
-    if (formatDate) {
-      setFetchingTime(currentTime - formatDate);
-    }
-  }, [formatDate]);
+  // useEffect(() => {
+  //   const currentTime = Math.floor(new Date().getTime() / 60000);
+  //   if (formatDate) {
+  //     setFetchingTime(currentTime - formatDate);
+  //   }
+  // }, [formatDate]);
 
   useEffect(() => {
     async function getTopMemes() {
+      const todayDate = new Date().toISOString();
+      console.log("todays Date: ", todayDate);
       setTopMemesLoading(true);
       const response = await fetch(
-        `https://evening-anchorage-43225.herokuapp.com/museum/memes/?created_at__gte=&created_at__lte=${toDate}&created_at=&created_at__gt=${fromDate}&created_at__lt=`
+        `https://evening-anchorage-43225.herokuapp.com/museum/memes/?created_at__gte=&created_at__lte=${todayDate}&created_at=&created_at__gt=2021-06-01T23:00:00.000Z&created_at__lt=`
       );
       const data = await response.json();
       setTopMemesLoading(false);
       setTopMemes(data);
     }
-    if (fromDate && toDate) {
-      getTopMemes();
-    }
-  }, [toDate, fromDate]);
+    getTopMemes();
+  }, []);
 
   const chakraStyles: ChakraStylesConfig = {
     dropdownIndicator: (provided, state) => ({
@@ -311,7 +311,7 @@ function Leaderboard() {
             </Button>
           </Link>
         </Box>
-        <Heading>Leader Board</Heading>
+        <Heading>Leaderboard</Heading>
       </Flex>
 
       {currentMeme && (
@@ -326,34 +326,6 @@ function Leaderboard() {
         />
       )}
 
-      <Flex
-        justify="space-around"
-        w="full"
-        flexDirection={{ base: "column", sm: "row" }}
-      >
-        <Box
-          borderColor={brandColors.mainPurple}
-          maxWidth="fit-content"
-          borderWidth="thick"
-          rounded="md"
-        >
-          <DatePicker
-            color="black"
-            onChange={(date) => setSelectDate(date)}
-            showTimeSelect
-            selected={selectDate}
-            maxDate={new Date()}
-            dateFormat="MMMM d, yyyy h:mm aa"
-          />
-        </Box>
-        <Select
-          chakraStyles={chakraStyles}
-          options={options.reverse()}
-          defaultValue={options.reverse()[6]}
-          onChange={(option) => setSelectDate(option.value)}
-          hasStickyGroupHeaders
-        />
-      </Flex>
       <HStack
         justifyContent="space-around"
         alignItems="flex-start"
