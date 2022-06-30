@@ -169,6 +169,7 @@ function MemeModal({
           display="flex"
           justifyContent="space-between"
           marginRight="10"
+          alignItems="center"
         >
           <Heading
             flexWrap="wrap"
@@ -176,7 +177,7 @@ function MemeModal({
             fontSize={meme.title.length > 20 ? "20px" : "26px"}
           >
             {meme.title.length > 20
-              ? `${meme.title.substring(0, 20)}...`
+              ? `${meme.title.substring(0, 15)}...`
               : meme.title}
           </Heading>
 
@@ -186,9 +187,9 @@ function MemeModal({
             rounded="full"
             size="md"
             variant="solid"
-            bg="purple.200"
+            bg={bg}
             border={`solid 5px ${borderColor}`}
-            color="white"
+            color={color}
             _hover={{
               color: "white",
               bg: "purple.400",
