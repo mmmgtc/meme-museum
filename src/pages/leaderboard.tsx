@@ -332,7 +332,7 @@ function Leaderboard() {
         flexDirection={{ base: "column", sm: "row" }}
       >
         <Stack gridGap="3">
-          <Heading>Top Meme lords</Heading>
+          <Heading>Top Meme Lords</Heading>
           {loading ? (
             <Text fontSize="4xl" fontWeight="bold" textAlign="center">
               Loading ...
