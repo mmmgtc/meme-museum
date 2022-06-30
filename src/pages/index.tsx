@@ -118,6 +118,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   const [latestId, setLatestId] = useState<number>(1);
   const [oldestId, setOldestId] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [tabsIndex, setTabsIndex] = useState<number>(0);
 
   useEffect(() => {
     if (dverify) {
@@ -216,6 +217,9 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     console.log("searchTerm", { search });
     if (search) {
       setPreOpenedMemeId(null);
+      setTabsIndex(0);
+      setHeaderMemeTitle(search as string);
+      setSearched(true);
       setSearchTerm(search as string);
       handleSearch(search as string).then((memesResult) => {
         setFoundMemes(memesResult);
@@ -670,6 +674,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         )}
         <Tabs
           isFitted
+          index={tabsIndex}
+          onChange={(index) => setTabsIndex(index)}
           variant="soft-rounded"
           py="4"
           px={{ xl: "0", "2xl": "52" }}
