@@ -169,7 +169,7 @@ function MemeModal({
           display="flex"
           justifyContent="space-between"
           marginRight="10"
-          alignItems='center'
+          alignItems="center"
         >
           <Heading
             flexWrap="wrap"
