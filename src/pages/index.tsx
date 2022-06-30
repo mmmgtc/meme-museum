@@ -406,6 +406,8 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       );
       const memesResult = await memesResponse.json();
 
+      console.log("memesResult", memesResult);
+
       setMemes(memesResult);
       setLoading(false);
     }

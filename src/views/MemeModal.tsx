@@ -186,9 +186,9 @@ function MemeModal({
             rounded="full"
             size="md"
             variant="solid"
-            bg="purple.200"
+            bg={bg}
             border={`solid 5px ${borderColor}`}
-            color="white"
+            color={color}
             _hover={{
               color: "white",
               bg: "purple.400",
