@@ -474,7 +474,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       >
         <Blockies
           size={10}
-          seed={userProfile?.username.toLowerCase()}
+          seed={userProfile ? userProfile.username.toLowerCase() : ""}
           className="blockies"
           scale={6}
         />
