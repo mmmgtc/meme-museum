@@ -26,6 +26,7 @@ import {
 import { Select } from "chakra-react-select";
 import { NextPageContext } from "next";
 import { NextSeo } from "next-seo";
+import Script from "next/script";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import {
@@ -138,7 +139,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       const sortedMemes = [...memes].sort((a: MemeType, b: MemeType) =>
         a.id < b.id ? -1 : 1
       );
-      console.log("memes: ", memes);
 
       setOldestId(sortedMemes[0].id);
       setLatestId(sortedMemes[sortedMemes.length - 1].id);
@@ -214,7 +214,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   );
 
   useEffect(() => {
-    console.log("searchTerm", { search });
     if (search) {
       setPreOpenedMemeId(null);
       setTabsIndex(0);
@@ -223,7 +222,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
       setSearchTerm(search as string);
       handleSearch(search as string).then((memesResult) => {
         setFoundMemes(memesResult);
-        console.log("memesResult", memesResult);
         if (memesResult !== null) {
           setTotalSearchResult(memesResult.length);
         } else {
@@ -316,9 +314,7 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
-    console.log("upvoteMemeResponse", upvoteMemeResponse);
     const upvotedMeme = await upvoteMemeResponse.json();
-    console.log("upvotedMeme", upvotedMeme);
     handlePostVote(setMemes, memeId, upvotedMeme);
     // setMemes((previousMemes) => [
     //   ...previousMemes.map((m) => {
@@ -353,7 +349,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         headers,
       }
     );
-    console.log("downvoteMemeResponse", downvoteMemeResponse);
     const downvotedMeme = await downvoteMemeResponse.json();
     handlePostVote(setMemes, memeId, downvotedMeme);
     // setMemes((previousMemes) => [
@@ -375,16 +370,11 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   };
 
   const fetchPaginatedMemes = async () => {
-    console.log("fetchPaginatedMemes: pre isBusyLoading");
     if (isBusyLoadingMemes) {
       return;
     }
 
     setIsBusyLoadingMemes(true);
-    console.log("latestId", latestId);
-    console.log("oldestId", oldestId);
-
-    console.log("fetchPaginatedMemes: fetching paginated memes");
     const paginatedMemesResponse = await fetch(
       `${PAGINATION_URL}?n=8&latest=${latestId}&oldest=${oldestId}`
     );
@@ -395,7 +385,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
     setMemes([...currentMemes]);
 
     setIsBusyLoadingMemes(false);
-    console.log("fetchPaginatedMemes: reset");
   };
 
   useEffect(() => {
@@ -405,8 +394,6 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
         `${process.env.NEXT_PUBLIC_API_URL}/museum/pagination/?n=16`
       );
       const memesResult = await memesResponse.json();
-
-      console.log("memesResult", memesResult);
 
       setMemes(memesResult);
       setLoading(false);
@@ -515,194 +502,213 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
   );
 
   return (
-    <Card>
-      {memeFromId && (
-        <NextSeo
-          openGraph={{
-            title: memeFromId?.title,
-            description: memeFromId?.description,
-            images: [
-              {
-                url: memeFromId?.image,
-                width: 800,
-                height: 800,
-                alt: memeFromId?.title.slice(0, 50),
-              },
-            ],
-          }}
-        />
-      )}
-      {isMemePaloozaDay() && (
-        <Confetti
-          width={width}
-          height={height}
-          recycle={false}
-          numberOfPieces={1000}
-        />
-      )}
-      <Container>
-        <VStack w="full" alignItems="center">
-          <Box cursor="pointer" onClick={() => router.reload()}>
-            <LogoIcon size="600px" logoPath="/memes-party.png" />
-          </Box>
-          <SimpleGrid
-            columns={{
-              sm: 1,
-              md: 3,
-            }}
-            spacing={4}
-          >
-            <InputGroup size="lg">
-              <Input
-                _placeholder={{
-                  color,
-                }}
-                variant="solid"
-                rounded="full"
-                bg={bg}
-                value={searchTerm}
-                border={`solid 5px ${borderColor}`}
-                color={color}
-                _hover={{
-                  bg: brandColors.darkPurple,
-                  color: "white",
-                }}
-                fontWeight="bold"
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    router.push(`/?search=${searchTerm}`);
-                    setSearched(true);
-                    setHeaderMemeTitle(searchTerm);
-                  }
-                }}
-                style={{
-                  textTransform: "uppercase",
-                }}
-                type="search"
-                placeholder="SEARCH.."
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  if (e.target.value === "" && router.query.search) {
-                    router.push("/");
-                    setSearched(false);
-                    setHeaderMemeTitle("ALL");
-                  }
-                }}
-                overflow="hidden"
-              />
+    <>
+      <Script
+        id="GoogleAnalytics"
+        strategy="lazyOnload"
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+      />
 
-              <InputRightElement w="max-content" right="1">
-                <Button
-                  onClick={() => {
-                    router.push(`/?search=${searchTerm}`);
-                    setHeaderMemeTitle(searchTerm);
-                  }}
-                  cursor="pointer"
-                  background="none"
-                >
-                  <Search2Icon color={color} />
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-            <Button
-              size="lg"
-              rounded="full"
-              variant="solid"
-              bg="purple.200"
-              color="white"
-              border={`solid 5px ${borderColor}`}
-              _hover={{
-                bg: altColor,
-                color,
-              }}
-              fontSize="lg"
-              leftIcon={<AddIcon />}
-              onClick={() => {
-                if (!account) {
-                  handleNotConnected();
-                  return;
-                }
-                onOpen();
-              }}
-            >
-              UPLOAD MEME
-            </Button>
-            <Button
-              size="lg"
-              rounded="full"
-              variant="solid"
-              bg="purple.200"
-              color="white"
-              border={`solid 5px ${borderColor}`}
-              _hover={{
-                bg: altColor,
-                color,
-              }}
-              fontSize="lg"
-              gridGap={4}
-              background={brandColors.mainPurple}
-              onClick={() => router.push("/leaderboard")}
-              onMouseEnter={() => setLeaderboardImage("/leaderboard-hover.png")}
-              onMouseLeave={() => setLeaderboardImage("/leaderboard.png")}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={leaderboardImage}
-                style={{ height: "60%", objectFit: "contain" }}
-                alt=""
-              />
-              LEADERBOARD
-            </Button>
-          </SimpleGrid>
-        </VStack>
-        <CreateMemeModal
-          {...{
-            isOpen,
-            onClose,
-            addMeme: handleAddMeme,
-            handleNotConnected,
-          }}
-        />
-        {currentMeme && (
-          <MemeModal
-            handleDelete={handleDeleteMeme}
-            isOpen={isOpenMeme}
-            onClose={onCloseMeme}
-            meme={currentMeme}
-            setPreOpenedMemeId={setPreOpenedMemeId}
-            handleUpvote={handleUpvote}
-            handleDownvote={handleDownvote}
+      <Script strategy="lazyOnload" id="GoogleAnalyticsGTag">
+        {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+            page_path: window.location.pathname,
+            });
+        `}
+      </Script>
+      <Card>
+        {memeFromId && (
+          <NextSeo
+            openGraph={{
+              title: memeFromId?.title,
+              description: memeFromId?.description,
+              images: [
+                {
+                  url: memeFromId?.image,
+                  width: 800,
+                  height: 800,
+                  alt: memeFromId?.title.slice(0, 50),
+                },
+              ],
+            }}
           />
         )}
-        <Tabs
-          isFitted
-          index={tabsIndex}
-          onChange={(index) => setTabsIndex(index)}
-          variant="soft-rounded"
-          py="4"
-          px={{ xl: "0", "2xl": "52" }}
-        >
-          <TabList
-            border={`solid 5px ${brandColors.mainPurpleHex}`}
-            rounded="full"
-          >
-            <Tab
-              key="all-memes"
-              color="white"
-              backgroundColor="purple.200"
-              _selected={{
-                color: brandColors.mainPurple,
-                background: "white",
+        {isMemePaloozaDay() && (
+          <Confetti
+            width={width}
+            height={height}
+            recycle={false}
+            numberOfPieces={1000}
+          />
+        )}
+        <Container>
+          <VStack w="full" alignItems="center">
+            <Box cursor="pointer" onClick={() => router.reload()}>
+              <LogoIcon size="600px" logoPath="/memes-party.png" />
+            </Box>
+            <SimpleGrid
+              columns={{
+                sm: 1,
+                md: 3,
               }}
-              _hover={{
-                color: "white",
-                background: brandColors.darkPurple,
-              }}
-              borderRightRadius="0"
+              spacing={4}
             >
-              ALL MEMES
-            </Tab>
-            {/* <Tab
+              <InputGroup size="lg">
+                <Input
+                  _placeholder={{
+                    color,
+                  }}
+                  variant="solid"
+                  rounded="full"
+                  bg={bg}
+                  value={searchTerm}
+                  border={`solid 5px ${borderColor}`}
+                  color={color}
+                  _hover={{
+                    bg: brandColors.darkPurple,
+                    color: "white",
+                  }}
+                  fontWeight="bold"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      router.push(`/?search=${searchTerm}`);
+                      setSearched(true);
+                      setHeaderMemeTitle(searchTerm);
+                    }
+                  }}
+                  style={{
+                    textTransform: "uppercase",
+                  }}
+                  type="search"
+                  placeholder="SEARCH.."
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    if (e.target.value === "" && router.query.search) {
+                      router.push("/");
+                      setSearched(false);
+                      setHeaderMemeTitle("ALL");
+                    }
+                  }}
+                  overflow="hidden"
+                />
+
+                <InputRightElement w="max-content" right="1">
+                  <Button
+                    onClick={() => {
+                      router.push(`/?search=${searchTerm}`);
+                      setHeaderMemeTitle(searchTerm);
+                    }}
+                    cursor="pointer"
+                    background="none"
+                  >
+                    <Search2Icon color={color} />
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+              <Button
+                size="lg"
+                rounded="full"
+                variant="solid"
+                bg="purple.200"
+                color="white"
+                border={`solid 5px ${borderColor}`}
+                _hover={{
+                  bg: altColor,
+                  color,
+                }}
+                fontSize="lg"
+                leftIcon={<AddIcon />}
+                onClick={() => {
+                  if (!account) {
+                    handleNotConnected();
+                    return;
+                  }
+                  onOpen();
+                }}
+              >
+                UPLOAD MEME
+              </Button>
+              <Button
+                size="lg"
+                rounded="full"
+                variant="solid"
+                bg="purple.200"
+                color="white"
+                border={`solid 5px ${borderColor}`}
+                _hover={{
+                  bg: altColor,
+                  color,
+                }}
+                fontSize="lg"
+                gridGap={4}
+                background={brandColors.mainPurple}
+                onClick={() => router.push("/leaderboard")}
+                onMouseEnter={() =>
+                  setLeaderboardImage("/leaderboard-hover.png")
+                }
+                onMouseLeave={() => setLeaderboardImage("/leaderboard.png")}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={leaderboardImage}
+                  style={{ height: "60%", objectFit: "contain" }}
+                  alt=""
+                />
+                LEADERBOARD
+              </Button>
+            </SimpleGrid>
+          </VStack>
+          <CreateMemeModal
+            {...{
+              isOpen,
+              onClose,
+              addMeme: handleAddMeme,
+              handleNotConnected,
+            }}
+          />
+          {currentMeme && (
+            <MemeModal
+              handleDelete={handleDeleteMeme}
+              isOpen={isOpenMeme}
+              onClose={onCloseMeme}
+              meme={currentMeme}
+              setPreOpenedMemeId={setPreOpenedMemeId}
+              handleUpvote={handleUpvote}
+              handleDownvote={handleDownvote}
+            />
+          )}
+          <Tabs
+            isFitted
+            index={tabsIndex}
+            onChange={(index) => setTabsIndex(index)}
+            variant="soft-rounded"
+            py="4"
+            px={{ xl: "0", "2xl": "52" }}
+          >
+            <TabList
+              border={`solid 5px ${brandColors.mainPurpleHex}`}
+              rounded="full"
+            >
+              <Tab
+                key="all-memes"
+                color="white"
+                backgroundColor="purple.200"
+                _selected={{
+                  color: brandColors.mainPurple,
+                  background: "white",
+                }}
+                _hover={{
+                  color: "white",
+                  background: brandColors.darkPurple,
+                }}
+                borderRightRadius="0"
+              >
+                ALL MEMES
+              </Tab>
+              {/* <Tab
               key="memepalooza"
               color="white"
               backgroundColor="purple.200"
@@ -721,74 +727,76 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 ? "ALL MEMES"
                 : `${selectedTag.join(", ").toUpperCase()} MEMES`}
             </Tab> */}
-            <Tab
-              key="my-memes"
-              color="white"
-              backgroundColor={brandColors.mainPurple}
-              _selected={{
-                color: brandColors.mainPurple,
-                background: "white",
-              }}
-              _hover={{
-                color: "white",
-                background: brandColors.darkPurple,
-              }}
-              _disabled={{
-                color: brandColors.mainPurple,
-                background: "spacelightpurple",
-                cursor: "not-allowed",
-                pointerEvents: "all",
-              }}
-              borderLeftRadius="0"
-              isDisabled={!account || !myMemes || myMemes.length === 0}
-            >
-              MY MEMES
-            </Tab>
-          </TabList>
+              <Tab
+                key="my-memes"
+                color="white"
+                backgroundColor={brandColors.mainPurple}
+                _selected={{
+                  color: brandColors.mainPurple,
+                  background: "white",
+                }}
+                _hover={{
+                  color: "white",
+                  background: brandColors.darkPurple,
+                }}
+                _disabled={{
+                  color: brandColors.mainPurple,
+                  background: "spacelightpurple",
+                  cursor: "not-allowed",
+                  pointerEvents: "all",
+                }}
+                borderLeftRadius="0"
+                isDisabled={!account || !myMemes || myMemes.length === 0}
+              >
+                MY MEMES
+              </Tab>
+            </TabList>
 
-          <TabPanels w="full">
-            <TabPanel w="full" px="0">
-              <HStack w="full" justifyContent="space-between">
-                <Heading py="6">{HeaderMemeTitle.toUpperCase()} MEMES</Heading>
-                <Text fontSize="2xl">
-                  {totalSearchResult !== null &&
-                    searchTerm.length > 0 &&
-                    `${totalSearchResult} SEARCH RESULTS`}
-                </Text>
-              </HStack>
+            <TabPanels w="full">
+              <TabPanel w="full" px="0">
+                <HStack w="full" justifyContent="space-between">
+                  <Heading py="6">
+                    {HeaderMemeTitle.toUpperCase()} MEMES
+                  </Heading>
+                  <Text fontSize="2xl">
+                    {totalSearchResult !== null &&
+                      searchTerm.length > 0 &&
+                      `${totalSearchResult} SEARCH RESULTS`}
+                  </Text>
+                </HStack>
 
-              {!loading ? (
-                <Masonry
-                  breakpointCols={breakpointColumnsObj}
-                  className="my-masonry-grid"
-                  columnClassName="my-masonry-grid_column"
-                >
-                  {allMemes}
-                </Masonry>
-              ) : (
-                <Box my={8} w="full">
-                  <Spinner
-                    thickness="6px"
-                    speed="0.65s"
-                    ml="70px"
-                    color="purple.200"
-                    size="xl"
-                  />
-                </Box>
-              )}
-              {isBusyLoadingMemes && (
-                <Box my={8} w="full">
-                  <Spinner
-                    thickness="6px"
-                    speed="0.65s"
-                    ml="70px"
-                    color="purple.200"
-                    size="xl"
-                  />
-                </Box>
-              )}
-            </TabPanel>
-            {/* <TabPanel w="full" px="0">
+                {!loading ? (
+                  <Masonry
+                    breakpointCols={breakpointColumnsObj}
+                    className="my-masonry-grid"
+                    columnClassName="my-masonry-grid_column"
+                  >
+                    {allMemes}
+                  </Masonry>
+                ) : (
+                  <Box my={8} w="full">
+                    <Spinner
+                      thickness="6px"
+                      speed="0.65s"
+                      ml="70px"
+                      color="purple.200"
+                      size="xl"
+                    />
+                  </Box>
+                )}
+                {isBusyLoadingMemes && (
+                  <Box my={8} w="full">
+                    <Spinner
+                      thickness="6px"
+                      speed="0.65s"
+                      ml="70px"
+                      color="purple.200"
+                      size="xl"
+                    />
+                  </Box>
+                )}
+              </TabPanel>
+              {/* <TabPanel w="full" px="0">
               <Heading py="6" textTransform="uppercase">
                 {selectedTag} Memes
               </Heading>
@@ -815,27 +823,27 @@ function Memes({ memeFromId }: { memeFromId?: MemeType }) {
                 {filteredMemes}
               </Masonry>
             </TabPanel> */}
-            <TabPanel w="full" px="0">
-              {renderUserProfile()}
-              <Heading paddingY="2rem">My Memes</Heading>
-              <Masonry
-                breakpointCols={breakpointColumnsObj}
-                className="my-masonry-grid"
-                columnClassName="my-masonry-grid_column"
-              >
-                {userMemes}
-              </Masonry>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Container>
-    </Card>
+              <TabPanel w="full" px="0">
+                {renderUserProfile()}
+                <Heading paddingY="2rem">My Memes</Heading>
+                <Masonry
+                  breakpointCols={breakpointColumnsObj}
+                  className="my-masonry-grid"
+                  columnClassName="my-masonry-grid_column"
+                >
+                  {userMemes}
+                </Masonry>
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Container>
+      </Card>
+    </>
   );
 }
 
 export async function getServerSideProps(ctx: NextPageContext) {
   const id = ctx.query.MEME || ctx.query.meme;
-  console.log("id: ", id);
   let memeFromId = null;
 
   if (id) {
@@ -843,7 +851,6 @@ export async function getServerSideProps(ctx: NextPageContext) {
       `${process.env.NEXT_PUBLIC_API_URL}/museum/memes/${id}`
     );
     memeFromId = await memesResponse.json();
-    console.log("memeFromId: ", memeFromId);
   }
   return {
     props: {
