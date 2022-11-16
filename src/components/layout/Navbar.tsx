@@ -39,11 +39,7 @@ function Navbar() {
         {/* <Flex h={16} alignItems="center" justifyContent="space-between"> */}
         <HStack w="full" spacing={8} alignItems="center">
           <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
-            <Link
-              href="https://m-m-m.xyz/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link href="/" target="_blank" rel="noopener noreferrer">
               <Flex _hover={{ cursor: "pointer" }} align="center" mr={5}>
                 <LogoIcon size="100px" logoPath="/mmm.svg" />
               </Flex>
